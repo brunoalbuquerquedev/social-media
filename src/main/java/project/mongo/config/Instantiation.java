@@ -15,12 +15,16 @@ public class Instantiation implements CommandLineRunner {
     private UserRepository userRepository;
 
     @Override
-    public void run(String... args) throws Exception {
-        User maria = new User(null, "Maria Brown", "maria.brown@gmail.com");
-        User alex = new User(null, "Alex Green", "alex.green@gmail.com");
-        User bob = new User(null, "Bob Grey", "bob@gmail.com");
+    public void run(String... args) {
+        try {
+            User maria = new User(null, "Maria Brown", "maria.brown@gmail.com");
+            User alex = new User(null, "Alex Green", "alex.green@gmail.com");
+            User bob = new User(null, "Bob Grey", "bob@gmail.com");
 
-        userRepository.deleteAll();
-        userRepository.saveAll(Arrays.asList(maria, alex, bob));
+            userRepository.deleteAll();
+            userRepository.saveAll(Arrays.asList(maria, alex, bob));
+        } catch (Exception e) {
+            System.out.println("Error at Instantiation.");
+        }
     }
 }
