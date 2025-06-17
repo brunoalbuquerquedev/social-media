@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import project.mongo.domain.Post;
 import project.mongo.domain.User;
 import project.mongo.dto.AuthorDto;
+import project.mongo.dto.CommentDto;
 import project.mongo.repository.PostRepository;
 import project.mongo.repository.UserRepository;
 
@@ -47,6 +48,27 @@ public class Instantiation implements CommandLineRunner {
                     "Acordei feliz hoje!",
                     new AuthorDto(maria)
             );
+
+            CommentDto c1 = new CommentDto(
+                    "Boa viagem mano!",
+                    sdf.parse("21/03/2018"),
+                    new AuthorDto(alex)
+            );
+
+            CommentDto c2 = new CommentDto(
+                    "Aproveite!",
+                    sdf.parse("22/03/2018"),
+                    new AuthorDto(bob)
+            );
+
+            CommentDto c3 = new CommentDto(
+                    "Tenha um ótimo dia!",
+                    sdf.parse("23/03/2018"),
+                    new AuthorDto(alex)
+            );
+
+            post1.getComments().addAll(Arrays.asList(c1, c2));
+            post2.getComments().add(c3);
 
             postRepository.deleteAll();
             postRepository.saveAll(Arrays.asList(post1, post2));
