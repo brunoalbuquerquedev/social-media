@@ -1,8 +1,11 @@
 package project.mongo.dto;
 
+import project.mongo.domain.Post;
 import project.mongo.domain.User;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserDto implements Serializable {
 
@@ -10,13 +13,16 @@ public class UserDto implements Serializable {
     private String name;
     private String email;
 
+    private List<Post> posts = new ArrayList<>();
+
     public UserDto() {
     }
 
-    public UserDto(User obj) {
-        this.id = obj.getId();
-        this.name = obj.getName();
-        this.email = obj.getEmail();
+    public UserDto(User user) {
+        this.id = user.getId();
+        this.name = user.getName();
+        this.email = user.getEmail();
+        this.posts = user.getPosts();
     }
 
     public String getId() {
@@ -41,5 +47,13 @@ public class UserDto implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public List<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
     }
 }

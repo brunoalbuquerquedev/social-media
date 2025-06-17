@@ -1,6 +1,6 @@
 package project.mongo.dto;
 
-import project.mongo.domain.User;
+import project.mongo.domain.Post;
 
 import java.util.Date;
 
@@ -10,17 +10,17 @@ public class PostDto {
     private Date date;
     private String title;
     private String body;
-    private User author;
+    private AuthorDto author;
 
     public PostDto() {
     }
 
-    public PostDto(String id, Date date, String title, String body, User author) {
-        this.id = id;
-        this.date = date;
-        this.title = title;
-        this.body = body;
-        this.author = author;
+    public PostDto(Post post) {
+        this.id = post.getId();
+        this.date = post.getDate();
+        this.title = post.getTitle();
+        this.body = post.getBody();
+        this.author = post.getAuthor();
     }
 
     public String getId() {
@@ -55,11 +55,11 @@ public class PostDto {
         this.body = body;
     }
 
-    public User getAuthor() {
+    public AuthorDto getAuthor() {
         return author;
     }
 
-    public void setAuthor(User author) {
+    public void setAuthor(AuthorDto author) {
         this.author = author;
     }
 }

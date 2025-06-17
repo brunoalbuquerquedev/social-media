@@ -48,7 +48,12 @@ public class Instantiation implements CommandLineRunner {
                     new AuthorDto(maria)
             );
 
+            postRepository.deleteAll();
             postRepository.saveAll(Arrays.asList(post1, post2));
+
+            maria.getPosts().addAll(Arrays.asList(post1, post2));
+
+            userRepository.save(maria);
 
         } catch (Exception e) {
             System.out.println("Error at Instantiation.");
