@@ -7,11 +7,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 import project.mongo.domain.User;
 import project.mongo.dto.UserDto;
 import project.mongo.services.UserService;
-import project.mongo.services.exceptions.ObjectNotFoundException;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Objects;
 
 @RestController
 @RequestMapping("/users")
@@ -35,22 +33,30 @@ public class UserResource {
 
     @PostMapping
     public ResponseEntity<UserDto> insert(@RequestBody UserDto dto, UriComponentsBuilder builder) {
-        User user = new User(null, dto.getName(), dto.getEmail());
+        User user = UserDto.fromDto(dto);
         user = userService.insert(user);
         URI uri = builder.path("/users/{id}").buildAndExpand(user.getId()).toUri();
         return ResponseEntity.created(uri).body(new UserDto(user));
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> update(@RequestBody UserDto dto, @PathVariable String id) {
+        User user = UserDto.fromDto(dto);
+        user.setId(id);
+        user = userService.update(user);
+        return ResponseEntity.noContent().build();
+    }
+
     @DeleteMapping
     public ResponseEntity<UserDto> delete(@RequestBody UserDto dto) {
-        User user = new User(dto.getId(), dto.getName(), dto.getEmail());
+        User user = UserDto.fromDto(dto);
         userService.delete(user);
-        return ResponseEntity.ok().body(null);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<UserDto> deleteById(@PathVariable String id) {
         userService.deleteById(id);
-        return ResponseEntity.ok().body(null);
+        return ResponseEntity.noContent().build();
     }
 }

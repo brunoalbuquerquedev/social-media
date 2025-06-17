@@ -62,4 +62,9 @@ public class User implements Serializable {
     public int hashCode() {
         return Objects.hashCode(id);
     }
+
+    public void updateData(User user) {
+        setName(user.getName());
+        setEmail(user.getEmail());
+    }
 }

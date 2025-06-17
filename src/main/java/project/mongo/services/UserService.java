@@ -3,6 +3,7 @@ package project.mongo.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import project.mongo.domain.User;
+import project.mongo.dto.UserDto;
 import project.mongo.repository.UserRepository;
 import project.mongo.services.exceptions.ObjectNotFoundException;
 
@@ -25,6 +26,12 @@ public class UserService {
 
     public User insert(User user) {
         return userRepository.save(user);
+    }
+
+    public User update(User user) {
+        User obj = findById(user.getId());
+        obj.updateData(user);
+        return userRepository.save(obj);
     }
 
     public void delete(User user) {
