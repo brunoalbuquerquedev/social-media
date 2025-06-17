@@ -2,6 +2,7 @@ package project.mongo.domain;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import project.mongo.dto.UserDto;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -61,6 +62,10 @@ public class User implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hashCode(id);
+    }
+
+    public static User fromDto(UserDto dto) {
+        return new User(dto.getId(), dto.getName(), dto.getEmail());
     }
 
     public void updateData(User user) {

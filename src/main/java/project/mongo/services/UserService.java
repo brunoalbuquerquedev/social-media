@@ -3,7 +3,6 @@ package project.mongo.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import project.mongo.domain.User;
-import project.mongo.dto.UserDto;
 import project.mongo.repository.UserRepository;
 import project.mongo.services.exceptions.ObjectNotFoundException;
 
