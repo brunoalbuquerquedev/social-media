@@ -34,8 +34,8 @@ public class Instantiation implements CommandLineRunner {
             User alex = new User(null, "Alex Green", "alex.green@gmail.com");
             User bob = new User(null, "Bob Grey", "bob@gmail.com");
 
-            userRepository.deleteAll();
-            userRepository.saveAll(Arrays.asList(maria, alex, bob));
+//            userRepository.deleteAll();
+//            userRepository.saveAll(Arrays.asList(maria, alex, bob));
 
             Post post1 = new Post(null, sdf.parse("21/03/2018"),
                     "Partiu Viagem",
@@ -67,16 +67,15 @@ public class Instantiation implements CommandLineRunner {
                     new AuthorDto(alex)
             );
 
-            post1.getComments().addAll(Arrays.asList(c1, c2));
-            post2.getComments().add(c3);
-
-            postRepository.deleteAll();
-            postRepository.saveAll(Arrays.asList(post1, post2));
-
-            maria.getPosts().addAll(Arrays.asList(post1, post2));
-
-            userRepository.save(maria);
-
+//            post1.getComments().addAll(Arrays.asList(c1, c2));
+//            post2.getComments().add(c3);
+//
+//            postRepository.deleteAll();
+//            postRepository.saveAll(Arrays.asList(post1, post2));
+//
+//            maria.getPosts().addAll(Arrays.asList(post1, post2));
+//
+//            userRepository.save(maria);
         } catch (Exception e) {
             System.out.println("Error at Instantiation.");
         }

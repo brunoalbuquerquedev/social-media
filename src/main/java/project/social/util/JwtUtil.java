@@ -78,4 +78,16 @@ public class JwtUtil {
             return false;
         }
     }
+
+    public static String extractAndValidateHeader(String header) {
+        if (header == null || !header.startsWith("Bearer "))
+            throw new InvalidTokenException("Missing or invalid authorization header.");
+
+        String token = header.replace("Bearer ", "");
+
+        if (!JwtUtil.isTokenValid(token))
+            throw new InvalidTokenException("Invalid or expired token.");
+
+        return token;
+    }
 }

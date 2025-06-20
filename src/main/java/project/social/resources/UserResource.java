@@ -40,14 +40,12 @@ public class UserResource {
         return ResponseEntity.ok(user.getPosts());
     }
 
-    @PostMapping("/users/{id}/follow")
-    public ResponseEntity<UserDto> follow(@PathVariable String followingId, @RequestHeader("Authorization") String authHeader) {
-        if (!JwtUtil.isTokenValid(followingId))
-            throw new InvalidTokenException("Invalid or expired token.");
-
-        String followerId =  JwtUtil.validateAndGetUserId(authHeader);
+    @PostMapping("/{id}/follow")
+    public ResponseEntity<Void> follow(@PathVariable("id") String followingId, @RequestHeader("Authorization") String authHeader) {
+        String token = JwtUtil.extractAndValidateHeader(authHeader);
+        String followerId = JwtUtil.validateAndGetUserId(token);
         User user = userService.followUser(followerId, followingId);
-        return ResponseEntity.ok(new UserDto(user));
+        return ResponseEntity.noContent().build();
     }
 
     //    @PostMapping
