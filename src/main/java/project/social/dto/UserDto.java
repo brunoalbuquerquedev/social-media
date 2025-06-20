@@ -4,12 +4,16 @@ import project.social.domain.Follow;
 import project.social.domain.Post;
 import project.social.domain.User;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class UserDto implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     private String id;
 

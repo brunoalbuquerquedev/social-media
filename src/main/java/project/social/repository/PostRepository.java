@@ -8,4 +8,5 @@ import java.util.List;
 public interface PostRepository extends MongoRepository<Post, String> {
 
     List<Post> findByTitleContainingIgnoreCase(String text);
+    List<Post> findByAuthorIdInOrderByCreatedAtDesc(List<String> list);
 }

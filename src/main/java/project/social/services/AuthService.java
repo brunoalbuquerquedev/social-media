@@ -4,15 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import project.social.domain.User;
-import project.social.dto.auth.LoginRequest;
-import project.social.dto.auth.RefreshRequest;
-import project.social.dto.auth.SignupRequest;
+import project.social.dto.auth.LoginRequestDto;
+import project.social.dto.auth.RefreshRequestDto;
+import project.social.dto.auth.SignupRequestDto;
 import project.social.repository.UserRepository;
 import project.social.services.exceptions.IncorrectPasswordException;
 import project.social.services.exceptions.InvalidTokenException;
 import project.social.services.exceptions.ObjectNotFoundException;
 import project.social.services.exceptions.UserAlreadyExistsException;
-import project.social.util.JwtTokenResponse;
+import project.social.dto.auth.JwtTokenResponse;
 import project.social.util.JwtUtil;
 
 @Service
@@ -21,9 +21,12 @@ public class AuthService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private JwtUtil jwtUtil;
+
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    public JwtTokenResponse register(SignupRequest request) {
+    public JwtTokenResponse register(SignupRequestDto request) {
         if (userRepository.existsByEmail(request.getEmail()))
             throw new UserAlreadyExistsException("This email already has an account.");
 
@@ -37,29 +40,29 @@ public class AuthService {
 
         userRepository.save(user);
 
-        return JwtUtil.generateTokens(user.getId(), user.getUsername());
+        return jwtUtil.generateTokens(user.getId(), user.getUsername());
     }
 
-    public JwtTokenResponse login(LoginRequest request) {
+    public JwtTokenResponse login(LoginRequestDto request) {
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new ObjectNotFoundException("User not found."));
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword()))
             throw new IncorrectPasswordException("Incorrect password.");
 
-        return JwtUtil.generateTokens(user.getId(), user.getUsername());
+        return jwtUtil.generateTokens(user.getId(), user.getUsername());
     }
 
-    public JwtTokenResponse refresh(RefreshRequest request) {
-        if (!JwtUtil.isTokenValid(request.getRefreshToken()))
+    public JwtTokenResponse refresh(RefreshRequestDto request) {
+        if (!jwtUtil.isTokenValid(request.getRefreshToken()))
             throw new InvalidTokenException("Invalid or expired token.");
 
-        String userId = JwtUtil.validateAndGetUserId(request.getRefreshToken());
-        String username = JwtUtil.extractUsername(request.getRefreshToken());
+        String userId = jwtUtil.getUserIdFromToken(request.getRefreshToken());
+        String username = jwtUtil.extractUsername(request.getRefreshToken());
 
         if (userId == null || username == null)
             throw new InvalidTokenException("Invalid token.");
 
-        return JwtUtil.generateTokens(userId, username);
+        return jwtUtil.generateTokens(userId, username);
     }
 }

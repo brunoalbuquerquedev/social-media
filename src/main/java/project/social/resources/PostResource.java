@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.social.domain.Post;
-import project.social.util.Url;
+import project.social.util.UrlDecoder;
 import project.social.services.PostService;
 
 import java.util.List;
@@ -30,7 +30,7 @@ public class PostResource {
 
     @GetMapping("/title-search")
     public ResponseEntity<List<Post>> findByTitle(@RequestParam(value = "text", defaultValue = "") String text) {
-        text = Url.decodeParam(text);
+        text = UrlDecoder.decodeParam(text);
         List<Post> list = postService.findByTitle(text);
         return ResponseEntity.ok(list);
     }

@@ -5,7 +5,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Date;
 import java.util.Objects;
 
 @Document(collection = "likes")
@@ -16,18 +15,19 @@ public class Like implements Serializable {
 
     @Id
     private String id;
+
     private String userId;
     private String postId;
-    private Date likedAt;
+    private String createdAt;
 
     public Like() {
     }
 
-    public Like(String id, String userId, String postId, Date likedAt) {
+    public Like(String id, String userId, String postId, String createdAt) {
         this.id = id;
         this.userId = userId;
         this.postId = postId;
-        this.likedAt = likedAt;
+        this.createdAt = createdAt;
     }
 
     public String getId() {
@@ -54,12 +54,12 @@ public class Like implements Serializable {
         this.postId = postId;
     }
 
-    public Date getLikedAt() {
-        return likedAt;
+    public String getCreatedAt() {
+        return createdAt;
     }
 
-    public void setLikedAt(Date likedAt) {
-        this.likedAt = likedAt;
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
     }
 
     @Override

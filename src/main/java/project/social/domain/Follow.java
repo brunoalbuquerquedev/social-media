@@ -15,19 +15,20 @@ public class Follow implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    private String id;
-    private String followerId;
-    private String followingId;
-    private Date followedAt;
+   private String id;
+
+   private String followerId;
+   private String followingId;
+   private Date createdAt;
 
     public Follow() {
     }
 
-    public Follow(String id, String followerId, String followingId, Date followedAt) {
+    public Follow(String id, String followerId, String followingId, Date createdAt) {
         this.id = id;
         this.followerId = followerId;
         this.followingId = followingId;
-        this.followedAt = followedAt;
+        this.createdAt = createdAt;
     }
 
     public String getId() {
@@ -54,12 +55,12 @@ public class Follow implements Serializable {
         this.followingId = followingId;
     }
 
-    public Date getFollowedAt() {
-        return followedAt;
+    public Date getCreatedAt() {
+        return createdAt;
     }
 
-    public void setFollowedAt(Date followedAt) {
-        this.followedAt = followedAt;
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 
     @Override

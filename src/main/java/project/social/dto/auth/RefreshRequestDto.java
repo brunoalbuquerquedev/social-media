@@ -1,13 +1,19 @@
 package project.social.dto.auth;
 
-public class RefreshRequest {
+import java.io.Serial;
+import java.io.Serializable;
+
+public class RefreshRequestDto implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     private String refreshToken;
 
-    public RefreshRequest() {
+    public RefreshRequestDto() {
     }
 
-    public RefreshRequest(String refreshToken) {
+    public RefreshRequestDto(String refreshToken) {
         this.refreshToken = refreshToken;
     }
 

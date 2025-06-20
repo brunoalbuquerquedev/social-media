@@ -3,6 +3,7 @@ package project.social.util;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
+import project.social.dto.auth.JwtTokenResponse;
 import project.social.services.exceptions.InvalidTokenException;
 
 import java.security.Key;
@@ -11,17 +12,17 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
-    private static final Key secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-    private static final long ACCESS_TOKEN_EXPIRATION = 10 * 60 * 1000;
-    private static final long REFRESH_TOKEN_EXPIRATION = 24 * 60 * 60 * 1000;
+    private final Key secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    private final long ACCESS_TOKEN_EXPIRATION = 10 * 60 * 1000;
+    private final long REFRESH_TOKEN_EXPIRATION = 24 * 60 * 60 * 1000;
 
-    public static JwtTokenResponse generateTokens(String userId, String username) {
+    public JwtTokenResponse generateTokens(String userId, String username) {
         String accessToken = generateAccessToken(userId, username);
         String refreshToken = generateRefreshToken(userId, username);
         return new JwtTokenResponse(accessToken, refreshToken);
     }
 
-    public static String generateAccessToken(String userId, String username) {
+    public String generateAccessToken(String userId, String username) {
         return Jwts.builder()
                 .setSubject(userId)
                 .claim("username", username)
@@ -31,7 +32,7 @@ public class JwtUtil {
                 .compact();
     }
 
-    public static String generateRefreshToken(String userId, String username) {
+    public String generateRefreshToken(String userId, String username) {
         return Jwts.builder()
                 .setSubject(userId)
                 .claim("username", username)
@@ -41,7 +42,7 @@ public class JwtUtil {
                 .compact();
     }
 
-    public static String validateAndGetUserId(String token) {
+    public String getUserIdFromToken(String token) {
         try {
             return Jwts.parserBuilder()
                     .setSigningKey(secretKey)
@@ -54,7 +55,7 @@ public class JwtUtil {
         }
     }
 
-    public static String extractUsername(String token) {
+    public String extractUsername(String token) {
         try {
             return Jwts.parserBuilder()
                     .setSigningKey(secretKey)
@@ -67,7 +68,7 @@ public class JwtUtil {
         }
     }
 
-    public static boolean isTokenValid(String token) {
+    public boolean isTokenValid(String token) {
         try {
             Jwts.parserBuilder()
                     .setSigningKey(secretKey)
@@ -79,15 +80,22 @@ public class JwtUtil {
         }
     }
 
-    public static String extractAndValidateHeader(String header) {
+    public String extractAndValidateHeader(String header) {
         if (header == null || !header.startsWith("Bearer "))
             throw new InvalidTokenException("Missing or invalid authorization header.");
 
         String token = header.replace("Bearer ", "");
 
-        if (!JwtUtil.isTokenValid(token))
+        if (!isTokenValid(token))
             throw new InvalidTokenException("Invalid or expired token.");
 
         return token;
+    }
+
+    public String extractToken(String authHeader) {
+        if (authHeader == null || !authHeader.startsWith("Bearer "))
+            throw new InvalidTokenException("Missing or malformed Authorization header.");
+
+        return authHeader.substring(7);
     }
 }

@@ -1,21 +1,19 @@
 package project.social.dto.auth;
 
-import project.social.util.JwtTokenResponse;
-
 import java.io.Serial;
 import java.io.Serializable;
 
-public class AuthResponse implements Serializable {
+public class AuthResponseDto implements Serializable{
 
     @Serial
     private static final long serialVersionUID = 1L;
 
     private JwtTokenResponse token;
 
-    public AuthResponse() {
+    public AuthResponseDto() {
     }
 
-    public AuthResponse(JwtTokenResponse token) {
+    public AuthResponseDto(JwtTokenResponse token) {
         this.token = token;
     }
 

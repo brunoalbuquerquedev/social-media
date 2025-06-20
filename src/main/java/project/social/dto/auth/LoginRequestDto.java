@@ -3,30 +3,20 @@ package project.social.dto.auth;
 import java.io.Serial;
 import java.io.Serializable;
 
-public class SignupRequest implements Serializable {
+public class LoginRequestDto implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private String username;
     private String email;
     private String password;
 
-    public SignupRequest() {
+    public LoginRequestDto() {
     }
 
-    public SignupRequest(String email, String username, String password) {
+    public LoginRequestDto(String email, String password) {
         this.email = email;
-        this.username = username;
         this.password = password;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public String getEmail() {
@@ -45,4 +35,3 @@ public class SignupRequest implements Serializable {
         this.password = password;
     }
 }
-

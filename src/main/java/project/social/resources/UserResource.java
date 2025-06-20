@@ -6,10 +6,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 import project.social.domain.Post;
 import project.social.domain.User;
+import project.social.dto.TimelinePostDto;
+import project.social.dto.TimelineResponseDto;
 import project.social.dto.UserDto;
+import project.social.services.TimelineService;
 import project.social.services.UserService;
-import project.social.services.exceptions.InvalidTokenException;
 import project.social.util.JwtUtil;
+import project.social.util.SecurityUtil;
 
 import java.net.URI;
 import java.util.List;
@@ -21,7 +24,16 @@ public class UserResource {
     @Autowired
     private UserService userService;
 
-    @GetMapping
+    @Autowired
+    private TimelineService timelineService;
+
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    @Autowired
+    private SecurityUtil securityUtil;
+
+    @GetMapping("/list")
     public ResponseEntity<List<UserDto>> findAll() {
         List<User> list = userService.findAll();
         List<UserDto> dtoList = list.stream().map(UserDto::new).toList();
@@ -41,26 +53,16 @@ public class UserResource {
     }
 
     @PostMapping("/{id}/follow")
-    public ResponseEntity<Void> follow(@PathVariable("id") String followingId, @RequestHeader("Authorization") String authHeader) {
-        String token = JwtUtil.extractAndValidateHeader(authHeader);
-        String followerId = JwtUtil.validateAndGetUserId(token);
+    public ResponseEntity<Void> follow(@PathVariable("id") String followingId) {
+        String followerId = securityUtil.getLoggedUserId();
         User user = userService.followUser(followerId, followingId);
         return ResponseEntity.noContent().build();
     }
 
-    //    @PostMapping
-    public ResponseEntity<UserDto> insert(@RequestBody UserDto dto, UriComponentsBuilder builder) {
-        User user = User.fromDto(dto);
-        user = userService.insert(user);
-        URI uri = builder.path("/users/{id}").buildAndExpand(user.getId()).toUri();
-        return ResponseEntity.created(uri).body(new UserDto(user));
+    @GetMapping("/{id}/timeline")
+    public ResponseEntity<TimelineResponseDto> timeline(@PathVariable String id) {
+        List<TimelinePostDto> posts = timelineService.getTimelineForUser(id);
+        return ResponseEntity.ok(new TimelineResponseDto(posts));
     }
 
-    //    @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@RequestBody UserDto dto, @PathVariable String id) {
-        User user = User.fromDto(dto);
-        user.setId(id);
-        user = userService.update(user);
-        return ResponseEntity.noContent().build();
-    }
 }
