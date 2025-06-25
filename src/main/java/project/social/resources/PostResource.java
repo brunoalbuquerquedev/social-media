@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.social.domain.Post;
+import project.social.util.SecurityUtil;
 import project.social.util.UrlDecoder;
 import project.social.services.PostService;
 
@@ -16,7 +17,10 @@ public class PostResource {
     @Autowired
     private PostService postService;
 
-    @GetMapping
+    @Autowired
+    private SecurityUtil securityUtil;
+
+    @GetMapping("/list")
     public ResponseEntity<List<Post>> findAll() {
         List<Post> list = postService.findAll();
         return ResponseEntity.ok(list);
@@ -28,7 +32,24 @@ public class PostResource {
         return ResponseEntity.ok(post);
     }
 
-    @GetMapping("/title-search")
+    @PostMapping("/{id}/like")
+    public ResponseEntity<Void> like(@PathVariable String id) {
+        String userId = securityUtil.getLoggedUserId();
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/{id}/unlike")
+    public ResponseEntity<Void> unlike(@PathVariable String id) {
+        String userId = securityUtil.getLoggedUserId();
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{id}/likes")
+    public ResponseEntity<Void> likes(@PathVariable String id) {
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/title")
     public ResponseEntity<List<Post>> findByTitle(@RequestParam(value = "text", defaultValue = "") String text) {
         text = UrlDecoder.decodeParam(text);
         List<Post> list = postService.findByTitle(text);

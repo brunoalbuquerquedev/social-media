@@ -7,7 +7,7 @@ import project.social.domain.User;
 import project.social.dto.auth.LoginRequestDto;
 import project.social.dto.auth.RefreshRequestDto;
 import project.social.dto.auth.SignupRequestDto;
-import project.social.repository.UserRepository;
+import project.social.repositories.UserRepository;
 import project.social.services.exceptions.IncorrectPasswordException;
 import project.social.services.exceptions.InvalidTokenException;
 import project.social.services.exceptions.ObjectNotFoundException;

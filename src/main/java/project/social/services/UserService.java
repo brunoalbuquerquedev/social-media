@@ -3,7 +3,7 @@ package project.social.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import project.social.domain.User;
-import project.social.repository.UserRepository;
+import project.social.repositories.UserRepository;
 import project.social.services.exceptions.ObjectNotFoundException;
 
 import java.util.List;
@@ -20,7 +20,13 @@ public class UserService {
     }
 
     public User findById(String id) {
-        return userRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("User not found."));
+        return userRepository.findById(id)
+                .orElseThrow(() -> new ObjectNotFoundException("User not found."));
+    }
+
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new ObjectNotFoundException("User not found."));
     }
 
     public User insert(User user) {
@@ -58,5 +64,19 @@ public class UserService {
 
         userRepository.save(follower);
         return userRepository.save(following);
+    }
+
+    public User unfollowUser(String followerId, String unfollowingId) {
+        if (followerId.equals(unfollowingId))
+            throw new IllegalArgumentException("You cannot unfollow yourself.");
+
+        User follower = findById(followerId);
+        User unfollowing = findById(unfollowingId);
+
+        follower.getFollowers().remove(unfollowingId);
+        unfollowing.getFollowers().remove(followerId);
+
+        userRepository.save(follower);
+        return userRepository.save(unfollowing);
     }
 }

@@ -6,7 +6,7 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 
-public class TimelinePostDto implements Serializable {
+public class FeedDto implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -25,10 +25,10 @@ public class TimelinePostDto implements Serializable {
 
     private boolean likedByCurrentUser;
 
-    public TimelinePostDto() {
+    public FeedDto() {
     }
 
-    public TimelinePostDto(Post post) {
+    public FeedDto(Post post) {
         this.id = post.getId();
         this.authorId = post.getAuthorId();
         this.content = post.getContent();
@@ -36,7 +36,7 @@ public class TimelinePostDto implements Serializable {
         this.createdAt = post.getCreatedAt();
         this.likesCount = post.getLikes().size();
         this.commentsCount = post.getComments().size();
-        this.likedByCurrentUser = post.getHasUserLiked();
+        this.likedByCurrentUser = post.isHasUserLiked();
     }
 
     public String getId() {

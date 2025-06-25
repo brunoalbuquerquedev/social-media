@@ -3,7 +3,7 @@ package project.social.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import project.social.domain.Post;
-import project.social.repository.PostRepository;
+import project.social.repositories.PostRepository;
 import project.social.services.exceptions.ObjectNotFoundException;
 
 import java.util.List;

@@ -16,6 +16,7 @@ public class Post implements Serializable {
 
     @Id
     private String id;
+    private String authorUsername;
     private String authorId;
     private String content;
     private String title;
@@ -29,11 +30,17 @@ public class Post implements Serializable {
     public Post() {
     }
 
-    public Post(String id, String title, String authorId, Date createdAt) {
+    public Post(String id, String authorUsername, String authorId, String content, String title, Date createdAt,
+                List<Like> likes, List<CommentDto> comments, boolean hasUserLiked) {
         this.id = id;
-        this.title = title;
+        this.authorUsername = authorUsername;
         this.authorId = authorId;
+        this.content = content;
+        this.title = title;
         this.createdAt = createdAt;
+        this.likes = likes;
+        this.comments = comments;
+        this.hasUserLiked = hasUserLiked;
     }
 
     public String getId() {
@@ -42,6 +49,14 @@ public class Post implements Serializable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getAuthorUsername() {
+        return authorUsername;
+    }
+
+    public void setAuthorUsername(String authorUsername) {
+        this.authorUsername = authorUsername;
     }
 
     public String getAuthorId() {
@@ -92,7 +107,7 @@ public class Post implements Serializable {
         this.comments = comments;
     }
 
-    public boolean getHasUserLiked() {
+    public boolean isHasUserLiked() {
         return hasUserLiked;
     }
 

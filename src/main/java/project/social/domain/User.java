@@ -38,7 +38,6 @@ public class User implements Serializable {
 
     @DBRef(lazy = true)
     private List<Post> posts = new ArrayList<>();
-
     private List<String> followers = new ArrayList<>();
     private List<String> following = new ArrayList<>();
 
@@ -50,6 +49,28 @@ public class User implements Serializable {
         this.username = username;
         this.email = email;
     }
+
+    public User(String id, String username, String email, String password, String fullName,
+                String bio, String profilePictureUrl, String location, Date birthDate,
+                Date createdAt, Boolean isActive, Date lastLogin,
+                List<Post> posts, List<String> followers, List<String> following) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.fullName = fullName;
+        this.bio = bio;
+        this.profilePictureUrl = profilePictureUrl;
+        this.location = location;
+        this.birthDate = birthDate;
+        this.createdAt = createdAt;
+        this.isActive = isActive;
+        this.lastLogin = lastLogin;
+        this.posts = posts;
+        this.followers = followers;
+        this.following = following;
+    }
+
 
     public String getId() {
         return id;

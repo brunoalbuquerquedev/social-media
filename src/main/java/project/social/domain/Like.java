@@ -16,6 +16,7 @@ public class Like implements Serializable {
     @Id
     private String id;
 
+    private String username;
     private String userId;
     private String postId;
     private String createdAt;
@@ -23,8 +24,9 @@ public class Like implements Serializable {
     public Like() {
     }
 
-    public Like(String id, String userId, String postId, String createdAt) {
+    public Like(String id, String username, String userId, String postId, String createdAt) {
         this.id = id;
+        this.username = username;
         this.userId = userId;
         this.postId = postId;
         this.createdAt = createdAt;
@@ -36,6 +38,14 @@ public class Like implements Serializable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getUserId() {
