@@ -1,8 +1,9 @@
 package project.social.domain;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-import project.social.dto.CommentDto;
+import project.social.dto.domain.CommentDto;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -22,7 +23,10 @@ public class Post implements Serializable {
     private String title;
     private Date createdAt;
 
+    @DBRef(lazy = true)
     private List<Like> likes = new ArrayList<>();
+
+    @DBRef(lazy = true)
     private List<CommentDto> comments = new ArrayList<>();
 
     private boolean hasUserLiked;
@@ -30,17 +34,77 @@ public class Post implements Serializable {
     public Post() {
     }
 
-    public Post(String id, String authorUsername, String authorId, String content, String title, Date createdAt,
-                List<Like> likes, List<CommentDto> comments, boolean hasUserLiked) {
-        this.id = id;
-        this.authorUsername = authorUsername;
-        this.authorId = authorId;
-        this.content = content;
-        this.title = title;
-        this.createdAt = createdAt;
-        this.likes = likes;
-        this.comments = comments;
-        this.hasUserLiked = hasUserLiked;
+    private Post(Builder builder) {
+        this.id = builder.id;
+        this.authorUsername = builder.authorUsername;
+        this.authorId = builder.authorId;
+        this.content = builder.content;
+        this.title = builder.title;
+        this.createdAt = builder.createdAt;
+        this.likes = builder.likes;
+        this.comments = builder.comments;
+        this.hasUserLiked = builder.hasUserLiked;
+    }
+
+    public static class Builder {
+        private String id;
+        private String authorUsername;
+        private String authorId;
+        private String content;
+        private String title;
+        private Date createdAt;
+        private List<Like> likes = new ArrayList<>();
+        private List<CommentDto> comments = new ArrayList<>();
+        private boolean hasUserLiked;
+
+        public Builder id(String id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder authorUsername(String authorUsername) {
+            this.authorUsername = authorUsername;
+            return this;
+        }
+
+        public Builder authorId(String authorId) {
+            this.authorId = authorId;
+            return this;
+        }
+
+        public Builder content(String content) {
+            this.content = content;
+            return this;
+        }
+
+        public Builder title(String title) {
+            this.title = title;
+            return this;
+        }
+
+        public Builder createdAt(Date createdAt) {
+            this.createdAt = createdAt;
+            return this;
+        }
+
+        public Builder likes(List<Like> likes) {
+            this.likes = likes;
+            return this;
+        }
+
+        public Builder comments(List<CommentDto> comments) {
+            this.comments = comments;
+            return this;
+        }
+
+        public Builder hasUserLiked(boolean hasUserLiked) {
+            this.hasUserLiked = hasUserLiked;
+            return this;
+        }
+
+        public Post build() {
+            return new Post(this);
+        }
     }
 
     public String getId() {

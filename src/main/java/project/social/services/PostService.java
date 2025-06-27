@@ -12,7 +12,11 @@ import java.util.List;
 public class PostService {
 
     @Autowired
-    private PostRepository postRepository;
+    private final PostRepository postRepository;
+
+    public PostService(PostRepository postRepository) {
+        this.postRepository = postRepository;
+    }
 
     public List<Post> findAll() {
         return postRepository.findAll();

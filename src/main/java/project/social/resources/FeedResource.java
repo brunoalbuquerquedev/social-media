@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import project.social.domain.User;
-import project.social.dto.FeedDto;
-import project.social.dto.FeedResponseDto;
+import project.social.dto.domain.FeedDto;
+import project.social.dto.domain.FeedResponseDto;
 import project.social.services.FeedService;
 import project.social.services.UserService;
 import project.social.util.SecurityUtil;
@@ -29,8 +29,14 @@ public class FeedResource {
     private UserService userService;
 
     @GetMapping()
-    public ResponseEntity<FeedResponseDto> getTimeline() {
+    public ResponseEntity<FeedResponseDto> getFeed() {
         String id = securityUtil.getLoggedUserId();
+        List<FeedDto> feed = feedService.getTimelineForUser(id);
+        return ResponseEntity.ok(new FeedResponseDto(feed));
+    }
+
+    @GetMapping("/id/{id}")
+    public ResponseEntity<FeedResponseDto> getUserFeed(@PathVariable String id) {
         List<FeedDto> feed = feedService.getTimelineForUser(id);
         return ResponseEntity.ok(new FeedResponseDto(feed));
     }
@@ -39,12 +45,6 @@ public class FeedResource {
     public ResponseEntity<FeedResponseDto> getUserFeedByUsername(@PathVariable String username) {
         User user = userService.findByUsername(username);
         List<FeedDto> feed = feedService.getTimelineForUser(user.getId());
-        return ResponseEntity.ok(new FeedResponseDto(feed));
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<FeedResponseDto> timeline(@PathVariable String id) {
-        List<FeedDto> feed = feedService.getTimelineForUser(id);
         return ResponseEntity.ok(new FeedResponseDto(feed));
     }
 }

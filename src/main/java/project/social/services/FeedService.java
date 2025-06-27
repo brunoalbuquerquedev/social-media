@@ -4,11 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import project.social.domain.Post;
 import project.social.domain.User;
-import project.social.dto.FeedDto;
+import project.social.dto.domain.FeedDto;
 import project.social.repositories.PostRepository;
 import project.social.repositories.UserRepository;
+import project.social.services.exceptions.ObjectNotFoundException;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -26,18 +26,8 @@ public class FeedService {
     }
 
     public List<FeedDto> getTimelineForUser(String userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
-
-        List<String> followingIds = user.getFollowing();
-
-        List<Post> posts = postRepository.findByAuthorIdInOrderByCreatedAtDesc(followingIds);
-
-        List<FeedDto> timeline = new ArrayList<>();
-
-        for (Post post : posts) {
-            timeline.add(new FeedDto(post));
-        }
-
-        return timeline;
+        User user = userRepository.findById(userId).orElseThrow(() -> new ObjectNotFoundException("User not found"));
+        List<Post> posts = postRepository.findByAuthorIdInOrderByCreatedAtDesc(user.getFollowingIds());
+        return posts.stream().map(FeedDto::new).toList();
     }
 }

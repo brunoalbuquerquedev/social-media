@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import project.social.domain.User;
+import project.social.dto.auth.JwtTokenResponse;
 import project.social.dto.auth.LoginRequestDto;
 import project.social.dto.auth.RefreshRequestDto;
 import project.social.dto.auth.SignupRequestDto;
@@ -12,35 +13,38 @@ import project.social.services.exceptions.IncorrectPasswordException;
 import project.social.services.exceptions.InvalidTokenException;
 import project.social.services.exceptions.ObjectNotFoundException;
 import project.social.services.exceptions.UserAlreadyExistsException;
-import project.social.dto.auth.JwtTokenResponse;
 import project.social.util.JwtUtil;
 
 @Service
 public class AuthService {
 
     @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    private JwtUtil jwtUtil;
+    private final JwtUtil jwtUtil;
 
-    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private final BCryptPasswordEncoder passwordEncoder;
 
-    public JwtTokenResponse register(SignupRequestDto request) {
+    public AuthService(UserRepository userRepository, JwtUtil jwtUtil) {
+        this.userRepository = userRepository;
+        this.jwtUtil = jwtUtil;
+        this.passwordEncoder = new BCryptPasswordEncoder();
+    }
+
+    public void register(SignupRequestDto request) {
         if (userRepository.existsByEmail(request.getEmail()))
             throw new UserAlreadyExistsException("This email already has an account.");
 
         if (userRepository.existsByUsername(request.getUsername()))
             throw new UserAlreadyExistsException("This username is unavailable.");
 
-        User user = new User();
-        user.setUsername(request.getUsername());
-        user.setEmail(request.getEmail());
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
-
+        User.Builder userBuilder = new User.Builder();
+        userBuilder.username(request.getUsername());
+        userBuilder.email(request.getEmail());
+        userBuilder.password(passwordEncoder.encode(request.getPassword()));
+        User user = userBuilder.build();
         userRepository.save(user);
-
-        return jwtUtil.generateTokens(user.getId(), user.getUsername());
     }
 
     public JwtTokenResponse login(LoginRequestDto request) {

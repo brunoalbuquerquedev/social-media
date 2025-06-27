@@ -1,4 +1,4 @@
-package project.social.dto;
+package project.social.dto.domain;
 
 import java.io.Serial;
 import java.io.Serializable;

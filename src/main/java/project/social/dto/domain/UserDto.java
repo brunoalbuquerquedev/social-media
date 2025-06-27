@@ -1,6 +1,5 @@
-package project.social.dto;
+package project.social.dto.domain;
 
-import project.social.domain.Follow;
 import project.social.domain.Post;
 import project.social.domain.User;
 
@@ -32,7 +31,10 @@ public class UserDto implements Serializable {
     private Date lastLogin;
 
     private List<Post> posts = new ArrayList<>();
-    private List<Follow> followers = new ArrayList<>();
+    private List<String> followersIds = new ArrayList<>();
+    private List<String> followingIds = new ArrayList<>();
+    private List<String> blockedUsersIds = new ArrayList<>();
+    private List<String> blockedByIds = new ArrayList<>();
 
     public UserDto() {
     }
@@ -49,6 +51,11 @@ public class UserDto implements Serializable {
         this.createdAt = user.getCreatedAt();
         this.isActive = user.getIsActive();
         this.lastLogin = user.getLastLogin();
+        this.posts = user.getPosts();
+        this.followersIds = user.getFollowersIds();
+        this.followingIds = user.getFollowingIds();
+        this.blockedUsersIds = user.getBlockedUsersIds();
+        this.blockedByIds = user.getBlockedByIds();
     }
 
     public String getId() {
@@ -135,8 +142,8 @@ public class UserDto implements Serializable {
         return isActive;
     }
 
-    public void setIsActive(Boolean isActive) {
-        this.isActive = isActive;
+    public void setIsActive(Boolean active) {
+        isActive = active;
     }
 
     public Date getLastLogin() {
@@ -155,11 +162,35 @@ public class UserDto implements Serializable {
         this.posts = posts;
     }
 
-    public List<Follow> getFollowers() {
-        return followers;
+    public List<String> getFollowersIds() {
+        return followersIds;
     }
 
-    public void setFollowers(List<Follow> followers) {
-        this.followers = followers;
+    public void setFollowersIds(List<String> followersIds) {
+        this.followersIds = followersIds;
+    }
+
+    public List<String> getFollowingIds() {
+        return followingIds;
+    }
+
+    public void setFollowingIds(List<String> followingIds) {
+        this.followingIds = followingIds;
+    }
+
+    public List<String> getBlockedUsersIds() {
+        return blockedUsersIds;
+    }
+
+    public void setBlockedUsersIds(List<String> blockedUsersIds) {
+        this.blockedUsersIds = blockedUsersIds;
+    }
+
+    public List<String> getBlockedByIds() {
+        return blockedByIds;
+    }
+
+    public void setBlockedByIds(List<String> blockedByIds) {
+        this.blockedByIds = blockedByIds;
     }
 }

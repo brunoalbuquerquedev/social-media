@@ -5,7 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.social.domain.Post;
 import project.social.domain.User;
-import project.social.dto.UserDto;
+import project.social.dto.domain.UserDto;
+import project.social.services.FollowService;
 import project.social.services.UserService;
 import project.social.util.JwtUtil;
 import project.social.util.SecurityUtil;
@@ -25,7 +26,10 @@ public class UserResource {
     @Autowired
     private SecurityUtil securityUtil;
 
-    @GetMapping("/list")
+    @Autowired
+    private FollowService followService;
+
+    @GetMapping("/all")
     public ResponseEntity<List<UserDto>> findAll() {
         List<User> list = userService.findAll();
 
@@ -37,10 +41,15 @@ public class UserResource {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<UserDto> me() {
+    public ResponseEntity<UserDto> getMe() {
         String id = securityUtil.getLoggedUserId();
         UserDto dto = new UserDto(userService.findById(id));
         return ResponseEntity.ok(dto);
+    }
+
+    @PutMapping("/me/update")
+    public ResponseEntity<Void> updateMe() {
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/id/{id}")
@@ -55,51 +64,9 @@ public class UserResource {
         return ResponseEntity.ok(new UserDto(user));
     }
 
-    @GetMapping("/{id}/posts")
+    @GetMapping("/id/{id}/posts")
     public ResponseEntity<List<Post>> findPosts(@PathVariable String id) {
         User user = userService.findById(id);
         return ResponseEntity.ok(user.getPosts());
-    }
-
-    @PostMapping("/{id}/follow")
-    public ResponseEntity<Void> follow(@PathVariable String id) {
-        String followerId = securityUtil.getLoggedUserId();
-        User user = userService.followUser(followerId, id);
-        return ResponseEntity.noContent().build();
-    }
-
-    @DeleteMapping("{id}/unfollow")
-    public ResponseEntity<Void> unfollow(@PathVariable String id) {
-        String followerId = securityUtil.getLoggedUserId();
-        User user = userService.unfollowUser(followerId, id);
-        return ResponseEntity.noContent().build();
-    }
-
-    @GetMapping("{id}/followers")
-    public ResponseEntity<List<UserDto>> getFollowersList(@PathVariable String id) {
-        User user = userService.findById(id);
-        List<User> list = user.getFollowers().stream()
-                .map(userService::findById)
-                .toList();
-
-        List<UserDto> dtoList = list.stream()
-                .map(UserDto::new)
-                .toList();
-
-        return ResponseEntity.ok(dtoList);
-    }
-
-    @GetMapping("{id}/following")
-    public ResponseEntity<List<UserDto>> getFollowingList(@PathVariable String id) {
-        User user = userService.findById(id);
-        List<User> list = user.getFollowing().stream()
-                .map(userService::findById)
-                .toList();
-
-        List<UserDto> dtoList = list.stream()
-                .map(UserDto::new)
-                .toList();
-
-        return ResponseEntity.ok(dtoList);
     }
 }

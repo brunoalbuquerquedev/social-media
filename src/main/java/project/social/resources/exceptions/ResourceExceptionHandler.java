@@ -73,4 +73,20 @@ public class ResourceExceptionHandler {
         );
         return ResponseEntity.status(status).body(error);
     }
+
+    @ExceptionHandler(IllegalFollowingArgumentException.class)
+    public ResponseEntity<StandardError> invalidFollowingArgument(InvalidTokenException e, HttpServletRequest request) {
+
+        HttpStatus status = HttpStatus.UNAUTHORIZED;
+        String message = "Invalid argument.";
+
+        StandardError error = new StandardError(
+                String.valueOf(System.currentTimeMillis()),
+                status.value(),
+                message,
+                e.getMessage(),
+                request.getRequestURI()
+        );
+        return ResponseEntity.status(status).body(error);
+    }
 }

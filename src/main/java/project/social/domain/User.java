@@ -3,7 +3,7 @@ package project.social.domain;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-import project.social.dto.UserDto;
+import project.social.dto.domain.UserDto;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -35,42 +35,152 @@ public class User implements Serializable {
     private Boolean isActive;
     private Date lastLogin;
 
+    @DBRef(lazy = true)
+    private List<Post> posts;
 
     @DBRef(lazy = true)
-    private List<Post> posts = new ArrayList<>();
-    private List<String> followers = new ArrayList<>();
-    private List<String> following = new ArrayList<>();
+    private List<String> followersIds;
+
+    @DBRef(lazy = true)
+    private List<String> followingIds;
+
+    @DBRef(lazy = true)
+    private List<String> blockedUsersIds;
+
+    @DBRef(lazy = true)
+    private List<String> blockedByIds;
 
     public User() {
     }
 
-    public User(String id, String username, String email) {
-        this.id = id;
-        this.username = username;
-        this.email = email;
+    private User(Builder builder) {
+        this.id = builder.id;
+        this.username = builder.username;
+        this.email = builder.email;
+        this.password = builder.password;
+        this.fullName = builder.fullName;
+        this.bio = builder.bio;
+        this.profilePictureUrl = builder.profilePictureUrl;
+        this.location = builder.location;
+        this.birthDate = builder.birthDate;
+        this.createdAt = builder.createdAt;
+        this.isActive = builder.isActive;
+        this.lastLogin = builder.lastLogin;
+        this.posts = builder.posts;
+        this.followersIds = builder.followersIds;
+        this.followingIds = builder.followingIds;
+        this.blockedUsersIds = builder.blockedUsersIds;
+        this.blockedByIds = builder.blockedByIds;
     }
 
-    public User(String id, String username, String email, String password, String fullName,
-                String bio, String profilePictureUrl, String location, Date birthDate,
-                Date createdAt, Boolean isActive, Date lastLogin,
-                List<Post> posts, List<String> followers, List<String> following) {
-        this.id = id;
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.fullName = fullName;
-        this.bio = bio;
-        this.profilePictureUrl = profilePictureUrl;
-        this.location = location;
-        this.birthDate = birthDate;
-        this.createdAt = createdAt;
-        this.isActive = isActive;
-        this.lastLogin = lastLogin;
-        this.posts = posts;
-        this.followers = followers;
-        this.following = following;
-    }
+    public static class Builder {
+        private String id = null;
+        private String username;
+        private String email;
+        private String password;
+        private String fullName = null;
+        private String bio = null;
+        private String profilePictureUrl = null;
+        private String location = null;
+        private Date birthDate = null;
+        private Date createdAt = new Date();
+        private Boolean isActive = true;
+        private Date lastLogin = null;
+        private List<Post> posts = new ArrayList<>();
+        private List<String> followersIds = new ArrayList<>();
+        private List<String> followingIds = new ArrayList<>();
+        private List<String> blockedUsersIds = new ArrayList<>();
+        private List<String> blockedByIds = new ArrayList<>();
 
+        public Builder id(String id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder username(String username) {
+            this.username = username;
+            return this;
+        }
+
+        public Builder email(String email) {
+            this.email = email;
+            return this;
+        }
+
+        public Builder password(String password) {
+            this.password = password;
+            return this;
+        }
+
+        public Builder fullName(String fullName) {
+            this.fullName = fullName;
+            return this;
+        }
+
+        public Builder bio(String bio) {
+            this.bio = bio;
+            return this;
+        }
+
+        public Builder profilePictureUrl(String profilePictureUrl) {
+            this.profilePictureUrl = profilePictureUrl;
+            return this;
+        }
+
+        public Builder location(String location) {
+            this.location = location;
+            return this;
+        }
+
+        public Builder birthDate(Date birthDate) {
+            this.birthDate = birthDate;
+            return this;
+        }
+
+        public Builder createdAt(Date createdAt) {
+            this.createdAt = createdAt;
+            return this;
+        }
+
+        public Builder isActive(Boolean isActive) {
+            this.isActive = isActive;
+            return this;
+        }
+
+        public Builder lastLogin(Date lastLogin) {
+            this.lastLogin = lastLogin;
+            return this;
+        }
+
+        public Builder posts(List<Post> posts) {
+            this.posts = posts;
+            return this;
+        }
+
+        public Builder followersIds(List<String> followersIds) {
+            this.followersIds = followersIds;
+            return this;
+        }
+
+        public Builder followingIds(List<String> followingIds) {
+            this.followingIds = followingIds;
+            return this;
+        }
+
+        public Builder blockedUsersIds(List<String> blockedUsersIds) {
+            this.blockedUsersIds = blockedUsersIds;
+            return this;
+        }
+
+        public Builder blockedByIds(List<String> blockedByIds) {
+            this.blockedByIds = blockedByIds;
+            return this;
+        }
+
+        public User build() {
+            return new User(this);
+        }
+    }
 
     public String getId() {
         return id;
@@ -156,8 +266,8 @@ public class User implements Serializable {
         return isActive;
     }
 
-    public void setIsActive(Boolean isActive) {
-        this.isActive = isActive;
+    public void setIsActive(Boolean active) {
+        isActive = active;
     }
 
     public Date getLastLogin() {
@@ -176,20 +286,36 @@ public class User implements Serializable {
         this.posts = posts;
     }
 
-    public List<String> getFollowers() {
-        return followers;
+    public List<String> getFollowersIds() {
+        return followersIds;
     }
 
-    public void setFollowers(List<String> followers) {
-        this.followers = followers;
+    public void setFollowersIds(List<String> followersIds) {
+        this.followersIds = followersIds;
     }
 
-    public List<String> getFollowing() {
-        return following;
+    public List<String> getFollowingIds() {
+        return followingIds;
     }
 
-    public void setFollowing(List<String> following) {
-        this.following = following;
+    public void setFollowingIds(List<String> followingIds) {
+        this.followingIds = followingIds;
+    }
+
+    public List<String> getBlockedUsersIds() {
+        return blockedUsersIds;
+    }
+
+    public void setBlockedUsersIds(List<String> blockedUsersIds) {
+        this.blockedUsersIds = blockedUsersIds;
+    }
+
+    public List<String> getBlockedByIds() {
+        return blockedByIds;
+    }
+
+    public void setBlockedByIds(List<String> blockedByIds) {
+        this.blockedByIds = blockedByIds;
     }
 
     @Override
@@ -205,16 +331,43 @@ public class User implements Serializable {
     }
 
     public static User fromDto(UserDto dto) {
-        return new User(dto.getId(), dto.getUsername(), dto.getEmail());
+        User.Builder builder = new User.Builder();
+        builder.id(dto.getId());
+        builder.username(dto.getUsername());
+        builder.email(dto.getEmail());
+        builder.password(dto.getPassword());
+        builder.fullName(dto.getFullName());
+        builder.bio(dto.getBio());
+        builder.profilePictureUrl(dto.getProfilePictureUrl());
+        builder.location(dto.getLocation());
+        builder.birthDate(dto.getBirthDate());
+        builder.createdAt(dto.getCreatedAt());
+        builder.isActive(dto.getIsActive());
+        builder.lastLogin(dto.getLastLogin());
+        builder.posts(dto.getPosts());
+        builder.followersIds(dto.getFollowersIds());
+        builder.followingIds(dto.getFollowingIds());
+        builder.blockedUsersIds(dto.getBlockedUsersIds());
+        builder.blockedByIds(dto.getBlockedByIds());
+        return builder.build();
     }
 
     public void updateData(User user) {
         setUsername(user.getUsername());
         setEmail(user.getEmail());
+        setPassword(user.getPassword());
         setFullName(user.getFullName());
         setBio(user.getBio());
+        setProfilePictureUrl(user.getProfilePictureUrl());
         setLocation(user.getLocation());
         setBirthDate(user.getBirthDate());
+        setCreatedAt(user.getCreatedAt());
+        setIsActive(user.getIsActive());
         setLastLogin(user.getLastLogin());
+        setPosts(user.getPosts());
+        setFollowersIds(user.getFollowersIds());
+        setFollowingIds(user.getFollowingIds());
+        setBlockedUsersIds(user.getBlockedUsersIds());
+        setBlockedByIds(user.getBlockedByIds());
     }
 }

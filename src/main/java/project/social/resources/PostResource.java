@@ -20,31 +20,31 @@ public class PostResource {
     @Autowired
     private SecurityUtil securityUtil;
 
-    @GetMapping("/list")
+    @GetMapping("/all")
     public ResponseEntity<List<Post>> findAll() {
         List<Post> list = postService.findAll();
         return ResponseEntity.ok(list);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public ResponseEntity<Post> findById(@PathVariable String id) {
         Post post = postService.findById(id);
         return ResponseEntity.ok(post);
     }
 
-    @PostMapping("/{id}/like")
-    public ResponseEntity<Void> like(@PathVariable String id) {
+    @PostMapping("/id/{id}/like")
+    public ResponseEntity<Void> likePost(@PathVariable String id) {
         String userId = securityUtil.getLoggedUserId();
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/{id}/unlike")
-    public ResponseEntity<Void> unlike(@PathVariable String id) {
+    @DeleteMapping("/id/{id}/unlike")
+    public ResponseEntity<Void> unlikePost(@PathVariable String id) {
         String userId = securityUtil.getLoggedUserId();
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/{id}/likes")
+    @GetMapping("/id/{id}/likes")
     public ResponseEntity<Void> likes(@PathVariable String id) {
         return ResponseEntity.noContent().build();
     }
