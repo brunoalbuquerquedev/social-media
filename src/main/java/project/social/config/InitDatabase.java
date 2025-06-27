@@ -32,7 +32,7 @@ public class InitDatabase {
                     .profilePictureUrl("https://picsum.photos/200").location("São Paulo")
                     .birthDate(new Date(95, 5, 10)).createdAt(new Date())
                     .isActive(true).lastLogin(new Date())
-                    .followersIds(new ArrayList<>()).followingIds(new ArrayList<>()).posts(new ArrayList<>())
+                    .followersIds(new ArrayList<>()).followedIds(new ArrayList<>()).posts(new ArrayList<>())
                     .blockedByIds(new ArrayList<>()).blockedUsersIds(new ArrayList<>())
                     .build();
 
@@ -42,7 +42,7 @@ public class InitDatabase {
                     .profilePictureUrl("https://picsum.photos/201").location("Rio de Janeiro")
                     .birthDate(new Date(90, 8, 20)).createdAt(new Date())
                     .isActive(true).lastLogin(new Date())
-                    .followersIds(new ArrayList<>()).followingIds(new ArrayList<>()).posts(new ArrayList<>())
+                    .followersIds(new ArrayList<>()).followedIds(new ArrayList<>()).posts(new ArrayList<>())
                     .blockedByIds(new ArrayList<>()).blockedUsersIds(new ArrayList<>())
                     .build();
 
@@ -51,7 +51,7 @@ public class InitDatabase {
                     .profilePictureUrl("https://picsum.photos/202").location("Belo Horizonte")
                     .birthDate(new Date(88, 2, 15)).createdAt(new Date())
                     .isActive(true).lastLogin(new Date())
-                    .followersIds(new ArrayList<>()).followingIds(new ArrayList<>()).posts(new ArrayList<>())
+                    .followersIds(new ArrayList<>()).followedIds(new ArrayList<>()).posts(new ArrayList<>())
                     .blockedByIds(new ArrayList<>()).blockedUsersIds(new ArrayList<>()).build();
 
             User user4 = new User.Builder().username("juliana").email("juliana@gmail.com").password("123456")
@@ -59,7 +59,7 @@ public class InitDatabase {
                     .profilePictureUrl("https://picsum.photos/203").location("Curitiba")
                     .birthDate(new Date(92, 11, 5)).createdAt(new Date())
                     .isActive(true).lastLogin(new Date())
-                    .followersIds(new ArrayList<>()).followingIds(new ArrayList<>()).posts(new ArrayList<>())
+                    .followersIds(new ArrayList<>()).followedIds(new ArrayList<>()).posts(new ArrayList<>())
                     .blockedByIds(new ArrayList<>()).blockedUsersIds(new ArrayList<>()).build();
 
             User user5 = new User.Builder().username("rodrigo").email("rodrigo@gmail.com").password("123456")
@@ -67,7 +67,7 @@ public class InitDatabase {
                     .profilePictureUrl("https://picsum.photos/204").location("Salvador")
                     .birthDate(new Date(94, 3, 12)).createdAt(new Date())
                     .isActive(true).lastLogin(new Date())
-                    .followersIds(new ArrayList<>()).followingIds(new ArrayList<>()).posts(new ArrayList<>())
+                    .followersIds(new ArrayList<>()).followedIds(new ArrayList<>()).posts(new ArrayList<>())
                     .blockedByIds(new ArrayList<>()).blockedUsersIds(new ArrayList<>()).build();
 
             User user6 = new User.Builder().username("fernanda").email("fernanda@gmail.com").password("123456")
@@ -75,7 +75,7 @@ public class InitDatabase {
                     .profilePictureUrl("https://picsum.photos/205").location("Fortaleza")
                     .birthDate(new Date(91, 7, 19)).createdAt(new Date())
                     .isActive(true).lastLogin(new Date())
-                    .followersIds(new ArrayList<>()).followingIds(new ArrayList<>()).posts(new ArrayList<>())
+                    .followersIds(new ArrayList<>()).followedIds(new ArrayList<>()).posts(new ArrayList<>())
                     .blockedByIds(new ArrayList<>()).blockedUsersIds(new ArrayList<>()).build();
 
             User user7 = new User.Builder().username("lucas").email("lucas@gmail.com").password("123456")
@@ -83,7 +83,7 @@ public class InitDatabase {
                     .profilePictureUrl("https://picsum.photos/206").location("Brasília")
                     .birthDate(new Date(93, 10, 25)).createdAt(new Date())
                     .isActive(true).lastLogin(new Date())
-                    .followersIds(new ArrayList<>()).followingIds(new ArrayList<>()).posts(new ArrayList<>())
+                    .followersIds(new ArrayList<>()).followedIds(new ArrayList<>()).posts(new ArrayList<>())
                     .blockedByIds(new ArrayList<>()).blockedUsersIds(new ArrayList<>()).build();
 
             User user8 = new User.Builder().username("marina").email("marina@gmail.com").password("123456")
@@ -91,7 +91,7 @@ public class InitDatabase {
                     .profilePictureUrl("https://picsum.photos/207").location("Florianópolis")
                     .birthDate(new Date(96, 1, 30)).createdAt(new Date())
                     .isActive(true).lastLogin(new Date())
-                    .followersIds(new ArrayList<>()).followingIds(new ArrayList<>()).posts(new ArrayList<>())
+                    .followersIds(new ArrayList<>()).followedIds(new ArrayList<>()).posts(new ArrayList<>())
                     .blockedByIds(new ArrayList<>()).blockedUsersIds(new ArrayList<>()).build();
 
             User user9 = new User.Builder().username("pedro").email("pedro@gmail.com").password("123456")
@@ -99,7 +99,7 @@ public class InitDatabase {
                     .profilePictureUrl("https://picsum.photos/208").location("Recife")
                     .birthDate(new Date(87, 4, 18)).createdAt(new Date())
                     .isActive(true).lastLogin(new Date())
-                    .followersIds(new ArrayList<>()).followingIds(new ArrayList<>()).posts(new ArrayList<>())
+                    .followersIds(new ArrayList<>()).followedIds(new ArrayList<>()).posts(new ArrayList<>())
                     .blockedByIds(new ArrayList<>()).blockedUsersIds(new ArrayList<>()).build();
 
             User user10 = new User.Builder().username("patricia").email("patricia@gmail.com").password("123456")
@@ -107,7 +107,7 @@ public class InitDatabase {
                     .profilePictureUrl("https://picsum.photos/209").location("Porto Alegre")
                     .birthDate(new Date(95, 6, 2)).createdAt(new Date())
                     .isActive(true).lastLogin(new Date())
-                    .followersIds(new ArrayList<>()).followingIds(new ArrayList<>()).posts(new ArrayList<>())
+                    .followersIds(new ArrayList<>()).followedIds(new ArrayList<>()).posts(new ArrayList<>())
                     .blockedByIds(new ArrayList<>()).blockedUsersIds(new ArrayList<>()).build();
 
             List<User> savedUsers = userRepository.saveAll(Arrays.asList(user1, user2, user3, user4, user5, user6, user7, user8, user9, user10));
@@ -207,7 +207,7 @@ public class InitDatabase {
 
             Follow follow1 = new Follow.Builder()
                     .followerId(user2.getId())
-                    .followingId(user1.getId())
+                    .followedId(user1.getId())
                     .createdAt(new Date())
                     .notified(false)
                     .status(FollowStatus.FOLLOWING)
@@ -215,7 +215,7 @@ public class InitDatabase {
 
             Follow follow2 = new Follow.Builder()
                     .followerId(user3.getId())
-                    .followingId(user1.getId())
+                    .followedId(user1.getId())
                     .createdAt(new Date())
                     .notified(false)
                     .status(FollowStatus.FOLLOWING)
@@ -223,7 +223,7 @@ public class InitDatabase {
 
             Follow follow3 = new Follow.Builder()
                     .followerId(user4.getId())
-                    .followingId(user2.getId())
+                    .followedId(user2.getId())
                     .createdAt(new Date())
                     .notified(false)
                     .status(FollowStatus.FOLLOWING)
@@ -231,7 +231,7 @@ public class InitDatabase {
 
             Follow follow4 = new Follow.Builder()
                     .followerId(user5.getId())
-                    .followingId(user3.getId())
+                    .followedId(user3.getId())
                     .createdAt(new Date())
                     .notified(false)
                     .status(FollowStatus.FOLLOWING)
@@ -239,7 +239,7 @@ public class InitDatabase {
 
             Follow follow5 = new Follow.Builder()
                     .followerId(user6.getId())
-                    .followingId(user4.getId())
+                    .followedId(user4.getId())
                     .createdAt(new Date())
                     .notified(false)
                     .status(FollowStatus.FOLLOWING)
@@ -247,7 +247,7 @@ public class InitDatabase {
 
             Follow follow6 = new Follow.Builder()
                     .followerId(user7.getId())
-                    .followingId(user5.getId())
+                    .followedId(user5.getId())
                     .createdAt(new Date())
                     .notified(false)
                     .status(FollowStatus.FOLLOWING)
@@ -255,7 +255,7 @@ public class InitDatabase {
 
             Follow follow7 = new Follow.Builder()
                     .followerId(user8.getId())
-                    .followingId(user6.getId())
+                    .followedId(user6.getId())
                     .createdAt(new Date())
                     .notified(false)
                     .status(FollowStatus.FOLLOWING)
@@ -263,7 +263,7 @@ public class InitDatabase {
 
             Follow follow8 = new Follow.Builder()
                     .followerId(user9.getId())
-                    .followingId(user7.getId())
+                    .followedId(user7.getId())
                     .createdAt(new Date())
                     .notified(false)
                     .status(FollowStatus.FOLLOWING)
@@ -271,7 +271,7 @@ public class InitDatabase {
 
             Follow follow9 = new Follow.Builder()
                     .followerId(user10.getId())
-                    .followingId(user8.getId())
+                    .followedId(user8.getId())
                     .createdAt(new Date())
                     .notified(false)
                     .status(FollowStatus.FOLLOWING)
@@ -279,7 +279,7 @@ public class InitDatabase {
 
             Follow follow10 = new Follow.Builder()
                     .followerId(user1.getId())
-                    .followingId(user9.getId())
+                    .followedId(user9.getId())
                     .createdAt(new Date())
                     .notified(false)
                     .status(FollowStatus.FOLLOWING)
@@ -287,6 +287,8 @@ public class InitDatabase {
 
             followRepository.saveAll(Arrays.asList(follow1, follow2, follow3, follow4, follow5, follow6,
                     follow7, follow8, follow9, follow10));
+
+            followRepository.deleteAll();
         };
     }
 }

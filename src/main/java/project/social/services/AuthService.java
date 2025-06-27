@@ -9,10 +9,7 @@ import project.social.dto.auth.LoginRequestDto;
 import project.social.dto.auth.RefreshRequestDto;
 import project.social.dto.auth.SignupRequestDto;
 import project.social.repositories.UserRepository;
-import project.social.services.exceptions.IncorrectPasswordException;
-import project.social.services.exceptions.InvalidTokenException;
-import project.social.services.exceptions.ObjectNotFoundException;
-import project.social.services.exceptions.UserAlreadyExistsException;
+import project.social.services.exceptions.*;
 import project.social.util.JwtUtil;
 
 @Service
@@ -38,6 +35,9 @@ public class AuthService {
 
         if (userRepository.existsByUsername(request.getUsername()))
             throw new UserAlreadyExistsException("This username is unavailable.");
+
+        if (request.getUsername() == null || request.getEmail() == null || request.getPassword() == null)
+            throw new InvalidRequestDataException("Invalid request.");
 
         User.Builder userBuilder = new User.Builder();
         userBuilder.username(request.getUsername());

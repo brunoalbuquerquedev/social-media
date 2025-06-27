@@ -7,6 +7,7 @@ import project.social.domain.User;
 import project.social.domain.enums.FollowStatus;
 import project.social.repositories.FollowRepository;
 import project.social.repositories.UserRepository;
+import project.social.services.exceptions.FollowAlreadyExistsException;
 import project.social.services.exceptions.IllegalFollowingArgumentException;
 import project.social.services.exceptions.ObjectNotFoundException;
 
@@ -31,30 +32,37 @@ public class FollowService {
         this.userService = userService;
     }
 
-    public void followUser(String followerId, String followingId) {
-        if (followerId.equals(followingId))
+    public List<Follow> findAll() {
+        return followRepository.findAll();
+    }
+
+    public List<Follow> findById(String id) {
+        return followRepository.findByFollowerId(id);
+    }
+
+    public void followUser(String followerUserId, String followedUserId) {
+        if (followerUserId.equals(followedUserId))
             throw new IllegalFollowingArgumentException("You cannot follow yourself.");
 
-        User follower = userService.findById(followerId);
-        User following = userService.findById(followingId);
+        User followerUser = userService.findById(followerUserId);
+        User followedUser = userService.findById(followedUserId);
 
-        List<String> followersIdList = follower.getFollowersIds();
-        List<String> followingsIdList = following.getFollowingIds();
+        Optional<Follow> optionalFollow = followRepository.findByFollowerIdAndFollowedId(followerUserId, followedUserId);
+
+        if (optionalFollow.isPresent())
+            throw new FollowAlreadyExistsException("The user is already following.");
 
         Follow.Builder followBuilder = Follow.builder();
 
-        if (!followersIdList.contains(following.getId()))
-            followBuilder.followingId(followingId);
-
-        if (!followingsIdList.contains(follower.getId()))
-            followBuilder.followerId(followerId);
-
+        followBuilder.followerId(followerUserId);
+        followBuilder.followedId(followedUserId);
         followBuilder.status(FollowStatus.FOLLOWING);
         Follow follow = followBuilder.build();
 
         followRepository.save(follow);
-        follower.getFollowersIds().add(follow.getId());
-        following.getFollowingIds().add(follow.getId());
+
+        followerUser.getFollowersIds().add(follow.getId());
+        followedUser.getFollowedIds().add(follow.getId());
     }
 
     public void unfollowUser(String followerId, String unfollowingId) {
@@ -64,7 +72,7 @@ public class FollowService {
         User follower = userService.findById(followerId);
         User unfollowing = userService.findById(unfollowingId);
 
-        Optional<Follow> optionalFollow = followRepository.findByFollowerIdAndFollowingId(followerId, unfollowingId);
+        Optional<Follow> optionalFollow = followRepository.findByFollowerIdAndFollowedId(followerId, unfollowingId);
 
         if (optionalFollow.isEmpty())
             throw new ObjectNotFoundException("Follow relationship not found.");
@@ -72,7 +80,7 @@ public class FollowService {
         Follow follow = optionalFollow.get();
         followRepository.delete(follow);
 
-        follower.getFollowingIds().remove(unfollowingId);
+        follower.getFollowedIds().remove(unfollowingId);
         unfollowing.getFollowersIds().remove(followerId);
         userRepository.save(follower);
         userRepository.save(unfollowing);

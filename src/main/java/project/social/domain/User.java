@@ -42,7 +42,7 @@ public class User implements Serializable {
     private List<String> followersIds;
 
     @DBRef(lazy = true)
-    private List<String> followingIds;
+    private List<String> followedIds;
 
     @DBRef(lazy = true)
     private List<String> blockedUsersIds;
@@ -68,7 +68,7 @@ public class User implements Serializable {
         this.lastLogin = builder.lastLogin;
         this.posts = builder.posts;
         this.followersIds = builder.followersIds;
-        this.followingIds = builder.followingIds;
+        this.followedIds = builder.followedIds;
         this.blockedUsersIds = builder.blockedUsersIds;
         this.blockedByIds = builder.blockedByIds;
     }
@@ -88,7 +88,7 @@ public class User implements Serializable {
         private Date lastLogin = null;
         private List<Post> posts = new ArrayList<>();
         private List<String> followersIds = new ArrayList<>();
-        private List<String> followingIds = new ArrayList<>();
+        private List<String> followedIds = new ArrayList<>();
         private List<String> blockedUsersIds = new ArrayList<>();
         private List<String> blockedByIds = new ArrayList<>();
 
@@ -162,8 +162,8 @@ public class User implements Serializable {
             return this;
         }
 
-        public Builder followingIds(List<String> followingIds) {
-            this.followingIds = followingIds;
+        public Builder followedIds(List<String> followedIds) {
+            this.followedIds = followedIds;
             return this;
         }
 
@@ -294,12 +294,12 @@ public class User implements Serializable {
         this.followersIds = followersIds;
     }
 
-    public List<String> getFollowingIds() {
-        return followingIds;
+    public List<String> getFollowedIds() {
+        return followedIds;
     }
 
-    public void setFollowingIds(List<String> followingIds) {
-        this.followingIds = followingIds;
+    public void setFollowedIds(List<String> followedIds) {
+        this.followedIds = followedIds;
     }
 
     public List<String> getBlockedUsersIds() {
@@ -346,7 +346,7 @@ public class User implements Serializable {
         builder.lastLogin(dto.getLastLogin());
         builder.posts(dto.getPosts());
         builder.followersIds(dto.getFollowersIds());
-        builder.followingIds(dto.getFollowingIds());
+        builder.followedIds(dto.getFollowedIds());
         builder.blockedUsersIds(dto.getBlockedUsersIds());
         builder.blockedByIds(dto.getBlockedByIds());
         return builder.build();
@@ -366,7 +366,7 @@ public class User implements Serializable {
         setLastLogin(user.getLastLogin());
         setPosts(user.getPosts());
         setFollowersIds(user.getFollowersIds());
-        setFollowingIds(user.getFollowingIds());
+        setFollowedIds(user.getFollowedIds());
         setBlockedUsersIds(user.getBlockedUsersIds());
         setBlockedByIds(user.getBlockedByIds());
     }

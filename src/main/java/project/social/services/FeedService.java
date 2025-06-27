@@ -27,7 +27,7 @@ public class FeedService {
 
     public List<FeedDto> getTimelineForUser(String userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new ObjectNotFoundException("User not found"));
-        List<Post> posts = postRepository.findByAuthorIdInOrderByCreatedAtDesc(user.getFollowingIds());
+        List<Post> posts = postRepository.findByAuthorIdInOrderByCreatedAtDesc(user.getFollowedIds());
         return posts.stream().map(FeedDto::new).toList();
     }
 }

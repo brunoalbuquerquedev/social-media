@@ -18,8 +18,15 @@ public class Follow implements Serializable {
     @Id
     private String id;
 
+    /**
+     * Follower is the source user, the one who's making the action of follow.
+     */
     private String followerId;
-    private String followingId;
+
+    /**
+     * Followed is the target user, the one who's been followed by another user.
+     */
+    private String followedId;
     private Date createdAt;
     private boolean notified;
     private FollowStatus status;
@@ -30,7 +37,7 @@ public class Follow implements Serializable {
     private Follow(Builder builder) {
         this.id = builder.id;
         this.followerId = builder.followerId;
-        this.followingId = builder.followingId;
+        this.followedId = builder.followedId;
         this.createdAt = builder.createdAt;
         this.notified = builder.notified;
         this.status = builder.status;
@@ -43,7 +50,7 @@ public class Follow implements Serializable {
     public static class Builder {
         private String id;
         private String followerId;
-        private String followingId;
+        private String followedId;
         private Date createdAt = new Date();
         private boolean notified = false;
         private FollowStatus status = null;
@@ -58,8 +65,8 @@ public class Follow implements Serializable {
             return this;
         }
 
-        public Builder followingId(String followingId) {
-            this.followingId = followingId;
+        public Builder followedId(String followedId) {
+            this.followedId = followedId;
             return this;
         }
 
@@ -99,12 +106,12 @@ public class Follow implements Serializable {
         this.followerId = followerId;
     }
 
-    public String getFollowingId() {
-        return followingId;
+    public String getFollowedId() {
+        return followedId;
     }
 
-    public void setFollowingId(String followingId) {
-        this.followingId = followingId;
+    public void setFollowedId(String followedId) {
+        this.followedId = followedId;
     }
 
     public Date getCreatedAt() {

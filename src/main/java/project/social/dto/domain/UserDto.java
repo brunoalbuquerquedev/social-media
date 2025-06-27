@@ -5,7 +5,6 @@ import project.social.domain.User;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -30,11 +29,11 @@ public class UserDto implements Serializable {
     private Boolean isActive;
     private Date lastLogin;
 
-    private List<Post> posts = new ArrayList<>();
-    private List<String> followersIds = new ArrayList<>();
-    private List<String> followingIds = new ArrayList<>();
-    private List<String> blockedUsersIds = new ArrayList<>();
-    private List<String> blockedByIds = new ArrayList<>();
+    private List<Post> posts;
+    private List<String> followersIds;
+    private List<String> followedIds;
+    private List<String> blockedUsersIds;
+    private List<String> blockedByIds;
 
     public UserDto() {
     }
@@ -53,7 +52,7 @@ public class UserDto implements Serializable {
         this.lastLogin = user.getLastLogin();
         this.posts = user.getPosts();
         this.followersIds = user.getFollowersIds();
-        this.followingIds = user.getFollowingIds();
+        this.followedIds = user.getFollowedIds();
         this.blockedUsersIds = user.getBlockedUsersIds();
         this.blockedByIds = user.getBlockedByIds();
     }
@@ -170,12 +169,12 @@ public class UserDto implements Serializable {
         this.followersIds = followersIds;
     }
 
-    public List<String> getFollowingIds() {
-        return followingIds;
+    public List<String> getFollowedIds() {
+        return followedIds;
     }
 
-    public void setFollowingIds(List<String> followingIds) {
-        this.followingIds = followingIds;
+    public void setFollowingIds(List<String> followedIds) {
+        this.followedIds = followedIds;
     }
 
     public List<String> getBlockedUsersIds() {
