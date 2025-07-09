@@ -122,4 +122,20 @@ public class ExceptionHandler {
         );
         return ResponseEntity.status(status).body(error);
     }
+
+    @org.springframework.web.bind.annotation.ExceptionHandler(IllegalBlockingArgumentException.class)
+    public ResponseEntity<StandardError> illegalBlockingArgument(IllegalBlockingArgumentException e, HttpServletRequest request) {
+
+        HttpStatus status = HttpStatus.UNAUTHORIZED;
+        String message = "Invalid argument.";
+
+        StandardError error = new StandardError(
+                String.valueOf(Instant.now().toEpochMilli()),
+                status.value(),
+                message,
+                e.getMessage(),
+                request.getRequestURI()
+        );
+        return ResponseEntity.status(status).body(error);
+    }
 }

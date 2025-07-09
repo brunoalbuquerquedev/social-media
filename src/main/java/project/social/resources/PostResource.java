@@ -32,13 +32,13 @@ public class PostResource {
         return ResponseEntity.ok(post);
     }
 
-    @PostMapping("/id/{id}/like")
+    @PostMapping("/id/{id}")
     public ResponseEntity<Void> likePost(@PathVariable String id) {
         String userId = securityUtil.getLoggedUserId();
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/id/{id}/unlike")
+    @DeleteMapping("/id/{id}")
     public ResponseEntity<Void> unlikePost(@PathVariable String id) {
         String userId = securityUtil.getLoggedUserId();
         return ResponseEntity.noContent().build();

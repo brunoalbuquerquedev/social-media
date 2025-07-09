@@ -11,6 +11,7 @@ import project.social.services.exceptions.FollowAlreadyExistsException;
 import project.social.services.exceptions.IllegalFollowingArgumentException;
 import project.social.services.exceptions.ObjectNotFoundException;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,39 +51,36 @@ public class FollowService {
         Optional<Follow> optionalFollow = followRepository.findByFollowerIdAndFollowedId(followerUserId, followedUserId);
 
         if (optionalFollow.isPresent())
-            throw new FollowAlreadyExistsException("The user is already following.");
+            throw new FollowAlreadyExistsException("The user is already followed.");
 
-        Follow.FollowBuilder followBuilder = Follow.builder();
-
-        followBuilder.followerId(followerUserId);
-        followBuilder.followedId(followedUserId);
-        followBuilder.status(FollowStatus.FOLLOWING);
-        Follow follow = followBuilder.build();
+        Follow follow = Follow.builder()
+                .followerId(followerUserId)
+                .followedId(followedUserId)
+                .status(FollowStatus.FOLLOWING)
+                .build();
 
         followRepository.save(follow);
 
         followerUser.getFollowersIds().add(follow.getId());
         followedUser.getFollowedIds().add(follow.getId());
+        userRepository.saveAll(Arrays.asList(followerUser, followedUser));
     }
 
-    public void unfollowUser(String followerId, String unfollowingId) {
-        if (followerId.equals(unfollowingId))
+    public void unfollowUser(String followerUserId, String unfollowingUserId) {
+        if (followerUserId.equals(unfollowingUserId))
             throw new IllegalFollowingArgumentException("You cannot unfollow yourself.");
 
-        User follower = userService.findById(followerId);
-        User unfollowing = userService.findById(unfollowingId);
+        User follower = userService.findById(followerUserId);
+        User unfollowing = userService.findById(unfollowingUserId);
 
-        Optional<Follow> optionalFollow = followRepository.findByFollowerIdAndFollowedId(followerId, unfollowingId);
+        Optional<Follow> optionalFollow = followRepository.findByFollowerIdAndFollowedId(followerUserId, unfollowingUserId);
 
         if (optionalFollow.isEmpty())
             throw new ObjectNotFoundException("Follow relationship not found.");
 
-        Follow follow = optionalFollow.get();
-        followRepository.delete(follow);
-
-        follower.getFollowedIds().remove(unfollowingId);
-        unfollowing.getFollowersIds().remove(followerId);
-        userRepository.save(follower);
-        userRepository.save(unfollowing);
+        followRepository.delete(optionalFollow.get());
+        follower.getFollowedIds().remove(unfollowingUserId);
+        unfollowing.getFollowersIds().remove(followerUserId);
+        userRepository.saveAll(Arrays.asList(follower, unfollowing));
     }
 }

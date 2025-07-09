@@ -43,14 +43,14 @@ public class FollowResource {
         return ResponseEntity.ok().body(dtoList);
     }
 
-    @PostMapping("/follow/{id}")
+    @PostMapping("/id/{id}")
     public ResponseEntity<Void> follow(@PathVariable String id) {
         String loggedUserId = securityUtil.getLoggedUserId();
         followService.followUser(loggedUserId, id);
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/unfollow/{id}")
+    @DeleteMapping("/id/{id}")
     public ResponseEntity<Void> unfollow(@PathVariable String id) {
         String loggedUserId = securityUtil.getLoggedUserId();
         followService.unfollowUser(loggedUserId, id);
@@ -58,7 +58,7 @@ public class FollowResource {
     }
 
     @GetMapping("/followers/me")
-    public ResponseEntity<List<UserDto>> getMeFollowersList() {
+    public ResponseEntity<List<UserDto>> getMeFollowers() {
         String loggedUserId = securityUtil.getLoggedUserId();
         List<Follow> followsList = followService.findById(loggedUserId);
 
@@ -74,7 +74,7 @@ public class FollowResource {
     }
 
     @GetMapping("/followers/{id}")
-    public ResponseEntity<List<UserDto>> getFollowersList(@PathVariable String id) {
+    public ResponseEntity<List<UserDto>> getFollowers(@PathVariable String id) {
         User user = userService.findById(id);
         List<User> followers = userService.findAllById(user.getFollowersIds());
 
@@ -86,7 +86,7 @@ public class FollowResource {
     }
 
     @GetMapping("/followed/{id}")
-    public ResponseEntity<List<UserDto>> getFollowedList(@PathVariable String id) {
+    public ResponseEntity<List<UserDto>> getFollowed(@PathVariable String id) {
         User user = userService.findById(id);
         List<User> following = userService.findAllById(user.getFollowedIds());
 

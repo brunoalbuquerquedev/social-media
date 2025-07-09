@@ -3,6 +3,7 @@ package project.social.domain;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import project.social.domain.enums.RestrictionType;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -24,5 +25,6 @@ public class Block implements Serializable {
     private String blockerId;
     private String blockedId;
     private Date createdAt;
+    private RestrictionType type;
 }
 
