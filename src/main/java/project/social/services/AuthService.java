@@ -30,39 +30,39 @@ public class AuthService {
     }
 
     public void register(SignupRequestDto request) {
-        if (userRepository.existsByEmail(request.getEmail()))
+        if (userRepository.existsByEmail(request.email()))
             throw new UserAlreadyExistsException("This email already has an account.");
 
-        if (userRepository.existsByUsername(request.getUsername()))
+        if (userRepository.existsByUsername(request.username()))
             throw new UserAlreadyExistsException("This username is unavailable.");
 
-        if (request.getUsername() == null || request.getEmail() == null || request.getPassword() == null)
+        if (request.username() == null || request.email() == null || request.password() == null)
             throw new InvalidRequestDataException("Invalid request.");
 
-        User.Builder userBuilder = new User.Builder();
-        userBuilder.username(request.getUsername());
-        userBuilder.email(request.getEmail());
-        userBuilder.password(passwordEncoder.encode(request.getPassword()));
-        User user = userBuilder.build();
+        User user = User.builder()
+                .username(request.username())
+                .email(request.email())
+                .password(passwordEncoder.encode(request.password()))
+                .build();
         userRepository.save(user);
     }
 
     public JwtTokenResponse login(LoginRequestDto request) {
-        User user = userRepository.findByEmail(request.getEmail())
+        User user = userRepository.findByEmail(request.email())
                 .orElseThrow(() -> new ObjectNotFoundException("User not found."));
 
-        if (!passwordEncoder.matches(request.getPassword(), user.getPassword()))
+        if (!passwordEncoder.matches(request.password(), user.getPassword()))
             throw new IncorrectPasswordException("Incorrect password.");
 
         return jwtUtil.generateTokens(user.getId(), user.getUsername());
     }
 
     public JwtTokenResponse refresh(RefreshRequestDto request) {
-        if (!jwtUtil.isTokenValid(request.getRefreshToken()))
+        if (!jwtUtil.isTokenValid(request.refreshToken()))
             throw new InvalidTokenException("Invalid or expired token.");
 
-        String userId = jwtUtil.getUserIdFromToken(request.getRefreshToken());
-        String username = jwtUtil.extractUsername(request.getRefreshToken());
+        String userId = jwtUtil.getUserIdFromToken(request.refreshToken());
+        String username = jwtUtil.extractUsername(request.refreshToken());
 
         if (userId == null || username == null)
             throw new InvalidTokenException("Invalid token.");

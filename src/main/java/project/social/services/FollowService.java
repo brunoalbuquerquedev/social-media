@@ -52,7 +52,7 @@ public class FollowService {
         if (optionalFollow.isPresent())
             throw new FollowAlreadyExistsException("The user is already following.");
 
-        Follow.Builder followBuilder = Follow.builder();
+        Follow.FollowBuilder followBuilder = Follow.builder();
 
         followBuilder.followerId(followerUserId);
         followBuilder.followedId(followedUserId);

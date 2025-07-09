@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import project.social.domain.Post;
 import project.social.domain.User;
 import project.social.dto.domain.FeedDto;
+import project.social.dto.domain.PostDto;
 import project.social.repositories.PostRepository;
 import project.social.repositories.UserRepository;
 import project.social.services.exceptions.ObjectNotFoundException;
@@ -25,9 +26,14 @@ public class FeedService {
         this.postRepository = postRepository;
     }
 
-    public List<FeedDto> getTimelineForUser(String userId) {
+    public FeedDto getTimelineForUser(String userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new ObjectNotFoundException("User not found"));
         List<Post> posts = postRepository.findByAuthorIdInOrderByCreatedAtDesc(user.getFollowedIds());
-        return posts.stream().map(FeedDto::new).toList();
+
+        List<PostDto> dtoList = posts.stream()
+                .map(PostDto::new)
+                .toList();
+
+        return new FeedDto(dtoList);
     }
 }
