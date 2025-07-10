@@ -1,18 +1,22 @@
 package project.social.services;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import project.social.domain.Block;
 import project.social.domain.User;
 import project.social.domain.enums.RestrictionType;
 import project.social.repositories.BlockRepository;
 import project.social.repositories.UserRepository;
-import project.social.services.exceptions.BlockAlreadyExistsException;
-import project.social.services.exceptions.IllegalBlockingArgumentException;
-import project.social.services.exceptions.ObjectNotFoundException;
+import project.social.exceptions.block.BlockAlreadyExistsException;
+import project.social.exceptions.block.InvalidBlockRequestException;
+import project.social.exceptions.base.ObjectNotFoundException;
 
 import java.util.Arrays;
 import java.util.Optional;
 
+@Service
+@RequiredArgsConstructor
 public class BlockService {
 
     @Autowired
@@ -24,15 +28,9 @@ public class BlockService {
     @Autowired
     private final UserRepository userRepository;
 
-    public BlockService(UserService userService, BlockRepository blockRepository, UserRepository userRepository) {
-        this.userService = userService;
-        this.blockRepository = blockRepository;
-        this.userRepository = userRepository;
-    }
-
     public void blockUser(String blockerUserId, String blockedUserId) {
         if (blockerUserId.equals(blockedUserId))
-            throw new IllegalBlockingArgumentException("You cannot block yourself.");
+            throw new InvalidBlockRequestException("You cannot block yourself.");
 
         User blockerUser = userService.findById(blockerUserId);
         User blockedUser = userService.findById(blockedUserId);
@@ -56,7 +54,7 @@ public class BlockService {
 
     public void unblockUser(String unblockerUserId, String unblockedUserId) {
         if (unblockerUserId.equals(unblockedUserId))
-            throw new IllegalBlockingArgumentException("You cannot unblock yourself.");
+            throw new InvalidBlockRequestException("You cannot unblock yourself.");
 
         User unblockerUser = userService.findById(unblockerUserId);
         User unblockedUser = userService.findById(unblockedUserId);

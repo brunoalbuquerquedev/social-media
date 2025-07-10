@@ -1,22 +1,20 @@
 package project.social.services;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import project.social.domain.Post;
 import project.social.repositories.PostRepository;
-import project.social.services.exceptions.ObjectNotFoundException;
+import project.social.exceptions.base.ObjectNotFoundException;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class PostService {
 
     @Autowired
     private final PostRepository postRepository;
-
-    public PostService(PostRepository postRepository) {
-        this.postRepository = postRepository;
-    }
 
     public List<Post> findAll() {
         return postRepository.findAll();

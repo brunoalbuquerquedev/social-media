@@ -1,5 +1,6 @@
 package project.social.services;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -8,11 +9,17 @@ import project.social.dto.auth.JwtTokenResponse;
 import project.social.dto.auth.LoginRequestDto;
 import project.social.dto.auth.RefreshRequestDto;
 import project.social.dto.auth.SignupRequestDto;
+import project.social.exceptions.auth.ExpiredTokenException;
+import project.social.exceptions.user.UserAlreadyExistsException;
 import project.social.repositories.UserRepository;
-import project.social.services.exceptions.*;
+import project.social.exceptions.auth.IncorrectPasswordException;
+import project.social.exceptions.auth.InvalidRequestDataException;
+import project.social.exceptions.auth.InvalidTokenException;
+import project.social.exceptions.base.ObjectNotFoundException;
 import project.social.util.JwtUtil;
 
 @Service
+@RequiredArgsConstructor
 public class AuthService {
 
     @Autowired
@@ -22,12 +29,6 @@ public class AuthService {
     private final JwtUtil jwtUtil;
 
     private final BCryptPasswordEncoder passwordEncoder;
-
-    public AuthService(UserRepository userRepository, JwtUtil jwtUtil) {
-        this.userRepository = userRepository;
-        this.jwtUtil = jwtUtil;
-        this.passwordEncoder = new BCryptPasswordEncoder();
-    }
 
     public void register(SignupRequestDto request) {
         if (userRepository.existsByEmail(request.email()))
@@ -59,7 +60,7 @@ public class AuthService {
 
     public JwtTokenResponse refresh(RefreshRequestDto request) {
         if (!jwtUtil.isTokenValid(request.refreshToken()))
-            throw new InvalidTokenException("Invalid or expired token.");
+            throw new ExpiredTokenException("Invalid or expired token.");
 
         String userId = jwtUtil.getUserIdFromToken(request.refreshToken());
         String username = jwtUtil.extractUsername(request.refreshToken());
