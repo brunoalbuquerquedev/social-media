@@ -1,17 +1,16 @@
 package project.social.services;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import project.social.domain.Follow;
 import project.social.domain.User;
 import project.social.domain.enums.FollowStatus;
-import project.social.repositories.FollowRepository;
-import project.social.repositories.UserRepository;
 import project.social.exceptions.follow.FollowAlreadyExistsException;
 import project.social.exceptions.follow.InvalidFollowRequestException;
-import project.social.exceptions.base.ObjectNotFoundException;
+import project.social.repositories.FollowRepository;
+import project.social.repositories.UserRepository;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -20,13 +19,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class FollowService {
 
-    @Autowired
     private final FollowRepository followRepository;
-
-    @Autowired
     private final UserRepository userRepository;
-
-    @Autowired
     private final UserService userService;
 
     public List<Follow> findAll() {
@@ -34,49 +28,67 @@ public class FollowService {
     }
 
     public List<Follow> findById(String id) {
-        return followRepository.findByFollowerId(id);
+        return followRepository.findByRequesterId(id);
     }
 
-    public void followUser(String followerUserId, String followedUserId) {
-        if (followerUserId.equals(followedUserId))
+    public void followUser(String requesterId, String targetId) {
+        if (requesterId.equals(targetId))
             throw new InvalidFollowRequestException("You cannot follow yourself.");
 
-        User followerUser = userService.findById(followerUserId);
-        User followedUser = userService.findById(followedUserId);
+        User requesterUser = userService.findById(requesterId);
+        User targetUser = userService.findById(targetId);
 
-        Optional<Follow> optionalFollow = followRepository.findByFollowerIdAndFollowedId(followerUserId, followedUserId);
+        Optional<Follow> optionalFollow0 = followRepository
+                .findByRequesterIdAndTargetId(requesterId, targetId);
 
-        if (optionalFollow.isPresent())
+        if (optionalFollow0.isPresent())
             throw new FollowAlreadyExistsException("The user is already followed.");
 
+        Optional<Follow> optionalFollow1 = followRepository
+                .findByRequesterIdAndTargetId(targetId, requesterId);
+
+        FollowStatus status = FollowStatus.FOLLOWING;
+
+        if (optionalFollow1.isPresent())
+            status = FollowStatus.MUTUAL_FOLLOWING;
+
         Follow follow = Follow.builder()
-                .followerId(followerUserId)
-                .followedId(followedUserId)
-                .status(FollowStatus.FOLLOWING)
+                .followerUserId(requesterId)
+                .followingUserId(targetId)
+                .status(status)
                 .build();
 
         followRepository.save(follow);
-
-        followerUser.getFollowersIds().add(follow.getId());
-        followedUser.getFollowedIds().add(follow.getId());
-        userRepository.saveAll(Arrays.asList(followerUser, followedUser));
+        requesterUser.getFollowersIds().add(follow.getId());
+        targetUser.getFollowingIds().add(follow.getId());
+        userRepository.saveAll(Arrays.asList(requesterUser, targetUser));
     }
 
-    public void unfollowUser(String followerUserId, String unfollowingUserId) {
-        if (followerUserId.equals(unfollowingUserId))
+    public void unfollowUser(String requesterId, String targetId) {
+        if (requesterId.equals(targetId))
             throw new InvalidFollowRequestException("You cannot unfollow yourself.");
 
-        User follower = userService.findById(followerUserId);
-        User unfollowing = userService.findById(unfollowingUserId);
+        User requester = userService.findById(requesterId);
+        User target = userService.findById(targetId);
 
-        Optional<Follow> optionalFollow = followRepository.findByFollowerIdAndFollowedId(followerUserId, unfollowingUserId);
+        Optional<Follow> optionalFollow = followRepository
+                .findByRequesterIdAndTargetId(requesterId, targetId);
 
-        if (optionalFollow.isEmpty())
-            throw new ObjectNotFoundException("Follow relationship not found.");
+        optionalFollow.ifPresent(followRepository::delete);
+        optionalFollow.map(Follow::getFollowingUserId).ifPresent(id -> requester.getFollowersIds().remove(id));
+        optionalFollow.map(Follow::getFollowerUserId).ifPresent(id -> target.getFollowingIds().remove(id));
+        userRepository.saveAll(Arrays.asList(requester, target));
+    }
 
-        followRepository.delete(optionalFollow.get());
-        follower.getFollowedIds().remove(unfollowingUserId);
-        unfollowing.getFollowersIds().remove(followerUserId);
-        userRepository.saveAll(Arrays.asList(follower, unfollowing));
+    public void deleteMutualFollowingByBlock(String requesterId, String targetId) {
+        Optional<Follow> optionalFollow0 = followRepository.findByRequesterIdAndTargetId(requesterId, targetId);
+        Optional<Follow> optionalFollow1 = followRepository.findByRequesterIdAndTargetId(targetId, requesterId);
+
+        List<Follow> list = new ArrayList<>();
+        optionalFollow0.ifPresent(list::add);
+        optionalFollow1.ifPresent(list::add);
+
+        if (!list.isEmpty())
+            followRepository.deleteAll(list);
     }
 }
