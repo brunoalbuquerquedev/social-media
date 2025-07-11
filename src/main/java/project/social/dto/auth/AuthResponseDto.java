@@ -1,28 +1,18 @@
 package project.social.dto.auth;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.io.Serial;
 import java.io.Serializable;
 
-public class AuthResponseDto implements Serializable{
+public record AuthResponseDto(
+        JwtTokenResponse token
+) implements Serializable{
 
     @Serial
     private static final long serialVersionUID = 1L;
-
-    private JwtTokenResponse token;
-
-    public AuthResponseDto() {
-    }
-
-    public AuthResponseDto(JwtTokenResponse token) {
-        this.token = token;
-    }
-
-    public JwtTokenResponse getToken() {
-        return token;
-    }
-
-    public void setToken(JwtTokenResponse token) {
-        this.token = token;
-    }
 }
 

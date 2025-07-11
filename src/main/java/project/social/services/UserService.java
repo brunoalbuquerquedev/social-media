@@ -1,39 +1,38 @@
 package project.social.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import project.social.domain.User;
+import project.social.dto.domain.UserDto;
+import project.social.exceptions.base.ObjectNotFoundException;
 import project.social.repositories.UserRepository;
-import project.social.services.exceptions.ObjectNotFoundException;
+import project.social.services.interfaces.IUserService;
 
 import java.util.List;
 
 @Service
-public class UserService {
+@RequiredArgsConstructor
+public class UserService implements IUserService {
 
-    @Autowired
     private final UserRepository userRepository;
 
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public List<UserDto> findAll() {
+        return userRepository.findAll().stream().map(UserDto::new).toList();
     }
 
-    public List<User> findAll() {
-        return userRepository.findAll();
+    public List<UserDto> findAllById(List<String> id) {
+        return userRepository.findAllById(id).stream().map(UserDto::new).toList();
     }
 
-    public List<User> findAllById(List<String> id) {
-        return userRepository.findAllById(id)
-                .orElseThrow(() -> new ObjectNotFoundException("No users found."));
-    }
-
-    public User findById(String id) {
-        return userRepository.findById(id)
+    public UserDto findById(String id) {
+        User user = userRepository.findById(id)
                 .orElseThrow(() -> new ObjectNotFoundException("User not found."));
+        return new UserDto(user);
     }
 
-    public User findByUsername(String username) {
-        return userRepository.findByUsername(username)
+    public UserDto findByUsername(String username) {
+        User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ObjectNotFoundException("User not found."));
+        return new UserDto(user);
     }
 }

@@ -11,9 +11,9 @@ public enum FollowStatus {
     FOLLOWING,
 
     /**
-     * One of the users has blocked the other. Prevents following, commenting, liking, etc.
+     * The user is following and followed by the other.
      */
-    BLOCKED,
+    MUTUAL_FOLLOWING,
 
     /**
      * The user has manually unfollowed the other user.

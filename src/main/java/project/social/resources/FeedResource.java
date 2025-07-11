@@ -1,50 +1,43 @@
 package project.social.resources;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import project.social.domain.User;
 import project.social.dto.domain.FeedDto;
-import project.social.dto.domain.FeedResponseDto;
+import project.social.dto.domain.UserDto;
 import project.social.services.FeedService;
 import project.social.services.UserService;
 import project.social.util.SecurityUtil;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("/feed")
+@RequiredArgsConstructor
+@RequestMapping("/api/feed")
 public class FeedResource {
 
-    @Autowired
     private FeedService feedService;
-
-    @Autowired
     private SecurityUtil securityUtil;
-
-    @Autowired
     private UserService userService;
 
     @GetMapping()
-    public ResponseEntity<FeedResponseDto> getFeed() {
+    public ResponseEntity<FeedDto> getFeed() {
         String id = securityUtil.getLoggedUserId();
-        List<FeedDto> feed = feedService.getTimelineForUser(id);
-        return ResponseEntity.ok(new FeedResponseDto(feed));
+        FeedDto feedDto = feedService.getFeed(id);
+        return ResponseEntity.ok(feedDto);
     }
 
     @GetMapping("/id/{id}")
-    public ResponseEntity<FeedResponseDto> getUserFeed(@PathVariable String id) {
-        List<FeedDto> feed = feedService.getTimelineForUser(id);
-        return ResponseEntity.ok(new FeedResponseDto(feed));
+    public ResponseEntity<FeedDto> getUserFeed(@PathVariable String id) {
+        FeedDto feedDto = feedService.getFeed(id);
+        return ResponseEntity.ok(feedDto);
     }
 
     @GetMapping("/user/{username}")
-    public ResponseEntity<FeedResponseDto> getUserFeedByUsername(@PathVariable String username) {
-        User user = userService.findByUsername(username);
-        List<FeedDto> feed = feedService.getTimelineForUser(user.getId());
-        return ResponseEntity.ok(new FeedResponseDto(feed));
+    public ResponseEntity<FeedDto> getUserFeedByUsername(@PathVariable String username) {
+        UserDto dto = userService.findByUsername(username);
+        FeedDto feedDto = feedService.getFeed(dto.id());
+        return ResponseEntity.ok(feedDto);
     }
 }

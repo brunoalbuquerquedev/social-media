@@ -1,4 +1,4 @@
-package project.social.services.exceptions;
+package project.social.exceptions.base;
 
 import java.io.Serial;
 

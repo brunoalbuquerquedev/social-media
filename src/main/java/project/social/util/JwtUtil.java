@@ -4,7 +4,7 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
 import project.social.dto.auth.JwtTokenResponse;
-import project.social.services.exceptions.InvalidTokenException;
+import project.social.exceptions.auth.InvalidTokenException;
 
 import java.security.Key;
 import java.util.Date;
@@ -82,12 +82,12 @@ public class JwtUtil {
 
     public String extractAndValidateHeader(String header) {
         if (header == null || !header.startsWith("Bearer "))
-            throw new InvalidTokenException("Missing or invalid authorization header.");
+            throw new InvalidTokenException("Invalid authorization header.");
 
         String token = header.replace("Bearer ", "");
 
         if (!isTokenValid(token))
-            throw new InvalidTokenException("Invalid or expired token.");
+            throw new InvalidTokenException("Invalid token.");
 
         return token;
     }
