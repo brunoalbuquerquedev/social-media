@@ -1,16 +1,14 @@
 package project.social.services;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import project.social.domain.Block;
 import project.social.domain.User;
 import project.social.domain.enums.RestrictionType;
-import project.social.repositories.BlockRepository;
-import project.social.repositories.UserRepository;
 import project.social.exceptions.block.BlockAlreadyExistsException;
 import project.social.exceptions.block.InvalidBlockRequestException;
-import project.social.exceptions.base.ObjectNotFoundException;
+import project.social.repositories.BlockRepository;
+import project.social.repositories.UserRepository;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -19,54 +17,91 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class BlockService {
 
-    @Autowired
     private final UserService userService;
-
-    @Autowired
+    private final FollowService followService;
+    private final UserRepository userRepository;
     private final BlockRepository blockRepository;
 
-    @Autowired
-    private final UserRepository userRepository;
-
-    public void blockUser(String blockerUserId, String blockedUserId) {
-        if (blockerUserId.equals(blockedUserId))
+    public void blockUser(String requesterId, String targetId) {
+        if (requesterId.equals(targetId))
             throw new InvalidBlockRequestException("You cannot block yourself.");
 
-        User blockerUser = userService.findById(blockerUserId);
-        User blockedUser = userService.findById(blockedUserId);
+        User blockerUser = userService.findById(requesterId);
+        User blockedUser = userService.findById(targetId);
 
-        Optional<Block> optionalBlock = blockRepository.findByBlockerIdAndBlockedId(blockerUserId, blockedUserId);
+        Optional<Block> optionalBlock = blockRepository
+                .findByRequesterIdAndTargetIdAndType(requesterId, targetId, RestrictionType.BLOCK);
 
         if (optionalBlock.isPresent())
             throw new BlockAlreadyExistsException("Block already exists.");
 
         Block block = Block.builder()
-                .blockerId(blockerUserId)
-                .blockedId(blockedUserId)
+                .blockerUserId(requesterId)
+                .blockingUserId(targetId)
                 .type(RestrictionType.BLOCK)
                 .build();
 
         blockRepository.save(block);
-        blockerUser.getBlockedUsersIds().add(blockedUserId);
-        blockedUser.getBlockedByIds().add(blockerUserId);
+        followService.deleteMutualFollowingByBlock(requesterId, targetId);
+        blockerUser.getUsersWhoBlockedMe().add(targetId);
+        blockedUser.getUsersBlockedByMe().add(requesterId);
         userRepository.saveAll(Arrays.asList(blockerUser, blockedUser));
     }
 
-    public void unblockUser(String unblockerUserId, String unblockedUserId) {
-        if (unblockerUserId.equals(unblockedUserId))
+    public void unblockUser(String requesterId, String targetId) {
+        if (requesterId.equals(targetId))
             throw new InvalidBlockRequestException("You cannot unblock yourself.");
 
-        User unblockerUser = userService.findById(unblockerUserId);
-        User unblockedUser = userService.findById(unblockedUserId);
+        User unblockerUser = userService.findById(requesterId);
+        User unblockedUser = userService.findById(targetId);
 
-        Optional<Block> optionalBlock = blockRepository.findByBlockerIdAndBlockedId(unblockerUserId, unblockedUserId);
+        Optional<Block> optionalBlock = blockRepository
+                .findByRequesterIdAndTargetIdAndType(requesterId, targetId, RestrictionType.BLOCK);
 
-        if (optionalBlock.isEmpty())
-            throw new ObjectNotFoundException("Block relationship not found.");
-
-        blockRepository.delete(optionalBlock.get());
-        unblockerUser.getBlockedByIds().remove(unblockedUserId);
-        unblockedUser.getBlockedUsersIds().remove(unblockerUserId);
+        optionalBlock.ifPresent(blockRepository::delete);
+        unblockerUser.getUsersWhoBlockedMe().remove(targetId);
+        unblockedUser.getUsersBlockedByMe().remove(requesterId);
         userRepository.saveAll(Arrays.asList(unblockerUser, unblockedUser));
+    }
+
+    public void muteUser(String requesterId, String targetId) {
+        if (requesterId.equals(targetId))
+            throw new InvalidBlockRequestException("You cannot block yourself.");
+
+        User blockerUser = userService.findById(requesterId);
+        User blockedUser = userService.findById(targetId);
+
+        Optional<Block> optionalBlock = blockRepository
+                .findByRequesterIdAndTargetIdAndType(requesterId, targetId, RestrictionType.MUTE);
+
+        if (optionalBlock.isPresent())
+            throw new BlockAlreadyExistsException("Mute already exists.");
+
+        Block block = Block.builder()
+                .blockerUserId(requesterId)
+                .blockingUserId(targetId)
+                .type(RestrictionType.MUTE)
+                .build();
+
+        blockRepository.save(block);
+        blockerUser.getUsersBlockedByMe().add(targetId);
+        blockedUser.getUsersWhoBlockedMe().add(requesterId);
+        userRepository.saveAll(Arrays.asList(blockerUser, blockedUser));
+    }
+
+    public void unmuteUser(String requesterId, String targetId) {
+        if (requesterId.equals(targetId))
+            throw new InvalidBlockRequestException("You cannot unmute yourself.");
+
+        User unblockerUser = userService.findById(requesterId);
+        User unblockingUser = userService.findById(targetId);
+
+        Optional<Block> optionalBlock = blockRepository
+                .findByRequesterIdAndTargetIdAndType(requesterId, targetId, RestrictionType.MUTE);
+
+        optionalBlock.ifPresent(blockRepository::delete);
+        unblockerUser.getUsersBlockedByMe().remove(targetId);
+        unblockingUser.getUsersWhoBlockedMe().remove(requesterId);
+        userRepository.saveAll(Arrays.asList(unblockerUser, unblockingUser));
     }
 }

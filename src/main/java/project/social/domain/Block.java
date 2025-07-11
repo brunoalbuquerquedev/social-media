@@ -22,8 +22,8 @@ public class Block implements Serializable {
 
     @Id
     private String id;
-    private String blockerId;
-    private String blockedId;
+    private String blockerUserId;
+    private String blockingUserId;
     private Date createdAt;
     private RestrictionType type;
 }
