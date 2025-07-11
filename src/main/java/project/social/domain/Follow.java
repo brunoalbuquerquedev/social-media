@@ -23,8 +23,8 @@ public class Follow implements Serializable {
     @Id
     private String id;
 
-    private String followerId;
-    private String followedId;
+    private String followerUserId;
+    private String followingUserId;
     private Date createdAt;
     private boolean notified;
     private FollowStatus status;

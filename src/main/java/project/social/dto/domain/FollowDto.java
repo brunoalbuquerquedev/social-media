@@ -22,8 +22,8 @@ public record FollowDto(
     public FollowDto(Follow follow) {
         this(
                 follow.getId(),
-                follow.getFollowerId(),
-                follow.getFollowedId(),
+                follow.getFollowerUserId(),
+                follow.getFollowingUserId(),
                 follow.getCreatedAt(),
                 follow.isNotified(),
                 follow.getStatus()

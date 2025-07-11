@@ -45,11 +45,11 @@ public class User implements Serializable {
     private List<String> followersIds;
 
     @DBRef(lazy = true)
-    private List<String> followedIds;
+    private List<String> followingIds;
 
     @DBRef(lazy = true)
-    private List<String> blockedUsersIds;
+    private List<String> usersBlockedByMe;
 
     @DBRef(lazy = true)
-    private List<String> blockedByIds;
+    private List<String> usersWhoBlockedMe;
 }

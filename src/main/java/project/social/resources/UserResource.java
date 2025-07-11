@@ -1,6 +1,6 @@
 package project.social.resources;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.social.domain.Post;
@@ -14,19 +14,13 @@ import project.social.util.SecurityUtil;
 import java.util.List;
 
 @RestController
-@RequestMapping("/users")
+@RequiredArgsConstructor
+@RequestMapping("/api/users")
 public class UserResource {
 
-    @Autowired
     private UserService userService;
-
-    @Autowired
     private JwtUtil jwtUtil;
-
-    @Autowired
     private SecurityUtil securityUtil;
-
-    @Autowired
     private FollowService followService;
 
     @GetMapping("/all")

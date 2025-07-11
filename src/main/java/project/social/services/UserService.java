@@ -1,11 +1,10 @@
 package project.social.services;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import project.social.domain.User;
-import project.social.repositories.UserRepository;
 import project.social.exceptions.base.ObjectNotFoundException;
+import project.social.repositories.UserRepository;
 
 import java.util.List;
 
@@ -13,7 +12,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserService {
 
-    @Autowired
     private final UserRepository userRepository;
 
     public List<User> findAll() {
@@ -21,8 +19,7 @@ public class UserService {
     }
 
     public List<User> findAllById(List<String> id) {
-        return userRepository.findAllById(id)
-                .orElseThrow(() -> new ObjectNotFoundException("No users found."));
+        return userRepository.findAllById(id);
     }
 
     public User findById(String id) {

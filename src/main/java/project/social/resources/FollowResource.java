@@ -1,6 +1,7 @@
 package project.social.resources;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.social.domain.Follow;
@@ -14,23 +15,13 @@ import project.social.util.SecurityUtil;
 import java.util.List;
 
 @RestController
-@RequestMapping("/follows")
+@RequiredArgsConstructor
+@RequestMapping("/api/follows")
 public class FollowResource {
 
-    @Autowired
     private final UserService userService;
-
-    @Autowired
     private final FollowService followService;
-
-    @Autowired
     private final SecurityUtil securityUtil;
-
-    public FollowResource(UserService userService, FollowService followService, SecurityUtil securityUtil) {
-        this.userService = userService;
-        this.followService = followService;
-        this.securityUtil = securityUtil;
-    }
 
     @GetMapping("/all")
     public ResponseEntity<List<FollowDto>> findAll() {
@@ -47,7 +38,7 @@ public class FollowResource {
     public ResponseEntity<Void> follow(@PathVariable String id) {
         String loggedUserId = securityUtil.getLoggedUserId();
         followService.followUser(loggedUserId, id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @DeleteMapping("/id/{id}")
@@ -63,7 +54,7 @@ public class FollowResource {
         List<Follow> followsList = followService.findById(loggedUserId);
 
         List<String> list = followsList.stream()
-                .map(Follow::getFollowedId)
+                .map(Follow::getFollowingUserId)
                 .toList();
 
         List<UserDto> dtoList = userService.findAllById(list).stream()
@@ -85,10 +76,10 @@ public class FollowResource {
         return ResponseEntity.ok(followersDtoList);
     }
 
-    @GetMapping("/followed/{id}")
-    public ResponseEntity<List<UserDto>> getFollowed(@PathVariable String id) {
+    @GetMapping("/following/{id}")
+    public ResponseEntity<List<UserDto>> getFollowing(@PathVariable String id) {
         User user = userService.findById(id);
-        List<User> following = userService.findAllById(user.getFollowedIds());
+        List<User> following = userService.findAllById(user.getFollowingIds());
 
         List<UserDto> followingDtoList = following.stream()
                 .map(UserDto::new)

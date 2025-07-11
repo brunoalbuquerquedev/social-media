@@ -1,7 +1,6 @@
 package project.social.services;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import project.social.domain.User;
@@ -10,25 +9,21 @@ import project.social.dto.auth.LoginRequestDto;
 import project.social.dto.auth.RefreshRequestDto;
 import project.social.dto.auth.SignupRequestDto;
 import project.social.exceptions.auth.ExpiredTokenException;
-import project.social.exceptions.user.UserAlreadyExistsException;
-import project.social.repositories.UserRepository;
 import project.social.exceptions.auth.IncorrectPasswordException;
 import project.social.exceptions.auth.InvalidRequestDataException;
 import project.social.exceptions.auth.InvalidTokenException;
 import project.social.exceptions.base.ObjectNotFoundException;
+import project.social.exceptions.user.UserAlreadyExistsException;
+import project.social.repositories.UserRepository;
 import project.social.util.JwtUtil;
 
 @Service
 @RequiredArgsConstructor
 public class AuthService {
 
-    @Autowired
-    private final UserRepository userRepository;
-
-    @Autowired
     private final JwtUtil jwtUtil;
-
     private final BCryptPasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
 
     public void register(SignupRequestDto request) {
         if (userRepository.existsByEmail(request.email()))

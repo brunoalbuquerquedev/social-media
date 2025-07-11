@@ -1,6 +1,8 @@
 package project.social.resources;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.social.domain.Post;
@@ -11,13 +13,11 @@ import project.social.services.PostService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/posts")
+@RequiredArgsConstructor
+@RequestMapping("/api/posts")
 public class PostResource {
 
-    @Autowired
     private PostService postService;
-
-    @Autowired
     private SecurityUtil securityUtil;
 
     @GetMapping("/all")
@@ -35,7 +35,7 @@ public class PostResource {
     @PostMapping("/id/{id}")
     public ResponseEntity<Void> likePost(@PathVariable String id) {
         String userId = securityUtil.getLoggedUserId();
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @DeleteMapping("/id/{id}")

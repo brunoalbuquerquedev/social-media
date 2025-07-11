@@ -1,5 +1,6 @@
 package project.social.resources;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,10 +12,10 @@ import project.social.dto.auth.*;
 import project.social.services.AuthService;
 
 @RestController
-@RequestMapping("/auth")
+@RequiredArgsConstructor
+@RequestMapping("/api/auth")
 public class AuthResource {
 
-    @Autowired
     private AuthService authService;
 
     @PostMapping("/signup")

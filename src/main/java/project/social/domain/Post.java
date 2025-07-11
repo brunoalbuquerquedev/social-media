@@ -1,6 +1,7 @@
 package project.social.domain;
 
 import lombok.*;
+import org.apache.logging.log4j.util.Lazy;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -38,4 +39,11 @@ public class Post implements Serializable {
 
     @DBRef(lazy = true)
     private final List<CommentDto> comments = new ArrayList<>();
+
+    @DBRef(lazy = true)
+    private final List<Tag> tags = new ArrayList<>();
+
+    @DBRef(lazy = true)
+    private final List<String> mediaUrl = new ArrayList<>();
+
 }

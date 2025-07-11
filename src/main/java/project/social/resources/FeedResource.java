@@ -1,6 +1,6 @@
 package project.social.resources;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,35 +13,31 @@ import project.social.services.UserService;
 import project.social.util.SecurityUtil;
 
 @RestController
-@RequestMapping("/feed")
+@RequiredArgsConstructor
+@RequestMapping("/api/feed")
 public class FeedResource {
 
-    @Autowired
     private FeedService feedService;
-
-    @Autowired
     private SecurityUtil securityUtil;
-
-    @Autowired
     private UserService userService;
 
     @GetMapping()
     public ResponseEntity<FeedDto> getFeed() {
         String id = securityUtil.getLoggedUserId();
-        FeedDto feedDto = feedService.getTimelineForUser(id);
+        FeedDto feedDto = feedService.getFeed(id);
         return ResponseEntity.ok(feedDto);
     }
 
     @GetMapping("/id/{id}")
     public ResponseEntity<FeedDto> getUserFeed(@PathVariable String id) {
-        FeedDto feedDto = feedService.getTimelineForUser(id);
+        FeedDto feedDto = feedService.getFeed(id);
         return ResponseEntity.ok(feedDto);
     }
 
     @GetMapping("/user/{username}")
     public ResponseEntity<FeedDto> getUserFeedByUsername(@PathVariable String username) {
         User user = userService.findByUsername(username);
-        FeedDto feedDto = feedService.getTimelineForUser(user.getId());
+        FeedDto feedDto = feedService.getFeed(user.getId());
         return ResponseEntity.ok(feedDto);
     }
 }

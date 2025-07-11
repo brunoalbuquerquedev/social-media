@@ -47,9 +47,9 @@ public record UserDto(
                 user.getLastLogin(),
                 user.getPosts(),
                 user.getFollowersIds(),
-                user.getFollowedIds(),
-                user.getBlockedUsersIds(),
-                user.getBlockedByIds()
+                user.getFollowingIds(),
+                user.getUsersBlockedByMe(),
+                user.getUsersWhoBlockedMe()
         );
     }
 }
