@@ -9,8 +9,8 @@ import java.util.Date;
 
 public record FollowDto(
         String id,
-        String followerId,
-        String followingId,
+        String followerUserId,
+        String followingUserId,
         Date createdAt,
         boolean notified,
         FollowStatus status

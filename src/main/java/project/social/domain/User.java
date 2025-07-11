@@ -4,6 +4,7 @@ import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import project.social.dto.domain.UserDto;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -42,14 +43,14 @@ public class User implements Serializable {
     private List<Post> posts;
 
     @DBRef(lazy = true)
-    private List<String> followersIds;
+    private List<String> usersFollowedByMe;
 
     @DBRef(lazy = true)
-    private List<String> followingIds;
+    private List<String> usersWhoFollowMe;
 
     @DBRef(lazy = true)
     private List<String> usersBlockedByMe;
 
     @DBRef(lazy = true)
-    private List<String> usersWhoBlockedMe;
+    private List<String> usersWhoBlockMe;
 }

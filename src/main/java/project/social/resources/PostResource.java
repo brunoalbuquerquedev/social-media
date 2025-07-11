@@ -1,11 +1,11 @@
 package project.social.resources;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.social.domain.Post;
+import project.social.dto.domain.PostDto;
 import project.social.util.SecurityUtil;
 import project.social.util.UrlDecoder;
 import project.social.services.PostService;
@@ -21,15 +21,15 @@ public class PostResource {
     private SecurityUtil securityUtil;
 
     @GetMapping("/all")
-    public ResponseEntity<List<Post>> findAll() {
-        List<Post> list = postService.findAll();
+    public ResponseEntity<List<PostDto>> findAll() {
+        List<PostDto> list = postService.findAll();
         return ResponseEntity.ok(list);
     }
 
     @GetMapping("/id/{id}")
-    public ResponseEntity<Post> findById(@PathVariable String id) {
-        Post post = postService.findById(id);
-        return ResponseEntity.ok(post);
+    public ResponseEntity<PostDto> findById(@PathVariable String id) {
+        PostDto dto = postService.findById(id);
+        return ResponseEntity.ok(dto);
     }
 
     @PostMapping("/id/{id}")
@@ -44,15 +44,16 @@ public class PostResource {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/id/{id}/likes")
-    public ResponseEntity<Void> likes(@PathVariable String id) {
-        return ResponseEntity.noContent().build();
+    @GetMapping("/id/{id}/liked")
+    public ResponseEntity<List<PostDto>> getPostsLikedByUser(@PathVariable String id) {
+        List<PostDto> list = postService.findByHasUserLiked();
+        return ResponseEntity.ok(list);
     }
 
     @GetMapping("/title")
-    public ResponseEntity<List<Post>> findByTitle(@RequestParam(value = "text", defaultValue = "") String text) {
+    public ResponseEntity<List<PostDto>> getPostByTitle(@RequestParam(value = "text", defaultValue = "") String text) {
         text = UrlDecoder.decodeParam(text);
-        List<Post> list = postService.findByTitle(text);
+        List<PostDto> list = postService.findByTitle(text);
         return ResponseEntity.ok(list);
     }
 }

@@ -25,19 +25,14 @@ public class UserResource {
 
     @GetMapping("/all")
     public ResponseEntity<List<UserDto>> findAll() {
-        List<User> list = userService.findAll();
-
-        List<UserDto> dtoList = list.stream()
-                .map(UserDto::new)
-                .toList();
-
-        return ResponseEntity.ok().body(dtoList);
+        List<UserDto> list = userService.findAll();
+        return ResponseEntity.ok().body(list);
     }
 
     @GetMapping("/me")
     public ResponseEntity<UserDto> getMe() {
         String id = securityUtil.getLoggedUserId();
-        UserDto dto = new UserDto(userService.findById(id));
+        UserDto dto = userService.findById(id);
         return ResponseEntity.ok(dto);
     }
 
@@ -48,19 +43,19 @@ public class UserResource {
 
     @GetMapping("/id/{id}")
     public ResponseEntity<UserDto> findById(@PathVariable String id) {
-        User user = userService.findById(id);
-        return ResponseEntity.ok(new UserDto(user));
+        UserDto dto = userService.findById(id);
+        return ResponseEntity.ok(dto);
     }
 
     @GetMapping("/username/{username}")
     public ResponseEntity<UserDto> findByUsername(@PathVariable String username) {
-        User user = userService.findByUsername(username);
-        return ResponseEntity.ok(new UserDto(user));
+        UserDto dto = userService.findByUsername(username);
+        return ResponseEntity.ok(dto);
     }
 
     @GetMapping("/id/{id}/posts")
     public ResponseEntity<List<Post>> findPosts(@PathVariable String id) {
-        User user = userService.findById(id);
-        return ResponseEntity.ok(user.getPosts());
+        UserDto dto = userService.findById(id);
+        return ResponseEntity.ok(dto.posts());
     }
 }

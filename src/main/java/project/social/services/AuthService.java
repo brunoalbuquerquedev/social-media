@@ -15,11 +15,12 @@ import project.social.exceptions.auth.InvalidTokenException;
 import project.social.exceptions.base.ObjectNotFoundException;
 import project.social.exceptions.user.UserAlreadyExistsException;
 import project.social.repositories.UserRepository;
+import project.social.services.interfaces.IAuthService;
 import project.social.util.JwtUtil;
 
 @Service
 @RequiredArgsConstructor
-public class AuthService {
+public class AuthService implements IAuthService {
 
     private final JwtUtil jwtUtil;
     private final BCryptPasswordEncoder passwordEncoder;

@@ -23,9 +23,9 @@ public record UserDto(
         Date lastLogin,
         List<Post> posts,
         List<String> followersIds,
-        List<String> followedIds,
-        List<String> blockedUsersIds,
-        List<String> blockedByIds
+        List<String> followingIds,
+        List<String> usersBlockedByMe,
+        List<String> usersWhoBlockedMe
 ) implements Serializable {
 
     @Serial

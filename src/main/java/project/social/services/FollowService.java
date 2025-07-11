@@ -5,10 +5,14 @@ import org.springframework.stereotype.Service;
 import project.social.domain.Follow;
 import project.social.domain.User;
 import project.social.domain.enums.FollowStatus;
+import project.social.dto.domain.FollowDto;
+import project.social.dto.domain.UserDto;
 import project.social.exceptions.follow.FollowAlreadyExistsException;
 import project.social.exceptions.follow.InvalidFollowRequestException;
+import project.social.mappers.UserMapper;
 import project.social.repositories.FollowRepository;
 import project.social.repositories.UserRepository;
+import project.social.services.interfaces.IFollowService;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,26 +21,28 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class FollowService {
+public class FollowService implements IFollowService {
 
     private final FollowRepository followRepository;
     private final UserRepository userRepository;
     private final UserService userService;
 
-    public List<Follow> findAll() {
-        return followRepository.findAll();
+    public List<FollowDto> findAll() {
+        return followRepository.findAll().stream().map(FollowDto::new).toList();
     }
 
-    public List<Follow> findById(String id) {
-        return followRepository.findByRequesterId(id);
+    public List<FollowDto> findById(String id) {
+        return followRepository.findByRequesterId(id).stream()
+                .map(FollowDto::new)
+                .toList();
     }
 
     public void followUser(String requesterId, String targetId) {
         if (requesterId.equals(targetId))
             throw new InvalidFollowRequestException("You cannot follow yourself.");
 
-        User requesterUser = userService.findById(requesterId);
-        User targetUser = userService.findById(targetId);
+        UserDto requesterUserDto = userService.findById(requesterId);
+        UserDto targetUserDto = userService.findById(targetId);
 
         Optional<Follow> optionalFollow0 = followRepository
                 .findByRequesterIdAndTargetId(requesterId, targetId);
@@ -59,8 +65,12 @@ public class FollowService {
                 .build();
 
         followRepository.save(follow);
-        requesterUser.getFollowersIds().add(follow.getId());
-        targetUser.getFollowingIds().add(follow.getId());
+
+        User requesterUser = UserMapper.fromDto(requesterUserDto);
+        User targetUser = UserMapper.fromDto(targetUserDto);
+
+        requesterUser.getUsersFollowedByMe().add(targetUser.getId());
+        targetUser.getUsersWhoFollowMe().add(requesterUser.getId());
         userRepository.saveAll(Arrays.asList(requesterUser, targetUser));
     }
 
@@ -68,16 +78,20 @@ public class FollowService {
         if (requesterId.equals(targetId))
             throw new InvalidFollowRequestException("You cannot unfollow yourself.");
 
-        User requester = userService.findById(requesterId);
-        User target = userService.findById(targetId);
+        UserDto requesterUserDto = userService.findById(requesterId);
+        UserDto targetUserDto = userService.findById(targetId);
 
         Optional<Follow> optionalFollow = followRepository
                 .findByRequesterIdAndTargetId(requesterId, targetId);
 
         optionalFollow.ifPresent(followRepository::delete);
-        optionalFollow.map(Follow::getFollowingUserId).ifPresent(id -> requester.getFollowersIds().remove(id));
-        optionalFollow.map(Follow::getFollowerUserId).ifPresent(id -> target.getFollowingIds().remove(id));
-        userRepository.saveAll(Arrays.asList(requester, target));
+
+        User requesterUser = UserMapper.fromDto(requesterUserDto);
+        User targetUser = UserMapper.fromDto(targetUserDto);
+
+        requesterUser.getUsersBlockedByMe().remove(targetId);
+        targetUser.getUsersWhoBlockMe().remove(requesterId);
+        userRepository.saveAll(Arrays.asList(requesterUser, targetUser));
     }
 
     public void deleteMutualFollowingByBlock(String requesterId, String targetId) {

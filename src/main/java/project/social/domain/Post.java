@@ -41,9 +41,6 @@ public class Post implements Serializable {
     private final List<CommentDto> comments = new ArrayList<>();
 
     @DBRef(lazy = true)
-    private final List<Tag> tags = new ArrayList<>();
-
-    @DBRef(lazy = true)
     private final List<String> mediaUrl = new ArrayList<>();
 
 }
