@@ -31,8 +31,8 @@ public class InitDatabase {
                     .profilePictureUrl("https://picsum.photos/200").location("São Paulo")
                     .birthDate(new Date(95, 5, 10)).createdAt(new Date())
                     .isActive(true).lastLogin(new Date())
-                    .followersIds(new ArrayList<>()).followedIds(new ArrayList<>()).posts(new ArrayList<>())
-                    .blockedByIds(new ArrayList<>()).blockedUsersIds(new ArrayList<>())
+                    .followersIds(new ArrayList<>()).followingIds(new ArrayList<>()).posts(new ArrayList<>())
+                    .usersBlockedByMe(new ArrayList<>()).usersWhoBlockedMe(new ArrayList<>())
                     .build();
 
             User user2 = User.builder()
@@ -41,8 +41,8 @@ public class InitDatabase {
                     .profilePictureUrl("https://picsum.photos/201").location("Rio de Janeiro")
                     .birthDate(new Date(90, 8, 20)).createdAt(new Date())
                     .isActive(true).lastLogin(new Date())
-                    .followersIds(new ArrayList<>()).followedIds(new ArrayList<>()).posts(new ArrayList<>())
-                    .blockedByIds(new ArrayList<>()).blockedUsersIds(new ArrayList<>())
+                    .followersIds(new ArrayList<>()).followingIds(new ArrayList<>()).posts(new ArrayList<>())
+                    .usersBlockedByMe(new ArrayList<>()).usersWhoBlockedMe(new ArrayList<>())
                     .build();
 
             User user3 = User.builder().username("carlos").email("carlos@gmail.com").password("123456")
@@ -50,64 +50,64 @@ public class InitDatabase {
                     .profilePictureUrl("https://picsum.photos/202").location("Belo Horizonte")
                     .birthDate(new Date(88, 2, 15)).createdAt(new Date())
                     .isActive(true).lastLogin(new Date())
-                    .followersIds(new ArrayList<>()).followedIds(new ArrayList<>()).posts(new ArrayList<>())
-                    .blockedByIds(new ArrayList<>()).blockedUsersIds(new ArrayList<>()).build();
+                    .followersIds(new ArrayList<>()).followingIds(new ArrayList<>()).posts(new ArrayList<>())
+                    .usersBlockedByMe(new ArrayList<>()).usersWhoBlockedMe(new ArrayList<>()).build();
 
             User user4 = User.builder().username("juliana").email("juliana@gmail.com").password("123456")
                     .fullName("Juliana Ribeiro").bio("Chef de cozinha")
                     .profilePictureUrl("https://picsum.photos/203").location("Curitiba")
                     .birthDate(new Date(92, 11, 5)).createdAt(new Date())
                     .isActive(true).lastLogin(new Date())
-                    .followersIds(new ArrayList<>()).followedIds(new ArrayList<>()).posts(new ArrayList<>())
-                    .blockedByIds(new ArrayList<>()).blockedUsersIds(new ArrayList<>()).build();
+                    .followersIds(new ArrayList<>()).followingIds(new ArrayList<>()).posts(new ArrayList<>())
+                    .usersBlockedByMe(new ArrayList<>()).usersWhoBlockedMe(new ArrayList<>()).build();
 
             User user5 = User.builder().username("rodrigo").email("rodrigo@gmail.com").password("123456")
                     .fullName("Rodrigo Martins").bio("Viciado em games")
                     .profilePictureUrl("https://picsum.photos/204").location("Salvador")
                     .birthDate(new Date(94, 3, 12)).createdAt(new Date())
                     .isActive(true).lastLogin(new Date())
-                    .followersIds(new ArrayList<>()).followedIds(new ArrayList<>()).posts(new ArrayList<>())
-                    .blockedByIds(new ArrayList<>()).blockedUsersIds(new ArrayList<>()).build();
+                    .followersIds(new ArrayList<>()).followingIds(new ArrayList<>()).posts(new ArrayList<>())
+                    .usersBlockedByMe(new ArrayList<>()).usersWhoBlockedMe(new ArrayList<>()).build();
 
             User user6 = User.builder().username("fernanda").email("fernanda@gmail.com").password("123456")
                     .fullName("Fernanda Lopes").bio("Leitora voraz")
                     .profilePictureUrl("https://picsum.photos/205").location("Fortaleza")
                     .birthDate(new Date(91, 7, 19)).createdAt(new Date())
                     .isActive(true).lastLogin(new Date())
-                    .followersIds(new ArrayList<>()).followedIds(new ArrayList<>()).posts(new ArrayList<>())
-                    .blockedByIds(new ArrayList<>()).blockedUsersIds(new ArrayList<>()).build();
+                    .followersIds(new ArrayList<>()).followingIds(new ArrayList<>()).posts(new ArrayList<>())
+                    .usersBlockedByMe(new ArrayList<>()).usersWhoBlockedMe(new ArrayList<>()).build();
 
             User user7 = User.builder().username("lucas").email("lucas@gmail.com").password("123456")
                     .fullName("Lucas Almeida").bio("Músico")
                     .profilePictureUrl("https://picsum.photos/206").location("Brasília")
                     .birthDate(new Date(93, 10, 25)).createdAt(new Date())
                     .isActive(true).lastLogin(new Date())
-                    .followersIds(new ArrayList<>()).followedIds(new ArrayList<>()).posts(new ArrayList<>())
-                    .blockedByIds(new ArrayList<>()).blockedUsersIds(new ArrayList<>()).build();
+                    .followersIds(new ArrayList<>()).followingIds(new ArrayList<>()).posts(new ArrayList<>())
+                    .usersBlockedByMe(new ArrayList<>()).usersWhoBlockedMe(new ArrayList<>()).build();
 
             User user8 = User.builder().username("marina").email("marina@gmail.com").password("123456")
                     .fullName("Marina Castro").bio("Aventureira")
                     .profilePictureUrl("https://picsum.photos/207").location("Florianópolis")
                     .birthDate(new Date(96, 1, 30)).createdAt(new Date())
                     .isActive(true).lastLogin(new Date())
-                    .followersIds(new ArrayList<>()).followedIds(new ArrayList<>()).posts(new ArrayList<>())
-                    .blockedByIds(new ArrayList<>()).blockedUsersIds(new ArrayList<>()).build();
+                    .followersIds(new ArrayList<>()).followingIds(new ArrayList<>()).posts(new ArrayList<>())
+                    .usersBlockedByMe(new ArrayList<>()).usersWhoBlockedMe(new ArrayList<>()).build();
 
             User user9 = User.builder().username("pedro").email("pedro@gmail.com").password("123456")
                     .fullName("Pedro Henrique").bio("Cinéfilo")
                     .profilePictureUrl("https://picsum.photos/208").location("Recife")
                     .birthDate(new Date(87, 4, 18)).createdAt(new Date())
                     .isActive(true).lastLogin(new Date())
-                    .followersIds(new ArrayList<>()).followedIds(new ArrayList<>()).posts(new ArrayList<>())
-                    .blockedByIds(new ArrayList<>()).blockedUsersIds(new ArrayList<>()).build();
+                    .followersIds(new ArrayList<>()).followingIds(new ArrayList<>()).posts(new ArrayList<>())
+                    .usersBlockedByMe(new ArrayList<>()).usersWhoBlockedMe(new ArrayList<>()).build();
 
             User user10 = User.builder().username("patricia").email("patricia@gmail.com").password("123456")
                     .fullName("Patricia Silva").bio("Apaixonada por moda")
                     .profilePictureUrl("https://picsum.photos/209").location("Porto Alegre")
                     .birthDate(new Date(95, 6, 2)).createdAt(new Date())
                     .isActive(true).lastLogin(new Date())
-                    .followersIds(new ArrayList<>()).followedIds(new ArrayList<>()).posts(new ArrayList<>())
-                    .blockedByIds(new ArrayList<>()).blockedUsersIds(new ArrayList<>()).build();
+                    .followersIds(new ArrayList<>()).followingIds(new ArrayList<>()).posts(new ArrayList<>())
+                    .usersBlockedByMe(new ArrayList<>()).usersWhoBlockedMe(new ArrayList<>()).build();
 
             List<User> savedUsers = userRepository.saveAll(
                     Arrays.asList(user1, user2, user3, user4, user5, user6, user7, user8, user9, user10)
@@ -283,80 +283,80 @@ public class InitDatabase {
             );
 
             Follow follow1 = Follow.builder()
-                    .followerId(user2.getId())
-                    .followedId(user1.getId())
+                    .followerUserId(user2.getId())
+                    .followingUserId(user1.getId())
                     .createdAt(new Date())
                     .notified(false)
                     .status(FollowStatus.FOLLOWING)
                     .build();
 
             Follow follow2 = Follow.builder()
-                    .followerId(user3.getId())
-                    .followedId(user1.getId())
+                    .followerUserId(user3.getId())
+                    .followingUserId(user1.getId())
                     .createdAt(new Date())
                     .notified(false)
                     .status(FollowStatus.FOLLOWING)
                     .build();
 
             Follow follow3 = Follow.builder()
-                    .followerId(user4.getId())
-                    .followedId(user2.getId())
+                    .followerUserId(user4.getId())
+                    .followingUserId(user2.getId())
                     .createdAt(new Date())
                     .notified(false)
                     .status(FollowStatus.FOLLOWING)
                     .build();
 
             Follow follow4 = Follow.builder()
-                    .followerId(user5.getId())
-                    .followedId(user3.getId())
+                    .followerUserId(user5.getId())
+                    .followingUserId(user3.getId())
                     .createdAt(new Date())
                     .notified(false)
                     .status(FollowStatus.FOLLOWING)
                     .build();
 
             Follow follow5 = Follow.builder()
-                    .followerId(user6.getId())
-                    .followedId(user4.getId())
+                    .followerUserId(user6.getId())
+                    .followingUserId(user4.getId())
                     .createdAt(new Date())
                     .notified(false)
                     .status(FollowStatus.FOLLOWING)
                     .build();
 
             Follow follow6 = Follow.builder()
-                    .followerId(user7.getId())
-                    .followedId(user5.getId())
+                    .followerUserId(user7.getId())
+                    .followingUserId(user5.getId())
                     .createdAt(new Date())
                     .notified(false)
                     .status(FollowStatus.FOLLOWING)
                     .build();
 
             Follow follow7 = Follow.builder()
-                    .followerId(user8.getId())
-                    .followedId(user6.getId())
+                    .followerUserId(user8.getId())
+                    .followingUserId(user6.getId())
                     .createdAt(new Date())
                     .notified(false)
                     .status(FollowStatus.FOLLOWING)
                     .build();
 
             Follow follow8 = Follow.builder()
-                    .followerId(user9.getId())
-                    .followedId(user7.getId())
+                    .followerUserId(user9.getId())
+                    .followingUserId(user7.getId())
                     .createdAt(new Date())
                     .notified(false)
                     .status(FollowStatus.FOLLOWING)
                     .build();
 
             Follow follow9 = Follow.builder()
-                    .followerId(user10.getId())
-                    .followedId(user8.getId())
+                    .followerUserId(user10.getId())
+                    .followingUserId(user8.getId())
                     .createdAt(new Date())
                     .notified(false)
                     .status(FollowStatus.FOLLOWING)
                     .build();
 
             Follow follow10 = Follow.builder()
-                    .followerId(user1.getId())
-                    .followedId(user9.getId())
+                    .followerUserId(user1.getId())
+                    .followingUserId(user9.getId())
                     .createdAt(new Date())
                     .notified(false)
                     .status(FollowStatus.FOLLOWING)
