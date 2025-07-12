@@ -4,8 +4,8 @@ import lombok.*;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -18,7 +18,7 @@ public class Conversation {
 
     private String id;
     private String lastMessageId;
-    private Date createdAt;
+    private OffsetDateTime createdAt;
 
     @Builder.Default
     private final List<String> participantsIds = new ArrayList<>(2);

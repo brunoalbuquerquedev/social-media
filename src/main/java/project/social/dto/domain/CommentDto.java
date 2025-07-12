@@ -4,14 +4,14 @@ import project.social.domain.Comment;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.OffsetDateTime;
 
 public record CommentDto(
         String id,
         String postId,
         String authorId,
         String content,
-        Date createdAt
+        OffsetDateTime createdAt
 ) implements Serializable {
 
     @Serial

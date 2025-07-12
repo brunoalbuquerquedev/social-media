@@ -7,7 +7,7 @@ import project.social.domain.enums.RestrictionType;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.OffsetDateTime;
 
 @Getter
 @Setter
@@ -24,7 +24,7 @@ public class Block implements Serializable {
     private String id;
     private String blockerUserId;
     private String blockingUserId;
-    private Date createdAt;
+    private OffsetDateTime createdAt;
     private RestrictionType type;
 }
 

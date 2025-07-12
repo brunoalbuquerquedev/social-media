@@ -7,7 +7,7 @@ import project.social.domain.enums.SeenStatus;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.OffsetDateTime;
 
 @Getter
 @Setter
@@ -26,7 +26,7 @@ public class Message implements Serializable {
     private String conversationId;
     private String senderId;
     private String content;
-    private Date sentAt;
+    private OffsetDateTime sentAt;
 
     @Builder.Default
     private SeenStatus seenStatus = SeenStatus.PENDING;

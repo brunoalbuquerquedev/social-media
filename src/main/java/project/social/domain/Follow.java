@@ -7,7 +7,7 @@ import project.social.domain.enums.FollowStatus;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.OffsetDateTime;
 
 @Getter
 @Setter
@@ -25,7 +25,7 @@ public class Follow implements Serializable {
 
     private String followerUserId;
     private String followingUserId;
-    private Date createdAt;
+    private OffsetDateTime createdAt;
     private boolean notified;
     private FollowStatus status;
 }

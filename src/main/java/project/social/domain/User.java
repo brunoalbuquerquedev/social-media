@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.OffsetDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -32,11 +33,11 @@ public class User implements Serializable {
     private String bio;
     private String profilePictureUrl;
     private String location;
-    private Date birthDate;
+    private OffsetDateTime birthDate;
 
-    private Date createdAt;
+    private OffsetDateTime createdAt;
     private Boolean isActive;
-    private Date lastLogin;
+    private OffsetDateTime lastLogin;
 
     @DBRef(lazy = true)
     private List<Post> posts;

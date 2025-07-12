@@ -5,13 +5,13 @@ import project.social.domain.enums.FollowStatus;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.OffsetDateTime;
 
 public record FollowDto(
         String id,
         String followerUserId,
         String followingUserId,
-        Date createdAt,
+        OffsetDateTime createdAt,
         boolean notified,
         FollowStatus status
 ) implements Serializable {

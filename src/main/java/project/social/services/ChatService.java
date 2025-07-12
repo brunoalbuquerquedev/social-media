@@ -14,6 +14,7 @@ import project.social.repositories.ConversationRepository;
 import project.social.repositories.MessageRepository;
 import project.social.services.interfaces.IChatService;
 
+import java.time.OffsetDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -39,7 +40,7 @@ public class ChatService implements IChatService {
                 .conversationId(conversationId)
                 .senderId(senderId)
                 .content(content)
-                .sentAt(new Date())
+                .sentAt(OffsetDateTime.now())
                 .seenStatus(SeenStatus.SENT)
                 .build();
 
@@ -54,7 +55,7 @@ public class ChatService implements IChatService {
     public ConversationDto startConversation(List<String> participantIds, boolean isGroup) {
         Conversation conversation = Conversation.builder()
                 .participantsIds(participantIds)
-                .createdAt(new Date())
+                .createdAt(OffsetDateTime.now())
                 .build();
         Conversation savedConversation = conversationRepository.save(conversation);
         return new ConversationDto(savedConversation);

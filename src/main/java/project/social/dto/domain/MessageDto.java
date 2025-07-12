@@ -5,14 +5,14 @@ import project.social.domain.enums.SeenStatus;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.OffsetDateTime;
 
 public record MessageDto(
         String id,
         String conversationId,
         String senderId,
         String content,
-        Date sentAt,
+        OffsetDateTime sentAt,
         SeenStatus seenStatus,
         boolean deletedBySender,
         boolean deletedByReceiver

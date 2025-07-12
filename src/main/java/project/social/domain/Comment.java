@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.OffsetDateTime;
 
 @Getter
 @Setter
@@ -25,5 +25,5 @@ public class Comment implements Serializable {
     private String postId;
     private String authorId;
     private String content;
-    private Date createdAt;
+    private OffsetDateTime createdAt;
 }

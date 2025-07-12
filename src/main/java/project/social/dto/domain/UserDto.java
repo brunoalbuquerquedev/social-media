@@ -5,7 +5,7 @@ import project.social.domain.User;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 public record UserDto(
@@ -17,10 +17,10 @@ public record UserDto(
         String bio,
         String profilePictureUrl,
         String location,
-        Date birthDate,
-        Date createdAt,
+        OffsetDateTime birthDate,
+        OffsetDateTime createdAt,
         Boolean isActive,
-        Date lastLogin,
+        OffsetDateTime lastLogin,
         List<Post> posts,
         List<String> followersIds,
         List<String> followingIds,
@@ -46,10 +46,10 @@ public record UserDto(
                 user.getIsActive(),
                 user.getLastLogin(),
                 user.getPosts(),
-                user.getFollowersIds(),
-                user.getFollowingIds(),
+                user.getUsersFollowedByMe(),
+                user.getUsersWhoFollowMe(),
                 user.getUsersBlockedByMe(),
-                user.getUsersWhoBlockedMe()
+                user.getUsersWhoBlockMe()
         );
     }
 }

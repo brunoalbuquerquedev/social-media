@@ -1,7 +1,6 @@
 package project.social.domain;
 
 import lombok.*;
-import org.apache.logging.log4j.util.Lazy;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -9,8 +8,8 @@ import project.social.dto.domain.CommentDto;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -30,7 +29,7 @@ public class Post implements Serializable {
     private String authorId;
     private String content;
     private String title;
-    private Date createdAt;
+    private OffsetDateTime createdAt;
     private String authorProfilePictureUrl;
     private boolean hasUserLiked;
 

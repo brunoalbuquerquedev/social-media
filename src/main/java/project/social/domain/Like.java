@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.OffsetDateTime;
 
 @Getter
 @Setter
@@ -24,5 +25,5 @@ public class Like implements Serializable {
     private String username;
     private String userId;
     private String postId;
-    private String createdAt;
+    private OffsetDateTime createdAt;
 }

@@ -5,6 +5,7 @@ import project.social.domain.Post;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.OffsetDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -13,7 +14,7 @@ public record PostDto(
         String authorId,
         String content,
         String title,
-        Date createdAt,
+        OffsetDateTime createdAt,
         String authorUsername,
         String authorProfilePictureUrl,
         List<Like> likes,
