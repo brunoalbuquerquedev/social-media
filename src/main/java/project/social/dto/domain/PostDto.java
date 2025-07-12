@@ -3,10 +3,7 @@ package project.social.dto.domain;
 import project.social.domain.Like;
 import project.social.domain.Post;
 
-import java.io.Serial;
-import java.io.Serializable;
 import java.time.OffsetDateTime;
-import java.util.Date;
 import java.util.List;
 
 public record PostDto(
@@ -20,11 +17,7 @@ public record PostDto(
         List<Like> likes,
         List<CommentDto> comments,
         boolean hasUserLiked
-) implements Serializable {
-
-    @Serial
-    private static final long serialVersionUID = 1L;
-
+) {
     public PostDto(Post post) {
         this(
                 post.getId(),

@@ -3,8 +3,6 @@ package project.social.dto.domain;
 import project.social.domain.Post;
 import project.social.domain.User;
 
-import java.io.Serial;
-import java.io.Serializable;
 import java.time.OffsetDateTime;
 import java.util.List;
 
@@ -26,11 +24,7 @@ public record UserDto(
         List<String> followingIds,
         List<String> usersBlockedByMe,
         List<String> usersWhoBlockedMe
-) implements Serializable {
-
-    @Serial
-    private static final long serialVersionUID = 1L;
-
+) {
     public UserDto(User user) {
         this(
                 user.getId(),
