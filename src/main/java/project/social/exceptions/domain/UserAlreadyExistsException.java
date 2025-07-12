@@ -1,4 +1,4 @@
-package project.social.exceptions.user;
+package project.social.exceptions.domain;
 
 import project.social.exceptions.base.ObjectAlreadyExistsException;
 

@@ -22,10 +22,10 @@ public class UserMapper {
                 user.getIsActive(),
                 user.getLastLogin(),
                 user.getPosts(),
-                user.getFollowersIds(),
-                user.getFollowingIds(),
+                user.getUsersFollowedByMe(),
+                user.getUsersWhoFollowMe(),
                 user.getUsersBlockedByMe(),
-                user.getUsersWhoBlockedMe()
+                user.getUsersWhoBlockMe()
         );
     }
 
@@ -46,10 +46,10 @@ public class UserMapper {
                 .isActive(dto.isActive())
                 .lastLogin(dto.lastLogin())
                 .posts(dto.posts())
-                .followersIds(dto.followersIds())
-                .followingIds(dto.followingIds())
+                .usersFollowedByMe(dto.followersIds())
+                .usersWhoFollowMe(dto.followingIds())
                 .usersBlockedByMe(dto.usersBlockedByMe())
-                .usersWhoBlockedMe(dto.usersWhoBlockedMe())
+                .usersWhoBlockMe(dto.usersWhoBlockedMe())
                 .build();
     }
 }

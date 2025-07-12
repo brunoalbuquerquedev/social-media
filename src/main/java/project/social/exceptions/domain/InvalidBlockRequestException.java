@@ -1,4 +1,4 @@
-package project.social.exceptions.block;
+package project.social.exceptions.domain;
 
 import project.social.exceptions.auth.InvalidRequestDataException;
 

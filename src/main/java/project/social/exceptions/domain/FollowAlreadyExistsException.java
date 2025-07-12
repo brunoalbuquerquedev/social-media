@@ -1,4 +1,4 @@
-package project.social.exceptions.follow;
+package project.social.exceptions.domain;
 
 import project.social.exceptions.base.ObjectAlreadyExistsException;
 

@@ -13,7 +13,7 @@ import project.social.exceptions.auth.IncorrectPasswordException;
 import project.social.exceptions.auth.InvalidRequestDataException;
 import project.social.exceptions.auth.InvalidTokenException;
 import project.social.exceptions.base.ObjectNotFoundException;
-import project.social.exceptions.user.UserAlreadyExistsException;
+import project.social.exceptions.domain.UserAlreadyExistsException;
 import project.social.repositories.UserRepository;
 import project.social.services.interfaces.IAuthService;
 import project.social.util.JwtUtil;

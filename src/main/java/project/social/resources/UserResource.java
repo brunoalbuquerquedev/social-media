@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.social.domain.Post;
-import project.social.domain.User;
 import project.social.dto.domain.UserDto;
 import project.social.services.FollowService;
 import project.social.services.UserService;
@@ -31,8 +30,8 @@ public class UserResource {
 
     @GetMapping("/me")
     public ResponseEntity<UserDto> getMe() {
-        String id = securityUtil.getLoggedUserId();
-        UserDto dto = userService.findById(id);
+        String loggedUserId = securityUtil.getLoggedUserId();
+        UserDto dto = userService.findById(loggedUserId);
         return ResponseEntity.ok(dto);
     }
 

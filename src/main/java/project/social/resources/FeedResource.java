@@ -23,8 +23,8 @@ public class FeedResource {
 
     @GetMapping()
     public ResponseEntity<FeedDto> getFeed() {
-        String id = securityUtil.getLoggedUserId();
-        FeedDto feedDto = feedService.getFeed(id);
+        String loggedUserId = securityUtil.getLoggedUserId();
+        FeedDto feedDto = feedService.getFeed(loggedUserId);
         return ResponseEntity.ok(feedDto);
     }
 
