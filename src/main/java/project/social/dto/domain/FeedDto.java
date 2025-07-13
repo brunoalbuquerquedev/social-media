@@ -1,9 +1,9 @@
 package project.social.dto.domain;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 public record FeedDto(
-        List<PostDto> posts
+        Page<PostDto> posts
 ) {
 
 }

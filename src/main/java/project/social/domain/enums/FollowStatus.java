@@ -18,10 +18,5 @@ public enum FollowStatus {
     /**
      * The user has manually unfollowed the other user.
      */
-    REMOVED,
-
-    /**
-     * The user is following but has muted the other user (e.g., to hide content in their feed).
-     */
-    MUTED
+    REMOVED
 }

@@ -25,7 +25,7 @@ public class Follow implements Serializable {
 
     private String followerUserId;
     private String followingUserId;
-    private OffsetDateTime createdAt;
+    private OffsetDateTime followedAt;
     private boolean notified;
     private FollowStatus status;
 }

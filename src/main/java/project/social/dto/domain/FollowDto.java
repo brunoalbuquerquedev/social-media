@@ -9,7 +9,7 @@ public record FollowDto(
         String id,
         String followerUserId,
         String followingUserId,
-        OffsetDateTime createdAt,
+        OffsetDateTime followedAt,
         boolean notified,
         FollowStatus status
 ) {
@@ -18,7 +18,7 @@ public record FollowDto(
                 follow.getId(),
                 follow.getFollowerUserId(),
                 follow.getFollowingUserId(),
-                follow.getCreatedAt(),
+                follow.getFollowedAt(),
                 follow.isNotified(),
                 follow.getStatus()
         );

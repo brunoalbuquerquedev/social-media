@@ -1,17 +1,23 @@
 package project.social.repositories;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Repository;
 import project.social.domain.Post;
 
 import java.util.List;
 import java.util.Optional;
 
+@Repository
 public interface PostRepository extends MongoRepository<Post, String> {
-    List<Post> findByTitleContainingIgnoreCase(String text);
+    Page<Post> findByTitleContainingIgnoreCase(String text, Pageable pageable);
 
-    List<Post> findByAuthorIdInOrderByCreatedAtDesc(List<String> list);
+    Page<Post> findByAuthorIdInOrderByCreatedAtDesc(List<String> list, Pageable pageable);
 
     Optional<Post> findByAuthorUsername(String username);
 
-    List<Post> findByHasUserLiked(boolean hasUserLiked);
+    Page<Post> findByHasUserLiked(boolean hasUserLiked, Pageable pageable);
+
+    Page<Post> findAllById(String id, Pageable pageable);
 }

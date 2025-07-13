@@ -289,7 +289,7 @@ public class InitDatabase {
             Follow follow1 = Follow.builder()
                     .followerUserId(user2.getId())
                     .followingUserId(user1.getId())
-                    .createdAt(OffsetDateTime.now())
+                    .followedAt(OffsetDateTime.now())
                     .notified(false)
                     .status(FollowStatus.FOLLOWING)
                     .build();
@@ -297,7 +297,7 @@ public class InitDatabase {
             Follow follow2 = Follow.builder()
                     .followerUserId(user3.getId())
                     .followingUserId(user1.getId())
-                    .createdAt(OffsetDateTime.now())
+                    .followedAt(OffsetDateTime.now())
                     .notified(false)
                     .status(FollowStatus.FOLLOWING)
                     .build();
@@ -305,7 +305,7 @@ public class InitDatabase {
             Follow follow3 = Follow.builder()
                     .followerUserId(user4.getId())
                     .followingUserId(user2.getId())
-                    .createdAt(OffsetDateTime.now())
+                    .followedAt(OffsetDateTime.now())
                     .notified(false)
                     .status(FollowStatus.FOLLOWING)
                     .build();
@@ -313,7 +313,7 @@ public class InitDatabase {
             Follow follow4 = Follow.builder()
                     .followerUserId(user5.getId())
                     .followingUserId(user3.getId())
-                    .createdAt(OffsetDateTime.now())
+                    .followedAt(OffsetDateTime.now())
                     .notified(false)
                     .status(FollowStatus.FOLLOWING)
                     .build();
@@ -321,7 +321,7 @@ public class InitDatabase {
             Follow follow5 = Follow.builder()
                     .followerUserId(user6.getId())
                     .followingUserId(user4.getId())
-                    .createdAt(OffsetDateTime.now())
+                    .followedAt(OffsetDateTime.now())
                     .notified(false)
                     .status(FollowStatus.FOLLOWING)
                     .build();
@@ -329,7 +329,7 @@ public class InitDatabase {
             Follow follow6 = Follow.builder()
                     .followerUserId(user7.getId())
                     .followingUserId(user5.getId())
-                    .createdAt(OffsetDateTime.now())
+                    .followedAt(OffsetDateTime.now())
                     .notified(false)
                     .status(FollowStatus.FOLLOWING)
                     .build();
@@ -337,7 +337,7 @@ public class InitDatabase {
             Follow follow7 = Follow.builder()
                     .followerUserId(user8.getId())
                     .followingUserId(user6.getId())
-                    .createdAt(OffsetDateTime.now())
+                    .followedAt(OffsetDateTime.now())
                     .notified(false)
                     .status(FollowStatus.FOLLOWING)
                     .build();
@@ -345,7 +345,7 @@ public class InitDatabase {
             Follow follow8 = Follow.builder()
                     .followerUserId(user9.getId())
                     .followingUserId(user7.getId())
-                    .createdAt(OffsetDateTime.now())
+                    .followedAt(OffsetDateTime.now())
                     .notified(false)
                     .status(FollowStatus.FOLLOWING)
                     .build();
@@ -353,7 +353,7 @@ public class InitDatabase {
             Follow follow9 = Follow.builder()
                     .followerUserId(user10.getId())
                     .followingUserId(user8.getId())
-                    .createdAt(OffsetDateTime.now())
+                    .followedAt(OffsetDateTime.now())
                     .notified(false)
                     .status(FollowStatus.FOLLOWING)
                     .build();
@@ -361,7 +361,7 @@ public class InitDatabase {
             Follow follow10 = Follow.builder()
                     .followerUserId(user1.getId())
                     .followingUserId(user9.getId())
-                    .createdAt(OffsetDateTime.now())
+                    .followedAt(OffsetDateTime.now())
                     .notified(false)
                     .status(FollowStatus.FOLLOWING)
                     .build();

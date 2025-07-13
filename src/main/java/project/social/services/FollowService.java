@@ -1,6 +1,9 @@
 package project.social.services;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import project.social.domain.Follow;
 import project.social.domain.User;
@@ -27,14 +30,14 @@ public class FollowService implements IFollowService {
     private final UserRepository userRepository;
     private final UserService userService;
 
-    public List<FollowDto> findAll() {
-        return followRepository.findAll().stream().map(FollowDto::new).toList();
+    public Page<FollowDto> findAll(int pageNumber, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        return followRepository.findAll(pageable).map(FollowDto::new);
     }
 
-    public List<FollowDto> findById(String id) {
-        return followRepository.findByRequesterId(id).stream()
-                .map(FollowDto::new)
-                .toList();
+    public Page<FollowDto> findAllById(String id, int pageNumber, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        return followRepository.findAllByRequesterId(id, pageable).map(FollowDto::new);
     }
 
     public void followUser(String requesterId, String targetId) {

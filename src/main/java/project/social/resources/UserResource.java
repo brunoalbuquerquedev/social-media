@@ -1,16 +1,16 @@
 package project.social.resources;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import project.social.domain.Post;
+import project.social.dto.domain.PostDto;
 import project.social.dto.domain.UserDto;
 import project.social.services.FollowService;
+import project.social.services.PostService;
 import project.social.services.UserService;
 import project.social.util.JwtUtil;
 import project.social.util.SecurityUtil;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,11 +21,13 @@ public class UserResource {
     private JwtUtil jwtUtil;
     private SecurityUtil securityUtil;
     private FollowService followService;
+    private PostService postService;
 
     @GetMapping("/all")
-    public ResponseEntity<List<UserDto>> findAll() {
-        List<UserDto> list = userService.findAll();
-        return ResponseEntity.ok().body(list);
+    public ResponseEntity<Page<UserDto>> findAll(@RequestParam(defaultValue = "0") int pageNumber,
+                                                 @RequestParam(defaultValue = "10") int pageSize) {
+        Page<UserDto> page = userService.findAll(pageNumber, pageSize);
+        return ResponseEntity.ok().body(page);
     }
 
     @GetMapping("/me")
@@ -53,8 +55,10 @@ public class UserResource {
     }
 
     @GetMapping("/id/{id}/posts")
-    public ResponseEntity<List<Post>> findPosts(@PathVariable String id) {
-        UserDto dto = userService.findById(id);
-        return ResponseEntity.ok(dto.posts());
+    public ResponseEntity<Page<PostDto>> findPosts(@PathVariable String id,
+                                                   @RequestParam(defaultValue = "0") int pageNumber,
+                                                   @RequestParam(defaultValue = "10") int pageSize) {
+        Page<PostDto> page = postService.findAllById(id, pageNumber, pageSize);
+        return ResponseEntity.ok(page);
     }
 }

@@ -2,10 +2,7 @@ package project.social.resources;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import project.social.dto.domain.FeedDto;
 import project.social.dto.domain.UserDto;
 import project.social.services.FeedService;
@@ -22,22 +19,27 @@ public class FeedResource {
     private UserService userService;
 
     @GetMapping()
-    public ResponseEntity<FeedDto> getFeed() {
+    public ResponseEntity<FeedDto> getFeed(@RequestParam(defaultValue = "0") int pageNumber,
+                                           @RequestParam(defaultValue = "10") int pageSize) {
         String loggedUserId = securityUtil.getLoggedUserId();
-        FeedDto feedDto = feedService.getFeed(loggedUserId);
+        FeedDto feedDto = feedService.getFeed(loggedUserId, pageNumber, pageSize);
         return ResponseEntity.ok(feedDto);
     }
 
     @GetMapping("/id/{id}")
-    public ResponseEntity<FeedDto> getUserFeed(@PathVariable String id) {
-        FeedDto feedDto = feedService.getFeed(id);
+    public ResponseEntity<FeedDto> getUserFeed(@PathVariable String id,
+                                               @RequestParam(defaultValue = "0") int pageNumber,
+                                               @RequestParam(defaultValue = "10") int pageSize) {
+        FeedDto feedDto = feedService.getFeed(id, pageNumber, pageSize);
         return ResponseEntity.ok(feedDto);
     }
 
     @GetMapping("/user/{username}")
-    public ResponseEntity<FeedDto> getUserFeedByUsername(@PathVariable String username) {
+    public ResponseEntity<FeedDto> getUserFeedByUsername(@PathVariable String username,
+                                                         @RequestParam(defaultValue = "0") int pageNumber,
+                                                         @RequestParam(defaultValue = "10") int pageSize) {
         UserDto dto = userService.findByUsername(username);
-        FeedDto feedDto = feedService.getFeed(dto.id());
+        FeedDto feedDto = feedService.getFeed(dto.id(), pageNumber, pageSize);
         return ResponseEntity.ok(feedDto);
     }
 }
