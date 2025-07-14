@@ -1,9 +1,11 @@
 package project.social.resources;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import project.social.dto.domain.BlockDto;
 import project.social.services.BlockService;
 import project.social.util.SecurityUtil;
 
@@ -41,5 +43,13 @@ public class BlockResource {
         String loggedUserId = securityUtil.getLoggedUserId();
         blockService.unmuteUser(loggedUserId, id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/id/{id}")
+    public ResponseEntity<Page<BlockDto>> getBlockByUserId(@PathVariable String id,
+                                                           @RequestParam(defaultValue = "0") int pageNumber,
+                                                           @RequestParam(defaultValue = "10") int pageSize) {
+        Page<BlockDto> page = blockService.findBlockById(id, pageNumber, pageSize);
+        return ResponseEntity.ok(page);
     }
 }
