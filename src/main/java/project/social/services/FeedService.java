@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import project.social.domain.Post;
 import project.social.domain.User;
-import project.social.domain.enums.RestrictionType;
 import project.social.dto.domain.FeedDto;
 import project.social.dto.domain.PostDto;
 import project.social.exceptions.base.ObjectNotFoundException;
@@ -21,13 +20,14 @@ public class FeedService implements IFeedService {
     private final UserRepository userRepository;
     private final PostRepository postRepository;
 
+    @Override
     public FeedDto getFeed(String userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ObjectNotFoundException("User not found"));
 
-        List<String> usersWhoBlockedMe = user.getUsersBlockedByMe();
+        List<String> usersWhoBlockedByMe = user.getUsersBlockedByMe();
         List<String> visibleUsersIds = user.getUsersFollowedByMe().stream()
-                .filter(id -> !usersWhoBlockedMe.contains(id))
+                .filter(id -> !usersWhoBlockedByMe.contains(id))
                 .toList();
 
         List<Post> posts = postRepository.findByAuthorIdInOrderByCreatedAtDesc(visibleUsersIds);

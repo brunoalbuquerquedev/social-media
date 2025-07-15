@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface FollowRepository extends MongoRepository<Follow, String> {
-    Optional<Follow> findByRequesterIdAndTargetId(String requesterId, String targetId);
+    Optional<Follow> findByFollowerUserIdAndFollowingUserId(String followerUserId, String followingUserId);
 
-    List<Follow> findByRequesterId(String requesterId);
+    List<Follow> findByFollowerUserId(String followerUserId);
 }

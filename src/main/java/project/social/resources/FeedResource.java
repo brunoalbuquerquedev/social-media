@@ -10,20 +10,20 @@ import project.social.dto.domain.FeedDto;
 import project.social.dto.domain.UserDto;
 import project.social.services.FeedService;
 import project.social.services.UserService;
-import project.social.util.SecurityUtil;
+import project.social.util.SecurityUtils;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/feed")
 public class FeedResource {
 
-    private FeedService feedService;
-    private SecurityUtil securityUtil;
-    private UserService userService;
+    private final FeedService feedService;
+    private final SecurityUtils securityUtils;
+    private final UserService userService;
 
     @GetMapping()
     public ResponseEntity<FeedDto> getFeed() {
-        String loggedUserId = securityUtil.getLoggedUserId();
+        String loggedUserId = securityUtils.getLoggedUserId();
         FeedDto feedDto = feedService.getFeed(loggedUserId);
         return ResponseEntity.ok(feedDto);
     }

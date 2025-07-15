@@ -8,7 +8,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.OffsetDateTime;
-import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -27,6 +26,7 @@ public class User implements Serializable {
 
     private String username;
     private String email;
+    private String role;
     private String password;
 
     private String fullName;

@@ -15,7 +15,6 @@ import project.social.repositories.MessageRepository;
 import project.social.services.interfaces.IChatService;
 
 import java.time.OffsetDateTime;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -25,16 +24,19 @@ public class ChatService implements IChatService {
     private ConversationRepository conversationRepository;
     private MessageRepository messageRepository;
 
+    @Override
     public List<ConversationDto> getConversationsForUser(String userId) {
-        List<Conversation> list = conversationRepository.findByParticipantIdsContaining(userId);
+        List<Conversation> list = conversationRepository.findByParticipantsIdsContaining(userId);
         return list.stream().map(ConversationDto::new).toList();
     }
 
+    @Override
     public List<MessageDto> getMessages(String conversationId) {
         List<Message> list = messageRepository.findByConversationIdOrderBySentAtAsc(conversationId);
         return list.stream().map(MessageDto::new).toList();
     }
 
+    @Override
     public MessageDto sendMessage(String conversationId, String senderId, String content) {
         Message message = Message.builder()
                 .conversationId(conversationId)
@@ -52,6 +54,7 @@ public class ChatService implements IChatService {
         return MessageMapper.toDto(savedMessage);
     }
 
+    @Override
     public ConversationDto startConversation(List<String> participantIds, boolean isGroup) {
         Conversation conversation = Conversation.builder()
                 .participantsIds(participantIds)
@@ -61,6 +64,7 @@ public class ChatService implements IChatService {
         return new ConversationDto(savedConversation);
     }
 
+    @Override
     public void markAsSeen(String messageId, String userId) {
         Message message = messageRepository.findById(messageId)
                 .orElseThrow(() -> new MessageNotFoundException("Message not found"));

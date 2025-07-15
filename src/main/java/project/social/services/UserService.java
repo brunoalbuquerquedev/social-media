@@ -16,20 +16,24 @@ public class UserService implements IUserService {
 
     private final UserRepository userRepository;
 
+    @Override
     public List<UserDto> findAll() {
         return userRepository.findAll().stream().map(UserDto::new).toList();
     }
 
+    @Override
     public List<UserDto> findAllById(List<String> id) {
         return userRepository.findAllById(id).stream().map(UserDto::new).toList();
     }
 
+    @Override
     public UserDto findById(String id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ObjectNotFoundException("User not found."));
         return new UserDto(user);
     }
 
+    @Override
     public UserDto findByUsername(String username) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ObjectNotFoundException("User not found."));

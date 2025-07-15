@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import project.social.exceptions.auth.InvalidTokenException;
 
 @Component
-public class SecurityUtil {
+public class SecurityUtils {
 
     public String getLoggedUserId() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();

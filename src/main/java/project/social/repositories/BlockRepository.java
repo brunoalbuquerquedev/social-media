@@ -7,5 +7,7 @@ import project.social.domain.enums.RestrictionType;
 import java.util.Optional;
 
 public interface BlockRepository extends MongoRepository<Block, String> {
-    Optional<Block> findByRequesterIdAndTargetIdAndType(String requesterId, String targetId, RestrictionType type);
+    Optional<Block> findByBlockerUserIdAndBlockingUserIdAndType(String blockerUserId,
+                                                                String blockingUserId,
+                                                                RestrictionType type);
 }

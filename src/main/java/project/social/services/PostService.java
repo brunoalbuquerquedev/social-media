@@ -16,24 +16,28 @@ public class PostService implements IPostService {
 
     private final PostRepository postRepository;
 
+    @Override
     public List<PostDto> findAll() {
         return postRepository.findAll().stream()
                 .map(PostDto::new)
                 .toList();
     }
 
+    @Override
     public PostDto findById(String id) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new ObjectNotFoundException("Post not found."));
         return new PostDto(post);
     }
 
+    @Override
     public List<PostDto> findByTitle(String text) {
         return postRepository.findByTitleContainingIgnoreCase(text).stream()
                 .map(PostDto::new)
                 .toList();
     }
 
+    @Override
     public List<PostDto> findByHasUserLiked() {
         return postRepository.findByHasUserLiked(true).stream()
                 .map(PostDto::new)

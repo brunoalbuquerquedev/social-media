@@ -1,10 +1,12 @@
 package project.social.config;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.core.codec.CodecException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import project.social.dto.config.StandardErrorDto;
 import project.social.exceptions.auth.InvalidRequestDataException;
 import project.social.exceptions.base.AuthenticationException;
 import project.social.exceptions.base.MessageSendException;
@@ -22,12 +24,12 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(InvalidRequestDataException.class)
-    public ResponseEntity<StandardError> invalidRequestData(InvalidRequestDataException e, HttpServletRequest request) {
+    public ResponseEntity<StandardErrorDto> invalidRequestData(InvalidRequestDataException e, HttpServletRequest request) {
 
         HttpStatus status = HttpStatus.BAD_REQUEST;
         String message = "Insufficient data for the request.";
 
-        StandardError error = new StandardError(
+        StandardErrorDto error = new StandardErrorDto(
                 String.valueOf(Instant.now().toEpochMilli()),
                 status.value(),
                 message,
@@ -38,12 +40,12 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MessageSendException.class)
-    public ResponseEntity<StandardError> messageSend(MessageSendException e, HttpServletRequest request) {
+    public ResponseEntity<StandardErrorDto> messageSend(MessageSendException e, HttpServletRequest request) {
 
         HttpStatus status = HttpStatus.BAD_REQUEST;
         String message = "Message send error.";
 
-        StandardError error = new StandardError(
+        StandardErrorDto error = new StandardErrorDto(
                 String.valueOf(Instant.now().toEpochMilli()),
                 status.value(),
                 message,
@@ -54,12 +56,12 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ObjectAlreadyExistsException.class)
-    public ResponseEntity<StandardError> objectAlreadyExists(ObjectAlreadyExistsException e, HttpServletRequest request) {
+    public ResponseEntity<StandardErrorDto> objectAlreadyExists(ObjectAlreadyExistsException e, HttpServletRequest request) {
 
         HttpStatus status = HttpStatus.CONFLICT;
-        String message = "Object already exists";
+        String message = "Object already exists.";
 
-        StandardError error = new StandardError(
+        StandardErrorDto error = new StandardErrorDto(
                 String.valueOf(Instant.now().toEpochMilli()),
                 status.value(),
                 message,
@@ -70,12 +72,12 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ObjectNotFoundException.class)
-    public ResponseEntity<StandardError> objectNotFound(ObjectNotFoundException e, HttpServletRequest request) {
+    public ResponseEntity<StandardErrorDto> objectNotFound(ObjectNotFoundException e, HttpServletRequest request) {
 
         HttpStatus status = HttpStatus.NOT_FOUND;
-        String message = "Not found";
+        String message = "Not found.";
 
-        StandardError error = new StandardError(
+        StandardErrorDto error = new StandardErrorDto(
                 String.valueOf(Instant.now().toEpochMilli()),
                 status.value(),
                 message,

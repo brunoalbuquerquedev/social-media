@@ -6,5 +6,5 @@ import project.social.domain.Conversation;
 import java.util.List;
 
 public interface ConversationRepository extends MongoRepository<Conversation, String> {
-    List<Conversation> findByParticipantIdsContaining(String userId);
+    List<Conversation> findByParticipantsIdsContaining(String participantsId);
 }

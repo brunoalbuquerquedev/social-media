@@ -4,9 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import project.social.domain.Post;
 import project.social.dto.domain.PostDto;
-import project.social.util.SecurityUtil;
+import project.social.util.SecurityUtils;
 import project.social.util.UrlDecoder;
 import project.social.services.PostService;
 
@@ -17,8 +16,8 @@ import java.util.List;
 @RequestMapping("/api/posts")
 public class PostResource {
 
-    private PostService postService;
-    private SecurityUtil securityUtil;
+    private final PostService postService;
+    private final SecurityUtils securityUtils;
 
     @GetMapping("/all")
     public ResponseEntity<List<PostDto>> findAll() {
@@ -34,13 +33,13 @@ public class PostResource {
 
     @PostMapping("/id/{id}")
     public ResponseEntity<Void> likePost(@PathVariable String id) {
-        String loggedUserId = securityUtil.getLoggedUserId();
+        String loggedUserId = securityUtils.getLoggedUserId();
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @DeleteMapping("/id/{id}")
     public ResponseEntity<Void> unlikePost(@PathVariable String id) {
-        String loggedUserId = securityUtil.getLoggedUserId();
+        String loggedUserId = securityUtils.getLoggedUserId();
         return ResponseEntity.noContent().build();
     }
 

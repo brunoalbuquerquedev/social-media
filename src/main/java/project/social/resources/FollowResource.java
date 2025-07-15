@@ -8,7 +8,7 @@ import project.social.dto.domain.FollowDto;
 import project.social.dto.domain.UserDto;
 import project.social.services.FollowService;
 import project.social.services.UserService;
-import project.social.util.SecurityUtil;
+import project.social.util.SecurityUtils;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ public class FollowResource {
 
     private final UserService userService;
     private final FollowService followService;
-    private final SecurityUtil securityUtil;
+    private final SecurityUtils securityUtils;
 
     @GetMapping("/all")
     public ResponseEntity<List<FollowDto>> findAll() {
@@ -29,21 +29,21 @@ public class FollowResource {
 
     @PostMapping("/id/{id}")
     public ResponseEntity<Void> follow(@PathVariable String id) {
-        String loggedUserId = securityUtil.getLoggedUserId();
+        String loggedUserId = securityUtils.getLoggedUserId();
         followService.followUser(loggedUserId, id);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @DeleteMapping("/id/{id}")
     public ResponseEntity<Void> unfollow(@PathVariable String id) {
-        String loggedUserId = securityUtil.getLoggedUserId();
+        String loggedUserId = securityUtils.getLoggedUserId();
         followService.unfollowUser(loggedUserId, id);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/followers/me")
     public ResponseEntity<List<UserDto>> getMyFollowers() {
-        String loggedUserId = securityUtil.getLoggedUserId();
+        String loggedUserId = securityUtils.getLoggedUserId();
         List<FollowDto> followsList = followService.findById(loggedUserId);
 
         List<String> list = followsList.stream()
