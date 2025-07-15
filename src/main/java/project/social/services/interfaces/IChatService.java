@@ -13,7 +13,7 @@ public interface IChatService {
 
     MessageDto sendMessage(String conversationId, String senderId, String content);
 
-    ConversationDto startConversation(List<String> participantIds, boolean isGroup);
+    ConversationDto startConversation(List<String> participantIds);
 
     void markAsSeen(String messageId, String userId);
 }

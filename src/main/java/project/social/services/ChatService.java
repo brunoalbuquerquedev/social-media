@@ -29,7 +29,7 @@ public class ChatService implements IChatService {
 
     public Page<ConversationDto> getConversationsForUser(String userId, int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        Page<Conversation> page = conversationRepository.findByParticipantIdsContaining(userId, pageable);
+        Page<Conversation> page = conversationRepository.findByParticipantsIdsContaining(userId, pageable);
         return page.map(ConversationDto::new);
     }
 
@@ -58,7 +58,7 @@ public class ChatService implements IChatService {
     }
 
     @Override
-    public ConversationDto startConversation(List<String> participantIds, boolean isGroup) {
+    public ConversationDto startConversation(List<String> participantIds) {
         Conversation conversation = Conversation.builder()
                 .participantsIds(participantIds)
                 .createdAt(OffsetDateTime.now())

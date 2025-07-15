@@ -21,7 +21,7 @@ public class FeedResource {
     @GetMapping()
     public ResponseEntity<FeedDto> getFeed(@RequestParam(defaultValue = "0") int pageNumber,
                                            @RequestParam(defaultValue = "10") int pageSize) {
-        String loggedUserId = securityUtil.getLoggedUserId();
+        String loggedUserId = securityUtils.getLoggedUserId();
         FeedDto feedDto = feedService.getFeed(loggedUserId, pageNumber, pageSize);
         return ResponseEntity.ok(feedDto);
     }

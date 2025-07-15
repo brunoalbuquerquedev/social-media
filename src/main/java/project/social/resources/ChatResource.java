@@ -44,9 +44,8 @@ public class ChatResource {
     }
 
     @PostMapping("/conversation/start")
-    public ResponseEntity<ConversationDto> startConversation(@RequestBody List<String> participantIds,
-                                                             @RequestParam(defaultValue = "false") boolean isGroup) {
-        ConversationDto dto = chatService.startConversation(participantIds, isGroup);
+    public ResponseEntity<ConversationDto> startConversation(@RequestBody List<String> participantIds) {
+        ConversationDto dto = chatService.startConversation(participantIds);
         return ResponseEntity.ok(dto);
     }
 

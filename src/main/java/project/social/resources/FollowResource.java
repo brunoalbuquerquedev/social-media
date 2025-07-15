@@ -46,7 +46,7 @@ public class FollowResource {
     @GetMapping("/followers/me")
     public ResponseEntity<Page<UserDto>> getMyFollowers(@RequestParam(defaultValue = "0") int pageNumber,
                                                         @RequestParam(defaultValue = "10") int pageSize) {
-        String loggedUserId = securityUtil.getLoggedUserId();
+        String loggedUserId = securityUtils.getLoggedUserId();
         List<FollowDto> followsList = followService.findAllById(loggedUserId, pageNumber, pageSize).toList();
 
         List<String> followsIdList = followsList.stream()

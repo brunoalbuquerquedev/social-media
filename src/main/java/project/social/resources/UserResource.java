@@ -21,6 +21,7 @@ public class UserResource {
     private final JwtUtils jwtUtils;
     private final SecurityUtils securityUtils;
     private final FollowService followService;
+    private final PostService postService;
 
     @GetMapping("/all")
     public ResponseEntity<Page<UserDto>> findAll(@RequestParam(defaultValue = "0") int pageNumber,
