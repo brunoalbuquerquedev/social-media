@@ -1,10 +1,14 @@
 package project.social.services;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import project.social.domain.Block;
 import project.social.domain.User;
 import project.social.domain.enums.RestrictionType;
+import project.social.dto.domain.BlockDto;
 import project.social.dto.domain.UserDto;
 import project.social.exceptions.domain.BlockAlreadyExistsException;
 import project.social.exceptions.domain.InvalidBlockRequestException;
@@ -26,6 +30,11 @@ public class BlockService implements IBlockService {
     private final BlockRepository blockRepository;
 
     @Override
+    public Page<BlockDto> findBlockById(String id, int pageNumber, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        return blockRepository.findAllByBlockerUserId(id, pageable).map(BlockDto::new);
+    }
+
     public void blockUser(String requesterId, String targetId) {
         if (requesterId.equals(targetId))
             throw new InvalidBlockRequestException("You cannot block yourself.");

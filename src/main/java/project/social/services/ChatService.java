@@ -1,6 +1,9 @@
 package project.social.services;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import project.social.domain.Conversation;
 import project.social.domain.Message;
@@ -24,16 +27,16 @@ public class ChatService implements IChatService {
     private ConversationRepository conversationRepository;
     private MessageRepository messageRepository;
 
-    @Override
-    public List<ConversationDto> getConversationsForUser(String userId) {
-        List<Conversation> list = conversationRepository.findByParticipantsIdsContaining(userId);
-        return list.stream().map(ConversationDto::new).toList();
+    public Page<ConversationDto> getConversationsForUser(String userId, int pageNumber, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Page<Conversation> page = conversationRepository.findByParticipantIdsContaining(userId, pageable);
+        return page.map(ConversationDto::new);
     }
 
-    @Override
-    public List<MessageDto> getMessages(String conversationId) {
-        List<Message> list = messageRepository.findByConversationIdOrderBySentAtAsc(conversationId);
-        return list.stream().map(MessageDto::new).toList();
+    public Page<MessageDto> getMessages(String conversationId, int pageNumber, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Page<Message> page = messageRepository.findByConversationIdOrderBySentAtAsc(conversationId, pageable);
+        return page.map(MessageDto::new);
     }
 
     @Override

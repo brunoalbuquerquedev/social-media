@@ -1,6 +1,9 @@
 package project.social.services;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import project.social.domain.Post;
 import project.social.domain.User;
@@ -21,7 +24,7 @@ public class FeedService implements IFeedService {
     private final PostRepository postRepository;
 
     @Override
-    public FeedDto getFeed(String userId) {
+    public FeedDto getFeed(String userId, int pageNumber, int pageSize) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ObjectNotFoundException("User not found"));
 
@@ -30,11 +33,10 @@ public class FeedService implements IFeedService {
                 .filter(id -> !usersWhoBlockedByMe.contains(id))
                 .toList();
 
-        List<Post> posts = postRepository.findByAuthorIdInOrderByCreatedAtDesc(visibleUsersIds);
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Page<Post> posts = postRepository.findByAuthorIdInOrderByCreatedAtDesc(visibleUsersIds, pageable);
 
-        List<PostDto> dtoList = posts.stream()
-                .map(PostDto::new)
-                .toList();
+        Page<PostDto> dtoList = posts.map(PostDto::new);
 
         return new FeedDto(dtoList);
     }

@@ -1,15 +1,14 @@
 package project.social.resources;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.social.dto.domain.PostDto;
 import project.social.util.SecurityUtils;
-import project.social.util.UrlDecoder;
 import project.social.services.PostService;
-
-import java.util.List;
+import project.social.util.UrlDecoder;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,9 +19,10 @@ public class PostResource {
     private final SecurityUtils securityUtils;
 
     @GetMapping("/all")
-    public ResponseEntity<List<PostDto>> findAll() {
-        List<PostDto> list = postService.findAll();
-        return ResponseEntity.ok(list);
+    public ResponseEntity<Page<PostDto>> findAll(@RequestParam(defaultValue = "0") int pageNumber,
+                                                 @RequestParam(defaultValue = "10") int pageSize) {
+        Page<PostDto> page = postService.findAll(pageNumber, pageSize);
+        return ResponseEntity.ok(page);
     }
 
     @GetMapping("/id/{id}")
@@ -44,15 +44,20 @@ public class PostResource {
     }
 
     @GetMapping("/id/{id}/liked")
-    public ResponseEntity<List<PostDto>> getPostsLikedByUser(@PathVariable String id) {
-        List<PostDto> list = postService.findByHasUserLiked();
-        return ResponseEntity.ok(list);
+    public ResponseEntity<Page<PostDto>> getPostsLikedByUser(@PathVariable String id,
+                                                             @RequestBody boolean hasUserLiked,
+                                                             @RequestParam(defaultValue = "0") int pageNumber,
+                                                             @RequestParam(defaultValue = "10") int pageSize) {
+        Page<PostDto> page = postService.findAllByHasUserLiked(hasUserLiked, pageNumber, pageSize);
+        return ResponseEntity.ok(page);
     }
 
     @GetMapping("/title")
-    public ResponseEntity<List<PostDto>> getPostByTitle(@RequestParam(value = "text", defaultValue = "") String text) {
+    public ResponseEntity<Page<PostDto>> getPostByTitle(@RequestParam(value = "text", defaultValue = "") String text,
+                                                        @RequestParam(defaultValue = "0") int pageNumber,
+                                                        @RequestParam(defaultValue = "10") int pageSize) {
         text = UrlDecoder.decodeParam(text);
-        List<PostDto> list = postService.findByTitle(text);
-        return ResponseEntity.ok(list);
+        Page<PostDto> page = postService.findByTitle(text, pageNumber, pageSize);
+        return ResponseEntity.ok(page);
     }
 }

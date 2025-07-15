@@ -1,6 +1,7 @@
 package project.social.resources;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.social.dto.domain.ConversationDto;
@@ -19,15 +20,19 @@ public class ChatResource {
     private final SecurityUtils securityUtils;
 
     @GetMapping("/conversation/id/{id}")
-    public ResponseEntity<List<ConversationDto>> getConversations(@PathVariable String id) {
-        List<ConversationDto> list = chatService.getConversationsForUser(id);
+    public ResponseEntity<Page<ConversationDto>> getConversations(@PathVariable String id,
+                                                                  @RequestParam(defaultValue = "0") int page,
+                                                                  @RequestParam(defaultValue = "10") int size) {
+        Page<ConversationDto> list = chatService.getConversationsForUser(id, page, size);
         return ResponseEntity.ok(list);
     }
 
     @GetMapping("/conversation/id/{id}/messages")
-    public ResponseEntity<List<MessageDto>> getMessages(@PathVariable String id) {
-        List<MessageDto> list = chatService.getMessages(id);
-        return ResponseEntity.ok(list);
+    public ResponseEntity<Page<MessageDto>> getMessages(@PathVariable String id,
+                                                        @RequestParam int pageNumber,
+                                                        @RequestParam int pageSize) {
+        Page<MessageDto> page = chatService.getMessages(id, pageNumber, pageSize);
+        return ResponseEntity.ok(page);
     }
 
     @PostMapping("/message/send")

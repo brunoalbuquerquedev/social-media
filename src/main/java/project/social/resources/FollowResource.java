@@ -1,6 +1,7 @@
 package project.social.resources;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,9 +23,10 @@ public class FollowResource {
     private final SecurityUtils securityUtils;
 
     @GetMapping("/all")
-    public ResponseEntity<List<FollowDto>> findAll() {
-        List<FollowDto> list = followService.findAll();
-        return ResponseEntity.ok().body(list);
+    public ResponseEntity<Page<FollowDto>> findAll(@RequestParam(defaultValue = "0") int pageNumber,
+                                                   @RequestParam(defaultValue = "10") int pageSize) {
+        Page<FollowDto> page = followService.findAll(pageNumber, pageSize);
+        return ResponseEntity.ok().body(page);
     }
 
     @PostMapping("/id/{id}")
@@ -42,29 +44,34 @@ public class FollowResource {
     }
 
     @GetMapping("/followers/me")
-    public ResponseEntity<List<UserDto>> getMyFollowers() {
-        String loggedUserId = securityUtils.getLoggedUserId();
-        List<FollowDto> followsList = followService.findById(loggedUserId);
+    public ResponseEntity<Page<UserDto>> getMyFollowers(@RequestParam(defaultValue = "0") int pageNumber,
+                                                        @RequestParam(defaultValue = "10") int pageSize) {
+        String loggedUserId = securityUtil.getLoggedUserId();
+        List<FollowDto> followsList = followService.findAllById(loggedUserId, pageNumber, pageSize).toList();
 
-        List<String> list = followsList.stream()
+        List<String> followsIdList = followsList.stream()
                 .map(FollowDto::followerUserId)
                 .toList();
 
-        List<UserDto> dtoList = userService.findAllById(list);
+        Page<UserDto> dtoList = userService.findAllById(followsIdList, pageNumber, pageSize);
         return ResponseEntity.ok().body(dtoList);
     }
 
     @GetMapping("/followers/{id}")
-    public ResponseEntity<List<UserDto>> getFollowers(@PathVariable String id) {
+    public ResponseEntity<Page<UserDto>> getFollowers(@PathVariable String id,
+                                                      @RequestParam(defaultValue = "0") int page,
+                                                      @RequestParam(defaultValue = "10") int size) {
         UserDto dto = userService.findById(id);
-        List<UserDto> list = userService.findAllById(dto.followersIds());
+        Page<UserDto> list = userService.findAllById(dto.followersIds(), page, size);
         return ResponseEntity.ok(list);
     }
 
     @GetMapping("/following/{id}")
-    public ResponseEntity<List<UserDto>> getFollowing(@PathVariable String id) {
+    public ResponseEntity<Page<UserDto>> getFollowing(@PathVariable String id,
+                                                      @RequestParam(defaultValue = "0") int page,
+                                                      @RequestParam(defaultValue = "10") int size) {
         UserDto dto = userService.findById(id);
-        List<UserDto> list = userService.findAllById(dto.followingIds());
+        Page<UserDto> list = userService.findAllById(dto.followingIds(), page, size);
         return ResponseEntity.ok(list);
     }
 }
