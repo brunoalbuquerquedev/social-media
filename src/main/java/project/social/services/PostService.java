@@ -17,7 +17,6 @@ public class PostService implements IPostService {
 
     private final PostRepository postRepository;
 
-    @Override
     public Page<PostDto> findAll(int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         return postRepository.findAll(pageable).map(PostDto::new);

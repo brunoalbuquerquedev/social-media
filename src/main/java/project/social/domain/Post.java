@@ -25,21 +25,20 @@ public class Post implements Serializable {
 
     @Id
     private String id;
-    private String authorUsername;
     private String authorId;
+    private String authorUsername;
     private String content;
-    private String title;
-    private OffsetDateTime createdAt;
     private String authorProfilePictureUrl;
+    private OffsetDateTime createdAt;
     private boolean hasUserLiked;
 
     @DBRef(lazy = true)
-    private final List<Like> likes = new ArrayList<>();
+    private List<Like> likes = new ArrayList<>();
 
     @DBRef(lazy = true)
-    private final List<CommentDto> comments = new ArrayList<>();
+    private List<CommentDto> comments = new ArrayList<>();
 
     @DBRef(lazy = true)
-    private final List<String> mediaUrl = new ArrayList<>();
+    private List<String> mediaUrl = new ArrayList<>();
 
 }

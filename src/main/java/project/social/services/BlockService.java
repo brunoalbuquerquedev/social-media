@@ -17,8 +17,8 @@ import project.social.repositories.BlockRepository;
 import project.social.repositories.UserRepository;
 import project.social.services.interfaces.IBlockService;
 
+import java.time.OffsetDateTime;
 import java.util.Arrays;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -30,9 +30,9 @@ public class BlockService implements IBlockService {
     private final BlockRepository blockRepository;
 
     @Override
-    public Page<BlockDto> findBlockById(String id, int pageNumber, int pageSize) {
+    public Page<BlockDto> findAllBlockById(String blockId, int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        return blockRepository.findAllByBlockerUserId(id, pageable).map(BlockDto::new);
+        return blockRepository.findAllByBlockerUserId(blockId, pageable).map(BlockDto::new);
     }
 
     public void blockUser(String requesterId, String targetId) {
@@ -42,16 +42,16 @@ public class BlockService implements IBlockService {
         UserDto requesterUserDto = userService.findById(requesterId);
         UserDto targetUserDto = userService.findById(targetId);
 
-        Optional<Block> optionalBlock = blockRepository
-                .findByBlockerUserIdAndBlockingUserIdAndType(requesterId, targetId, RestrictionType.BLOCK);
-
-        if (optionalBlock.isPresent())
-            throw new BlockAlreadyExistsException("Block already exists.");
+        blockRepository.findByBlockerUserIdAndBlockingUserIdAndType(requesterId, targetId, RestrictionType.BLOCK)
+                .ifPresent(b -> {
+                    throw new BlockAlreadyExistsException("Block already exists.");
+                });
 
         Block block = Block.builder()
                 .blockerUserId(requesterId)
                 .blockingUserId(targetId)
                 .type(RestrictionType.BLOCK)
+                .createdAt(OffsetDateTime.now())
                 .build();
 
         blockRepository.save(block);
@@ -73,10 +73,8 @@ public class BlockService implements IBlockService {
         UserDto requesterUserDto = userService.findById(requesterId);
         UserDto targetUserDto = userService.findById(targetId);
 
-        Optional<Block> optionalBlock = blockRepository
-                .findByBlockerUserIdAndBlockingUserIdAndType(requesterId, targetId, RestrictionType.BLOCK);
-
-        optionalBlock.ifPresent(blockRepository::delete);
+        blockRepository.findByBlockerUserIdAndBlockingUserIdAndType(requesterId, targetId, RestrictionType.BLOCK)
+                .ifPresent(blockRepository::delete);
 
         User requesterUser = UserMapper.fromDto(requesterUserDto);
         User targetUser = UserMapper.fromDto(targetUserDto);
@@ -94,11 +92,10 @@ public class BlockService implements IBlockService {
         UserDto requesterUserDto = userService.findById(requesterId);
         UserDto targetUserDto = userService.findById(targetId);
 
-        Optional<Block> optionalBlock = blockRepository
-                .findByBlockerUserIdAndBlockingUserIdAndType(requesterId, targetId, RestrictionType.MUTE);
-
-        if (optionalBlock.isPresent())
-            throw new BlockAlreadyExistsException("Mute already exists.");
+        blockRepository.findByBlockerUserIdAndBlockingUserIdAndType(requesterId, targetId, RestrictionType.BLOCK)
+                .ifPresent(b -> {
+                    throw new BlockAlreadyExistsException("Block already exists.");
+                });
 
         Block block = Block.builder()
                 .blockerUserId(requesterId)
@@ -124,10 +121,8 @@ public class BlockService implements IBlockService {
         UserDto requesterUserDto = userService.findById(requesterId);
         UserDto targetUserDto = userService.findById(targetId);
 
-        Optional<Block> optionalBlock = blockRepository
-                .findByBlockerUserIdAndBlockingUserIdAndType(requesterId, targetId, RestrictionType.MUTE);
-
-        optionalBlock.ifPresent(blockRepository::delete);
+        blockRepository.findByBlockerUserIdAndBlockingUserIdAndType(requesterId, targetId, RestrictionType.MUTE)
+                .ifPresent(blockRepository::delete);
 
         User requesterUser = UserMapper.fromDto(requesterUserDto);
         User targetUser = UserMapper.fromDto(targetUserDto);

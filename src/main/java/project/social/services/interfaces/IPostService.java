@@ -4,8 +4,6 @@ import org.springframework.data.domain.Page;
 import project.social.dto.domain.PostDto;
 
 public interface IPostService {
-    Page<PostDto> findAll(int page, int size);
-
     PostDto findById(String id);
 
     Page<PostDto> findByTitle(String text, int page, int size);

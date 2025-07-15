@@ -19,7 +19,6 @@ public class UserService implements IUserService {
 
     private final UserRepository userRepository;
 
-    @Override
     public Page<UserDto> findAll(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         return userRepository.findAll(pageable).map(UserDto::new);

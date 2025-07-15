@@ -17,10 +17,10 @@ import project.social.repositories.FollowRepository;
 import project.social.repositories.UserRepository;
 import project.social.services.interfaces.IFollowService;
 
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +30,6 @@ public class FollowService implements IFollowService {
     private final UserRepository userRepository;
     private final UserService userService;
 
-    @Override
     public Page<FollowDto> findAll(int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         return followRepository.findAll(pageable).map(FollowDto::new);
@@ -49,24 +48,20 @@ public class FollowService implements IFollowService {
         UserDto requesterUserDto = userService.findById(requesterId);
         UserDto targetUserDto = userService.findById(targetId);
 
-        Optional<Follow> optionalFollow0 = followRepository
-                .findByFollowerUserIdAndFollowingUserId(requesterId, targetId);
+        followRepository.findByFollowerUserIdAndFollowingUserId(requesterId, targetId)
+                .ifPresent(f -> {
+                    throw new FollowAlreadyExistsException("The user is already followed.");
+                });
 
-        if (optionalFollow0.isPresent())
-            throw new FollowAlreadyExistsException("The user is already followed.");
-
-        Optional<Follow> optionalFollow1 = followRepository
-                .findByFollowerUserIdAndFollowingUserId(targetId, requesterId);
-
-        FollowStatus status = FollowStatus.FOLLOWING;
-
-        if (optionalFollow1.isPresent())
-            status = FollowStatus.MUTUAL_FOLLOWING;
+        FollowStatus status = followRepository
+                .findByFollowerUserIdAndFollowingUserId(targetId, requesterId)
+                .isPresent() ? FollowStatus.MUTUAL_FOLLOWING : FollowStatus.FOLLOWING;
 
         Follow follow = Follow.builder()
                 .followerUserId(requesterId)
                 .followingUserId(targetId)
                 .status(status)
+                .followedAt(OffsetDateTime.now())
                 .build();
 
         followRepository.save(follow);
@@ -87,10 +82,8 @@ public class FollowService implements IFollowService {
         UserDto requesterUserDto = userService.findById(requesterId);
         UserDto targetUserDto = userService.findById(targetId);
 
-        Optional<Follow> optionalFollow = followRepository
-                .findByFollowerUserIdAndFollowingUserId(requesterId, targetId);
-
-        optionalFollow.ifPresent(followRepository::delete);
+        followRepository.findByFollowerUserIdAndFollowingUserId(requesterId, targetId)
+                .ifPresent(followRepository::delete);
 
         User requesterUser = UserMapper.fromDto(requesterUserDto);
         User targetUser = UserMapper.fromDto(targetUserDto);
@@ -102,15 +95,10 @@ public class FollowService implements IFollowService {
 
     @Override
     public void deleteMutualFollowingByBlock(String requesterId, String targetId) {
-        Optional<Follow> optionalFollow0 = followRepository
-                .findByFollowerUserIdAndFollowingUserId(requesterId, targetId);
-
-        Optional<Follow> optionalFollow1 = followRepository
-                .findByFollowerUserIdAndFollowingUserId(targetId, requesterId);
-
         List<Follow> list = new ArrayList<>();
-        optionalFollow0.ifPresent(list::add);
-        optionalFollow1.ifPresent(list::add);
+
+        followRepository.findByFollowerUserIdAndFollowingUserId(requesterId, targetId).ifPresent(list::add);
+        followRepository.findByFollowerUserIdAndFollowingUserId(targetId, requesterId).ifPresent(list::add);
 
         if (!list.isEmpty())
             followRepository.deleteAll(list);

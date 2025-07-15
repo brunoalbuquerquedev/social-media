@@ -1,5 +1,6 @@
 package project.social.dto.domain;
 
+import jakarta.validation.constraints.NotNull;
 import project.social.domain.Like;
 import project.social.domain.Post;
 
@@ -7,26 +8,24 @@ import java.time.OffsetDateTime;
 import java.util.List;
 
 public record PostDto(
-        String id,
-        String authorId,
-        String content,
-        String title,
-        OffsetDateTime createdAt,
-        String authorUsername,
-        String authorProfilePictureUrl,
-        List<Like> likes,
-        List<CommentDto> comments,
-        boolean hasUserLiked
+        @NotNull String id,
+        @NotNull String authorId,
+        @NotNull String authorUsername,
+        @NotNull String content,
+        @NotNull String authorProfilePictureUrl,
+        @NotNull OffsetDateTime createdAt,
+        @NotNull List<Like> likes,
+        @NotNull List<CommentDto> comments,
+        @NotNull Boolean hasUserLiked
 ) {
     public PostDto(Post post) {
         this(
                 post.getId(),
                 post.getAuthorId(),
-                post.getContent(),
-                post.getTitle(),
-                post.getCreatedAt(),
                 post.getAuthorUsername(),
+                post.getContent(),
                 post.getAuthorProfilePictureUrl(),
+                post.getCreatedAt(),
                 post.getLikes(),
                 post.getComments(),
                 post.isHasUserLiked()

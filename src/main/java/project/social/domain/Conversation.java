@@ -21,8 +21,8 @@ public class Conversation {
     private OffsetDateTime createdAt;
 
     @Builder.Default
-    private final List<String> participantsIds = new ArrayList<>(2);
+    private List<String> participantsIds = new ArrayList<>(2);
 
     @DBRef(lazy = true)
-    private final List<String> messages = new ArrayList<>();
+    private List<String> messages = new ArrayList<>();
 }

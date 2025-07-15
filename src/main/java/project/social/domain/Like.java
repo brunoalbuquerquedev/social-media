@@ -22,8 +22,7 @@ public class Like implements Serializable {
     @Id
     private String id;
 
-    private String username;
     private String userId;
     private String postId;
-    private OffsetDateTime createdAt;
+    private OffsetDateTime likedAt;
 }
