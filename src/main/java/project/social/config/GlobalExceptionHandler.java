@@ -86,4 +86,20 @@ public class GlobalExceptionHandler {
         );
         return ResponseEntity.status(status).body(error);
     }
+
+    @ExceptionHandler(CodecException.class)
+    public ResponseEntity<StandardErrorDto> codecException(CodecException e, HttpServletRequest request) {
+
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        String message = "Codec exception.";
+
+        StandardErrorDto error = new StandardErrorDto(
+                String.valueOf(Instant.now().toEpochMilli()),
+                status.value(),
+                message,
+                e.getMessage(),
+                request.getRequestURI()
+        );
+        return ResponseEntity.status(status).body(error);
+    }
 }
