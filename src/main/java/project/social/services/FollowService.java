@@ -30,6 +30,7 @@ public class FollowService implements IFollowService {
     private final UserRepository userRepository;
     private final UserService userService;
 
+    @Override
     public Page<FollowDto> findAll(int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         return followRepository.findAll(pageable).map(FollowDto::new);
@@ -40,6 +41,7 @@ public class FollowService implements IFollowService {
         return followRepository.findAllByRequesterId(id, pageable).map(FollowDto::new);
     }
 
+    @Override
     public void followUser(String requesterId, String targetId) {
         if (requesterId.equals(targetId))
             throw new InvalidFollowRequestException("You cannot follow yourself.");
@@ -48,13 +50,13 @@ public class FollowService implements IFollowService {
         UserDto targetUserDto = userService.findById(targetId);
 
         Optional<Follow> optionalFollow0 = followRepository
-                .findByRequesterIdAndTargetId(requesterId, targetId);
+                .findByFollowerUserIdAndFollowingUserId(requesterId, targetId);
 
         if (optionalFollow0.isPresent())
             throw new FollowAlreadyExistsException("The user is already followed.");
 
         Optional<Follow> optionalFollow1 = followRepository
-                .findByRequesterIdAndTargetId(targetId, requesterId);
+                .findByFollowerUserIdAndFollowingUserId(targetId, requesterId);
 
         FollowStatus status = FollowStatus.FOLLOWING;
 
@@ -77,6 +79,7 @@ public class FollowService implements IFollowService {
         userRepository.saveAll(Arrays.asList(requesterUser, targetUser));
     }
 
+    @Override
     public void unfollowUser(String requesterId, String targetId) {
         if (requesterId.equals(targetId))
             throw new InvalidFollowRequestException("You cannot unfollow yourself.");
@@ -85,7 +88,7 @@ public class FollowService implements IFollowService {
         UserDto targetUserDto = userService.findById(targetId);
 
         Optional<Follow> optionalFollow = followRepository
-                .findByRequesterIdAndTargetId(requesterId, targetId);
+                .findByFollowerUserIdAndFollowingUserId(requesterId, targetId);
 
         optionalFollow.ifPresent(followRepository::delete);
 
@@ -97,9 +100,13 @@ public class FollowService implements IFollowService {
         userRepository.saveAll(Arrays.asList(requesterUser, targetUser));
     }
 
+    @Override
     public void deleteMutualFollowingByBlock(String requesterId, String targetId) {
-        Optional<Follow> optionalFollow0 = followRepository.findByRequesterIdAndTargetId(requesterId, targetId);
-        Optional<Follow> optionalFollow1 = followRepository.findByRequesterIdAndTargetId(targetId, requesterId);
+        Optional<Follow> optionalFollow0 = followRepository
+                .findByFollowerUserIdAndFollowingUserId(requesterId, targetId);
+
+        Optional<Follow> optionalFollow1 = followRepository
+                .findByFollowerUserIdAndFollowingUserId(targetId, requesterId);
 
         List<Follow> list = new ArrayList<>();
         optionalFollow0.ifPresent(list::add);

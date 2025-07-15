@@ -8,5 +8,5 @@ import project.social.domain.Conversation;
 
 @Repository
 public interface ConversationRepository extends MongoRepository<Conversation, String> {
-    Page<Conversation> findByParticipantIdsContaining(String userId, Pageable pageable);
+    Page<Conversation> findByParticipantsIdsContaining(String participantsId, Pageable pageable);
 }

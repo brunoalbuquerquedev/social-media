@@ -39,6 +39,7 @@ public class ChatService implements IChatService {
         return page.map(MessageDto::new);
     }
 
+    @Override
     public MessageDto sendMessage(String conversationId, String senderId, String content) {
         Message message = Message.builder()
                 .conversationId(conversationId)
@@ -56,6 +57,7 @@ public class ChatService implements IChatService {
         return MessageMapper.toDto(savedMessage);
     }
 
+    @Override
     public ConversationDto startConversation(List<String> participantIds, boolean isGroup) {
         Conversation conversation = Conversation.builder()
                 .participantsIds(participantIds)
@@ -65,6 +67,7 @@ public class ChatService implements IChatService {
         return new ConversationDto(savedConversation);
     }
 
+    @Override
     public void markAsSeen(String messageId, String userId) {
         Message message = messageRepository.findById(messageId)
                 .orElseThrow(() -> new MessageNotFoundException("Message not found"));

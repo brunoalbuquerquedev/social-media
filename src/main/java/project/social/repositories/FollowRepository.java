@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Repository
 public interface FollowRepository extends MongoRepository<Follow, String> {
-    Optional<Follow> findByRequesterIdAndTargetId(String requesterId, String targetId);
+    Optional<Follow> findByFollowerUserIdAndFollowingUserId(String followerUserId, String followingUserId);
 
-    Page<Follow> findAllByRequesterId(String requesterId, Pageable pageable);
+    Page<Follow> findAllByRequesterId(String followerUserId, Pageable pageable);
 }

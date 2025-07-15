@@ -11,4 +11,10 @@ public interface IAuthService {
     JwtTokenResponse login(LoginRequestDto request);
 
     JwtTokenResponse refresh(RefreshRequestDto request);
+
+    void logout();
+
+    void changePassword();
+
+    void recoverPassword();
 }

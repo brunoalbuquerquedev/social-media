@@ -9,19 +9,18 @@ import project.social.dto.domain.UserDto;
 import project.social.services.FollowService;
 import project.social.services.PostService;
 import project.social.services.UserService;
-import project.social.util.JwtUtil;
-import project.social.util.SecurityUtil;
+import project.social.util.JwtUtils;
+import project.social.util.SecurityUtils;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
 public class UserResource {
 
-    private UserService userService;
-    private JwtUtil jwtUtil;
-    private SecurityUtil securityUtil;
-    private FollowService followService;
-    private PostService postService;
+    private final UserService userService;
+    private final JwtUtils jwtUtils;
+    private final SecurityUtils securityUtils;
+    private final FollowService followService;
 
     @GetMapping("/all")
     public ResponseEntity<Page<UserDto>> findAll(@RequestParam(defaultValue = "0") int pageNumber,
@@ -32,7 +31,7 @@ public class UserResource {
 
     @GetMapping("/me")
     public ResponseEntity<UserDto> getMe() {
-        String loggedUserId = securityUtil.getLoggedUserId();
+        String loggedUserId = securityUtils.getLoggedUserId();
         UserDto dto = userService.findById(loggedUserId);
         return ResponseEntity.ok(dto);
     }

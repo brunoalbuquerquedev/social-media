@@ -19,22 +19,26 @@ public class UserService implements IUserService {
 
     private final UserRepository userRepository;
 
+    @Override
     public Page<UserDto> findAll(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         return userRepository.findAll(pageable).map(UserDto::new);
     }
-
+  
+    @Override
     public Page<UserDto> findAllById(List<String> id, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         return userRepository.findAllById(id, pageable).map(UserDto::new);
     }
 
+    @Override
     public UserDto findById(String id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ObjectNotFoundException("User not found."));
         return new UserDto(user);
     }
 
+    @Override
     public UserDto findByUsername(String username) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ObjectNotFoundException("User not found."));

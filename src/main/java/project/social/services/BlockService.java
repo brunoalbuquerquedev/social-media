@@ -29,6 +29,7 @@ public class BlockService implements IBlockService {
     private final UserRepository userRepository;
     private final BlockRepository blockRepository;
 
+    @Override
     public Page<BlockDto> findBlockById(String id, int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         return blockRepository.findAllByBlockerUserId(id, pageable).map(BlockDto::new);
@@ -42,7 +43,7 @@ public class BlockService implements IBlockService {
         UserDto targetUserDto = userService.findById(targetId);
 
         Optional<Block> optionalBlock = blockRepository
-                .findByRequesterIdAndTargetIdAndType(requesterId, targetId, RestrictionType.BLOCK);
+                .findByBlockerUserIdAndBlockingUserIdAndType(requesterId, targetId, RestrictionType.BLOCK);
 
         if (optionalBlock.isPresent())
             throw new BlockAlreadyExistsException("Block already exists.");
@@ -64,6 +65,7 @@ public class BlockService implements IBlockService {
         userRepository.saveAll(Arrays.asList(requesterUser, targetUser));
     }
 
+    @Override
     public void unblockUser(String requesterId, String targetId) {
         if (requesterId.equals(targetId))
             throw new InvalidBlockRequestException("You cannot unblock yourself.");
@@ -72,7 +74,7 @@ public class BlockService implements IBlockService {
         UserDto targetUserDto = userService.findById(targetId);
 
         Optional<Block> optionalBlock = blockRepository
-                .findByRequesterIdAndTargetIdAndType(requesterId, targetId, RestrictionType.BLOCK);
+                .findByBlockerUserIdAndBlockingUserIdAndType(requesterId, targetId, RestrictionType.BLOCK);
 
         optionalBlock.ifPresent(blockRepository::delete);
 
@@ -84,6 +86,7 @@ public class BlockService implements IBlockService {
         userRepository.saveAll(Arrays.asList(requesterUser, targetUser));
     }
 
+    @Override
     public void muteUser(String requesterId, String targetId) {
         if (requesterId.equals(targetId))
             throw new InvalidBlockRequestException("You cannot block yourself.");
@@ -92,7 +95,7 @@ public class BlockService implements IBlockService {
         UserDto targetUserDto = userService.findById(targetId);
 
         Optional<Block> optionalBlock = blockRepository
-                .findByRequesterIdAndTargetIdAndType(requesterId, targetId, RestrictionType.MUTE);
+                .findByBlockerUserIdAndBlockingUserIdAndType(requesterId, targetId, RestrictionType.MUTE);
 
         if (optionalBlock.isPresent())
             throw new BlockAlreadyExistsException("Mute already exists.");
@@ -113,6 +116,7 @@ public class BlockService implements IBlockService {
         userRepository.saveAll(Arrays.asList(requesterUser, targetUser));
     }
 
+    @Override
     public void unmuteUser(String requesterId, String targetId) {
         if (requesterId.equals(targetId))
             throw new InvalidBlockRequestException("You cannot unmute yourself.");
@@ -121,7 +125,7 @@ public class BlockService implements IBlockService {
         UserDto targetUserDto = userService.findById(targetId);
 
         Optional<Block> optionalBlock = blockRepository
-                .findByRequesterIdAndTargetIdAndType(requesterId, targetId, RestrictionType.MUTE);
+                .findByBlockerUserIdAndBlockingUserIdAndType(requesterId, targetId, RestrictionType.MUTE);
 
         optionalBlock.ifPresent(blockRepository::delete);
 

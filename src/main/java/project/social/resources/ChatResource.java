@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import project.social.dto.domain.ConversationDto;
 import project.social.dto.domain.MessageDto;
 import project.social.services.ChatService;
-import project.social.util.SecurityUtil;
+import project.social.util.SecurityUtils;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ import java.util.List;
 public class ChatResource {
 
     private final ChatService chatService;
-    private final SecurityUtil securityUtil;
+    private final SecurityUtils securityUtils;
 
     @GetMapping("/conversation/id/{id}")
     public ResponseEntity<Page<ConversationDto>> getConversations(@PathVariable String id,
@@ -52,7 +52,7 @@ public class ChatResource {
 
     @PostMapping("/message/seen/id/{id}")
     public ResponseEntity<Void> markAsSeen(@PathVariable String messageId) {
-        String loggedUserId = securityUtil.getLoggedUserId();
+        String loggedUserId = securityUtils.getLoggedUserId();
         chatService.markAsSeen(messageId, loggedUserId);
         return ResponseEntity.noContent().build();
     }

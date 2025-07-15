@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import project.social.domain.User;
+import project.social.domain.enums.UserRole;
 import project.social.dto.auth.JwtTokenResponse;
 import project.social.dto.auth.LoginRequestDto;
 import project.social.dto.auth.RefreshRequestDto;
@@ -16,34 +17,42 @@ import project.social.exceptions.base.ObjectNotFoundException;
 import project.social.exceptions.domain.UserAlreadyExistsException;
 import project.social.repositories.UserRepository;
 import project.social.services.interfaces.IAuthService;
-import project.social.util.JwtUtil;
+import project.social.util.EnumUtils;
+import project.social.util.JwtUtils;
 
 @Service
 @RequiredArgsConstructor
 public class AuthService implements IAuthService {
 
-    private final JwtUtil jwtUtil;
+    private final JwtUtils jwtUtils;
     private final BCryptPasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
 
+    @Override
     public void register(SignupRequestDto request) {
+        if (request == null)
+            throw new InvalidTokenException("Json token is null.");
+
+        if (request.username() == null || request.email() == null
+                || request.role() == null || request.password() == null)
+            throw new InvalidRequestDataException("Invalid request.");
+
         if (userRepository.existsByEmail(request.email()))
             throw new UserAlreadyExistsException("This email already has an account.");
 
         if (userRepository.existsByUsername(request.username()))
             throw new UserAlreadyExistsException("This username is unavailable.");
 
-        if (request.username() == null || request.email() == null || request.password() == null)
-            throw new InvalidRequestDataException("Invalid request.");
-
         User user = User.builder()
                 .username(request.username())
                 .email(request.email())
+                .role(request.role())
                 .password(passwordEncoder.encode(request.password()))
                 .build();
         userRepository.save(user);
     }
 
+    @Override
     public JwtTokenResponse login(LoginRequestDto request) {
         User user = userRepository.findByEmail(request.email())
                 .orElseThrow(() -> new ObjectNotFoundException("User not found."));
@@ -51,19 +60,42 @@ public class AuthService implements IAuthService {
         if (!passwordEncoder.matches(request.password(), user.getPassword()))
             throw new IncorrectPasswordException("Incorrect password.");
 
-        return jwtUtil.generateTokens(user.getId(), user.getUsername());
+        UserRole role = EnumUtils.safeValueOf(UserRole.class, user.getRole())
+                .orElseThrow(() -> new InvalidTokenException("Invalid role data in request json body."));
+
+        return jwtUtils.generateTokens(user.getId(), user.getUsername(), role);
     }
 
+    @Override
     public JwtTokenResponse refresh(RefreshRequestDto request) {
-        if (!jwtUtil.isTokenValid(request.refreshToken()))
+        if (!jwtUtils.isTokenValid(request.refreshToken()))
             throw new ExpiredTokenException("Invalid or expired token.");
 
-        String userId = jwtUtil.getUserIdFromToken(request.refreshToken());
-        String username = jwtUtil.extractUsername(request.refreshToken());
+        String userId = jwtUtils.getUserIdFromToken(request.refreshToken());
+        String username = jwtUtils.extractUsername(request.refreshToken());
+        String role = jwtUtils.extractRole(request.refreshToken());
+
+        UserRole userRole = EnumUtils.safeValueOf(UserRole.class, role)
+                .orElseThrow(() -> new InvalidTokenException("Invalid role data in request json body."));
 
         if (userId == null || username == null)
             throw new InvalidTokenException("Invalid token.");
 
-        return jwtUtil.generateTokens(userId, username);
+        return jwtUtils.generateTokens(userId, username, userRole);
+    }
+
+    @Override
+    public void logout() {
+
+    }
+
+    @Override
+    public void changePassword() {
+
+    }
+
+    @Override
+    public void recoverPassword() {
+
     }
 }
