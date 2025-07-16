@@ -36,9 +36,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 String token = jwtUtils.extractToken(authHeader);
 
                 if (jwtUtils.isTokenValid(token)) {
-                    String userId = jwtUtils.getUserIdFromToken(token);
+                    String userId = jwtUtils.extractUserId(token);
 
-                    String role = jwtUtils.extractRole(token);
+                    String role = jwtUtils.extractField(token, "role");
                     UserRole userRole = EnumUtils.safeValueOf(UserRole.class, role)
                             .orElseThrow(() -> new InvalidTokenException("Invalid role data in request json body."));
 

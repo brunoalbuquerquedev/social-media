@@ -1,6 +1,5 @@
 package project.social.dto.domain;
 
-import jakarta.validation.constraints.NotNull;
 import project.social.domain.Post;
 import project.social.domain.User;
 
@@ -8,18 +7,18 @@ import java.time.OffsetDateTime;
 import java.util.List;
 
 public record UserDto(
-        @NotNull String id,
-        @NotNull String username,
-        @NotNull String email,
-        @NotNull String role,
-        @NotNull String password,
+        String id,
+        String username,
+        String email,
+        String role,
+        String password,
         String fullName,
         String bio,
         String profilePictureUrl,
         String location,
         OffsetDateTime birthDate,
-        @NotNull OffsetDateTime createdAt,
-        @NotNull Boolean isActive,
+        OffsetDateTime createdAt,
+        Boolean isActive,
         OffsetDateTime lastLogin,
         List<Post> posts,
         List<String> followersIds,

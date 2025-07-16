@@ -1,18 +1,17 @@
 package project.social.dto.domain;
 
-import jakarta.validation.constraints.NotNull;
 import project.social.domain.Follow;
 import project.social.domain.enums.FollowStatus;
 
 import java.time.OffsetDateTime;
 
 public record FollowDto(
-        @NotNull String id,
-        @NotNull String followerUserId,
-        @NotNull String followingUserId,
-        @NotNull OffsetDateTime followedAt,
-        @NotNull Boolean notified,
-        @NotNull FollowStatus status
+        String id,
+        String followerUserId,
+        String followingUserId,
+        OffsetDateTime followedAt,
+        Boolean notified,
+        FollowStatus status
 ) {
     public FollowDto(Follow follow) {
         this(

@@ -1,5 +1,6 @@
 package project.social.resources;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -34,7 +35,7 @@ public class PostResource {
 
     @GetMapping("/id/{id}/liked")
     public ResponseEntity<Page<PostDto>> getPostsLikedByUser(@PathVariable String id,
-                                                             @RequestBody boolean hasUserLiked,
+                                                             @Valid @RequestBody boolean hasUserLiked,
                                                              @RequestParam(defaultValue = "0") int pageNumber,
                                                              @RequestParam(defaultValue = "10") int pageSize) {
         Page<PostDto> page = postService.findAllByHasUserLiked(hasUserLiked, pageNumber, pageSize);
@@ -43,16 +44,16 @@ public class PostResource {
 
 
     @PostMapping()
-    public ResponseEntity<Void> createPost(@RequestBody String content,
-                                           @RequestBody String authorProfilePictureUrl,
-                                           @RequestBody List<String> mediaUrl) {
+    public ResponseEntity<Void> createPost(@Valid @RequestBody String content,
+                                           @Valid @RequestBody String authorProfilePictureUrl,
+                                           @Valid @RequestBody List<String> mediaUrl) {
         String loggedUserId = securityUtils.getLoggedUserId();
         postService.createPost(loggedUserId, content, authorProfilePictureUrl, mediaUrl);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @DeleteMapping("/id/{id}")
-    public ResponseEntity<Void> deletePost(@RequestParam String id) {
+    public ResponseEntity<Void> deletePost(@Valid @RequestParam String id) {
         String loggedUserId = securityUtils.getLoggedUserId();
         postService.deletePost(loggedUserId, id);
         return ResponseEntity.noContent().build();

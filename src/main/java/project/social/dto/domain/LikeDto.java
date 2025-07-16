@@ -1,15 +1,14 @@
 package project.social.dto.domain;
 
-import jakarta.validation.constraints.NotNull;
 import project.social.domain.Like;
 
 import java.time.OffsetDateTime;
 
 public record LikeDto(
-        @NotNull String id,
-        @NotNull String userId,
-        @NotNull String postId,
-        @NotNull OffsetDateTime likedAt
+        String id,
+        String userId,
+        String postId,
+        OffsetDateTime likedAt
 ) {
 
     public LikeDto(Like like) {

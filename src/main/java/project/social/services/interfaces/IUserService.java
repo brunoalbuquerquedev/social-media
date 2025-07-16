@@ -11,4 +11,6 @@ public interface IUserService {
     UserDto findById(String id);
 
     UserDto findByUsername(String username);
+
+    void updateUser(String userId, UserDto dto);
 }

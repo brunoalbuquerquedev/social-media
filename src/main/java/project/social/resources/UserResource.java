@@ -1,5 +1,6 @@
 package project.social.resources;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +39,9 @@ public class UserResource {
     }
 
     @PutMapping("/me/update")
-    public ResponseEntity<Void> updateMe() {
+    public ResponseEntity<Void> updateMe(@Valid @RequestBody UserDto request) {
+        String loggedUserId = securityUtils.getLoggedUserId();
+        userService.updateUser(loggedUserId, request);
         return ResponseEntity.noContent().build();
     }
 
@@ -49,13 +52,13 @@ public class UserResource {
     }
 
     @GetMapping("/username/{username}")
-    public ResponseEntity<UserDto> findByUsername(@PathVariable String username) {
+    public ResponseEntity<UserDto> findByUsername(@Valid @PathVariable String username) {
         UserDto dto = userService.findByUsername(username);
         return ResponseEntity.ok(dto);
     }
 
     @GetMapping("/id/{id}/posts")
-    public ResponseEntity<Page<PostDto>> findPosts(@PathVariable String id,
+    public ResponseEntity<Page<PostDto>> findPosts(@Valid @PathVariable String id,
                                                    @RequestParam(defaultValue = "0") int pageNumber,
                                                    @RequestParam(defaultValue = "10") int pageSize) {
         Page<PostDto> page = postService.findAllById(id, pageNumber, pageSize);

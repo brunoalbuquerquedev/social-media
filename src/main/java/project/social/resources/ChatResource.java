@@ -1,5 +1,6 @@
 package project.social.resources;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -44,7 +45,7 @@ public class ChatResource {
     }
 
     @PostMapping("/conversation/start")
-    public ResponseEntity<ConversationDto> startConversation(@RequestBody List<String> participantIds) {
+    public ResponseEntity<ConversationDto> startConversation(@Valid  @RequestBody List<String> participantIds) {
         ConversationDto dto = chatService.startConversation(participantIds);
         return ResponseEntity.ok(dto);
     }
