@@ -1,8 +1,10 @@
 package project.social.dto.auth;
 
+import jakarta.validation.constraints.NotNull;
+
 public record JwtTokenResponse(
-        String accessToken,
-        String refreshToken
+        @NotNull String accessToken,
+        @NotNull String refreshToken
 ) {
 
 }

@@ -1,5 +1,6 @@
 package project.social.services;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -11,7 +12,6 @@ import project.social.dto.auth.RefreshRequestDto;
 import project.social.dto.auth.SignupRequestDto;
 import project.social.exceptions.auth.ExpiredTokenException;
 import project.social.exceptions.auth.IncorrectPasswordException;
-import project.social.exceptions.auth.InvalidRequestDataException;
 import project.social.exceptions.auth.InvalidTokenException;
 import project.social.exceptions.base.ObjectNotFoundException;
 import project.social.exceptions.domain.UserAlreadyExistsException;
@@ -19,6 +19,8 @@ import project.social.repositories.UserRepository;
 import project.social.services.interfaces.IAuthService;
 import project.social.util.EnumUtils;
 import project.social.util.JwtUtils;
+
+import java.time.OffsetDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -29,14 +31,7 @@ public class AuthService implements IAuthService {
     private final UserRepository userRepository;
 
     @Override
-    public void register(SignupRequestDto request) {
-        if (request == null)
-            throw new InvalidTokenException("Json token is null.");
-
-        if (request.username() == null || request.email() == null
-                || request.role() == null || request.password() == null)
-            throw new InvalidRequestDataException("Invalid request.");
-
+    public void register(@NotNull SignupRequestDto request) {
         if (userRepository.existsByEmail(request.email()))
             throw new UserAlreadyExistsException("This email already has an account.");
 
@@ -48,12 +43,14 @@ public class AuthService implements IAuthService {
                 .email(request.email())
                 .role(request.role())
                 .password(passwordEncoder.encode(request.password()))
+                .createdAt(OffsetDateTime.now())
                 .build();
+
         userRepository.save(user);
     }
 
     @Override
-    public JwtTokenResponse login(LoginRequestDto request) {
+    public JwtTokenResponse login(@NotNull LoginRequestDto request) {
         User user = userRepository.findByEmail(request.email())
                 .orElseThrow(() -> new ObjectNotFoundException("User not found."));
 
@@ -67,7 +64,7 @@ public class AuthService implements IAuthService {
     }
 
     @Override
-    public JwtTokenResponse refresh(RefreshRequestDto request) {
+    public JwtTokenResponse refresh(@NotNull RefreshRequestDto request) {
         if (!jwtUtils.isTokenValid(request.refreshToken()))
             throw new ExpiredTokenException("Invalid or expired token.");
 
@@ -77,9 +74,6 @@ public class AuthService implements IAuthService {
 
         UserRole userRole = EnumUtils.safeValueOf(UserRole.class, role)
                 .orElseThrow(() -> new InvalidTokenException("Invalid role data in request json body."));
-
-        if (userId == null || username == null)
-            throw new InvalidTokenException("Invalid token.");
 
         return jwtUtils.generateTokens(userId, username, userRole);
     }

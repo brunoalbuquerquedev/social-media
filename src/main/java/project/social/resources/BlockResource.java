@@ -49,7 +49,7 @@ public class BlockResource {
     public ResponseEntity<Page<BlockDto>> getBlockByUserId(@PathVariable String id,
                                                            @RequestParam(defaultValue = "0") int pageNumber,
                                                            @RequestParam(defaultValue = "10") int pageSize) {
-        Page<BlockDto> page = blockService.findBlockById(id, pageNumber, pageSize);
+         Page<BlockDto> page = blockService.findAllBlockById(id, pageNumber, pageSize);
         return ResponseEntity.ok(page);
     }
 }

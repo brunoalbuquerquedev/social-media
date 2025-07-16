@@ -15,7 +15,5 @@ public interface BlockRepository extends MongoRepository<Block, String> {
                                                                 String blockingUserId,
                                                                 RestrictionType type);
 
-    Optional<Block> findByRequesterIdAndTargetIdAndType(String requesterId, String targetId, RestrictionType type);
-
     Page<Block> findAllByBlockerUserId(String blockerUserId, Pageable pageable);
 }

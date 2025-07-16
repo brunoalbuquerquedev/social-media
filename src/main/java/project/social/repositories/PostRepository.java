@@ -11,8 +11,6 @@ import java.util.Optional;
 
 @Repository
 public interface PostRepository extends MongoRepository<Post, String> {
-    Page<Post> findByTitleContainingIgnoreCase(String text, Pageable pageable);
-
     Page<Post> findByAuthorIdInOrderByCreatedAtDesc(List<String> list, Pageable pageable);
 
     Optional<Post> findByAuthorUsername(String username);

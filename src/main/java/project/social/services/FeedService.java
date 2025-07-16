@@ -35,9 +35,7 @@ public class FeedService implements IFeedService {
 
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         Page<Post> posts = postRepository.findByAuthorIdInOrderByCreatedAtDesc(visibleUsersIds, pageable);
-
         Page<PostDto> dtoList = posts.map(PostDto::new);
-
         return new FeedDto(dtoList);
     }
 }
