@@ -37,7 +37,7 @@ public class FollowService implements IFollowService {
 
     public Page<FollowDto> findAllById(String id, int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        return followRepository.findAllByRequesterId(id, pageable).map(FollowDto::new);
+        return followRepository.findAllByFollowerUserId(id, pageable).map(FollowDto::new);
     }
 
     @Override

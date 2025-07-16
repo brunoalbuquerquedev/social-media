@@ -7,7 +7,6 @@ import java.time.OffsetDateTime;
 
 public record LikeDto(
         @NotNull String id,
-        @NotNull String username,
         @NotNull String userId,
         @NotNull String postId,
         @NotNull OffsetDateTime likedAt
@@ -16,7 +15,6 @@ public record LikeDto(
     public LikeDto(Like like) {
         this(
                 like.getId(),
-                like.getUsername(),
                 like.getUserId(),
                 like.getPostId(),
                 like.getLikedAt()

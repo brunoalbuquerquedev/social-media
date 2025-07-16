@@ -41,15 +41,9 @@ public class PostService implements IPostService {
     }
 
     @Override
-    public Page<PostDto> findByTitle(String text, int pageNumber, int pageSize) {
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        return postRepository.findByTitleContainingIgnoreCase(text, pageable).map(PostDto::new);
-    }
-
-    @Override
     public Page<PostDto> findAllByHasUserLiked(boolean hasUserLiked, int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        return postRepository.findByHasUserLiked(true, pageable).map(PostDto::new);
+        return postRepository.findByHasUserLiked(hasUserLiked, pageable).map(PostDto::new);
     }
 
     @Override

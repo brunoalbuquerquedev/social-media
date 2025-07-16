@@ -24,5 +24,5 @@ public class Conversation {
     private List<String> participantsIds = new ArrayList<>(2);
 
     @DBRef(lazy = true)
-    private List<String> messages = new ArrayList<>();
+    private List<String> messages;
 }

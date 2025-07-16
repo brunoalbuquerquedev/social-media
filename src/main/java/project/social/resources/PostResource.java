@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import project.social.dto.domain.PostDto;
 import project.social.services.PostService;
 import project.social.util.SecurityUtils;
-import project.social.util.UrlDecoder;
 
 import java.util.List;
 
@@ -42,14 +41,6 @@ public class PostResource {
         return ResponseEntity.ok(page);
     }
 
-    @GetMapping("/title")
-    public ResponseEntity<Page<PostDto>> getPostByTitle(@RequestParam(value = "text", defaultValue = "") String text,
-                                                        @RequestParam(defaultValue = "0") int pageNumber,
-                                                        @RequestParam(defaultValue = "10") int pageSize) {
-        text = UrlDecoder.decodeParam(text);
-        Page<PostDto> page = postService.findByTitle(text, pageNumber, pageSize);
-        return ResponseEntity.ok(page);
-    }
 
     @PostMapping()
     public ResponseEntity<Void> createPost(@RequestBody String content,

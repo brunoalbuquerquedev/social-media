@@ -33,12 +33,12 @@ public class Post implements Serializable {
     private boolean hasUserLiked;
 
     @DBRef(lazy = true)
-    private List<Like> likes = new ArrayList<>();
+    private List<Like> likes;
 
     @DBRef(lazy = true)
-    private List<CommentDto> comments = new ArrayList<>();
+    private List<CommentDto> comments;
 
     @DBRef(lazy = true)
-    private List<String> mediaUrl = new ArrayList<>();
+    private List<String> mediaUrl;
 
 }
