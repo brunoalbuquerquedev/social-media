@@ -1,4 +1,4 @@
-package project.social.util;
+package project.social.security;
 
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;

@@ -29,4 +29,9 @@ public enum Permission {
                 .map(Permission::getValue)
                 .toList();
     }
+
+    public static List<Permission> getAllPermissions() {
+        return Arrays.asList(values());
+    }
+
 }

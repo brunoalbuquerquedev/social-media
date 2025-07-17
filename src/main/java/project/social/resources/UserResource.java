@@ -10,7 +10,7 @@ import project.social.dto.domain.UserDto;
 import project.social.services.FollowService;
 import project.social.services.PostService;
 import project.social.services.UserService;
-import project.social.util.JwtUtils;
+import project.social.security.JwtUtils;
 import project.social.util.SecurityUtils;
 
 @RestController

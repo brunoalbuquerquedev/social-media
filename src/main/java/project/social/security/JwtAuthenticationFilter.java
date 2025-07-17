@@ -1,4 +1,4 @@
-package project.social.util;
+package project.social.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import project.social.domain.enums.UserRole;
 import project.social.exceptions.auth.InvalidTokenException;
+import project.social.util.EnumUtils;
 
 import java.io.IOException;
 import java.util.List;

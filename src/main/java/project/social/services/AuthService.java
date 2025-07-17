@@ -1,6 +1,5 @@
 package project.social.services;
 
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,7 +21,7 @@ import project.social.repositories.RevokedTokenRepository;
 import project.social.repositories.UserRepository;
 import project.social.services.interfaces.IAuthService;
 import project.social.util.EnumUtils;
-import project.social.util.JwtUtils;
+import project.social.security.JwtUtils;
 
 import java.time.OffsetDateTime;
 import java.util.Date;
