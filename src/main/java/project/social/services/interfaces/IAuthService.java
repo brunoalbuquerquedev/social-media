@@ -1,9 +1,9 @@
 package project.social.services.interfaces;
 
-import project.social.dto.auth.JwtTokenDto;
-import project.social.dto.auth.LoginRequestDto;
-import project.social.dto.auth.RefreshRequestDto;
-import project.social.dto.auth.SignupRequestDto;
+import project.social.common.dtos.auth.JwtTokenDto;
+import project.social.common.dtos.auth.LoginRequestDto;
+import project.social.common.dtos.auth.RefreshRequestDto;
+import project.social.common.dtos.auth.SignupRequestDto;
 
 public interface IAuthService {
     void register(SignupRequestDto request);

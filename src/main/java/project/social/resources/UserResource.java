@@ -5,17 +5,20 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import project.social.dto.domain.PostDto;
-import project.social.dto.domain.UserDto;
+import project.social.common.annotations.CurrentUser;
+import project.social.common.dtos.domain.PostDto;
+import project.social.common.dtos.domain.user.UserDto;
+import project.social.common.dtos.domain.user.UserResponseDto;
+import project.social.common.dtos.domain.user.UserUpdateDto;
+import project.social.common.utils.JwtUtils;
+import project.social.common.utils.SecurityUtils;
 import project.social.services.FollowService;
 import project.social.services.PostService;
 import project.social.services.UserService;
-import project.social.util.JwtUtils;
-import project.social.util.SecurityUtils;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/users")
+@RequestMapping("/api/v1/users")
 public class UserResource {
 
     private final UserService userService;
@@ -32,28 +35,26 @@ public class UserResource {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<UserDto> getMe() {
-        String loggedUserId = securityUtils.getLoggedUserId();
-        UserDto dto = userService.findById(loggedUserId);
+    public ResponseEntity<UserResponseDto> getMe(@CurrentUser String currentUserId) {
+        UserResponseDto dto = userService.findById(currentUserId);
         return ResponseEntity.ok(dto);
     }
 
     @PutMapping("/me/update")
-    public ResponseEntity<Void> updateMe(@Valid @RequestBody UserDto request) {
-        String loggedUserId = securityUtils.getLoggedUserId();
-        userService.updateUser(loggedUserId, request);
+    public ResponseEntity<Void> updateMe(@Valid @RequestBody UserUpdateDto request, @CurrentUser String currentUserId) {
+        userService.updateUser(currentUserId, request);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/id/{id}")
-    public ResponseEntity<UserDto> findById(@PathVariable String id) {
-        UserDto dto = userService.findById(id);
+    public ResponseEntity<UserResponseDto> findById(@PathVariable String id) {
+        UserResponseDto dto = userService.findById(id);
         return ResponseEntity.ok(dto);
     }
 
     @GetMapping("/username/{username}")
-    public ResponseEntity<UserDto> findByUsername(@Valid @PathVariable String username) {
-        UserDto dto = userService.findByUsername(username);
+    public ResponseEntity<UserResponseDto> findByUsername(@Valid @PathVariable String username) {
+        UserResponseDto dto = userService.findByUsername(username);
         return ResponseEntity.ok(dto);
     }
 

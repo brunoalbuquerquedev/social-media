@@ -1,8 +1,8 @@
 package project.social.services.interfaces;
 
 import org.springframework.data.domain.Page;
-import project.social.dto.domain.ConversationDto;
-import project.social.dto.domain.MessageDto;
+import project.social.common.dtos.domain.ConversationDto;
+import project.social.common.dtos.domain.MessageDto;
 
 import java.util.List;
 

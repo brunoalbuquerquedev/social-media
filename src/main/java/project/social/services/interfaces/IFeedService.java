@@ -1,7 +1,7 @@
 package project.social.services.interfaces;
 
-import project.social.dto.domain.FeedDto;
+import project.social.common.dtos.domain.FeedResponseDto;
 
 public interface IFeedService {
-    FeedDto getFeed(String userId, int pageNumber, int pageSize);
+    FeedResponseDto getFeed(String userId, int pageNumber, int pageSize);
 }

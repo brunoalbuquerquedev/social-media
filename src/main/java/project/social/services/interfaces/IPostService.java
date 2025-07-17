@@ -1,7 +1,7 @@
 package project.social.services.interfaces;
 
 import org.springframework.data.domain.Page;
-import project.social.dto.domain.PostDto;
+import project.social.common.dtos.domain.PostDto;
 
 import java.util.List;
 

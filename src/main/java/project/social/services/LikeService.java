@@ -6,9 +6,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import project.social.domain.Like;
-import project.social.dto.domain.LikeDto;
-import project.social.exceptions.base.ObjectNotFoundException;
-import project.social.exceptions.domain.LikeAlreadyExistsException;
+import project.social.common.dtos.domain.LikeDto;
+import project.social.common.exceptions.base.ObjectNotFoundException;
+import project.social.common.exceptions.domain.LikeAlreadyExistsException;
 import project.social.repositories.LikeRepository;
 import project.social.services.interfaces.ILikeService;
 

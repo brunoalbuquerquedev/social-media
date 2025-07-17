@@ -6,12 +6,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import project.social.dto.config.StandardErrorDto;
-import project.social.exceptions.auth.InvalidRequestDataException;
-import project.social.exceptions.base.AuthenticationException;
-import project.social.exceptions.base.MessageSendException;
-import project.social.exceptions.base.ObjectAlreadyExistsException;
-import project.social.exceptions.base.ObjectNotFoundException;
+import project.social.common.dtos.config.StandardErrorDto;
+import project.social.common.exceptions.auth.InvalidRequestDataException;
+import project.social.common.exceptions.base.AuthenticationException;
+import project.social.common.exceptions.base.MessageSendException;
+import project.social.common.exceptions.base.ObjectAlreadyExistsException;
+import project.social.common.exceptions.base.ObjectNotFoundException;
 
 import java.time.Instant;
 

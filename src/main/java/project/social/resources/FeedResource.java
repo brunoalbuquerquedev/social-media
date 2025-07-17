@@ -3,15 +3,17 @@ package project.social.resources;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import project.social.dto.domain.FeedDto;
-import project.social.dto.domain.UserDto;
+import project.social.common.annotations.CurrentUser;
+import project.social.common.dtos.domain.FeedResponseDto;
+import project.social.common.dtos.domain.user.UserDto;
+import project.social.common.dtos.domain.user.UserResponseDto;
 import project.social.services.FeedService;
 import project.social.services.UserService;
-import project.social.util.SecurityUtils;
+import project.social.common.utils.SecurityUtils;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/feed")
+@RequestMapping("/api/v1/feed")
 public class FeedResource {
 
     private final FeedService feedService;
@@ -19,27 +21,27 @@ public class FeedResource {
     private final UserService userService;
 
     @GetMapping()
-    public ResponseEntity<FeedDto> getFeed(@RequestParam(defaultValue = "0") int pageNumber,
-                                           @RequestParam(defaultValue = "10") int pageSize) {
-        String loggedUserId = securityUtils.getLoggedUserId();
-        FeedDto feedDto = feedService.getFeed(loggedUserId, pageNumber, pageSize);
-        return ResponseEntity.ok(feedDto);
+    public ResponseEntity<FeedResponseDto> getFeed(@RequestParam(defaultValue = "0") int pageNumber,
+                                                   @RequestParam(defaultValue = "10") int pageSize,
+                                                   @CurrentUser String currentUserId) {
+        FeedResponseDto feedResponseDto = feedService.getFeed(currentUserId, pageNumber, pageSize);
+        return ResponseEntity.ok(feedResponseDto);
     }
 
     @GetMapping("/id/{id}")
-    public ResponseEntity<FeedDto> getUserFeed(@PathVariable String id,
-                                               @RequestParam(defaultValue = "0") int pageNumber,
-                                               @RequestParam(defaultValue = "10") int pageSize) {
-        FeedDto feedDto = feedService.getFeed(id, pageNumber, pageSize);
-        return ResponseEntity.ok(feedDto);
+    public ResponseEntity<FeedResponseDto> getUserFeed(@PathVariable String id,
+                                                       @RequestParam(defaultValue = "0") int pageNumber,
+                                                       @RequestParam(defaultValue = "10") int pageSize) {
+        FeedResponseDto feedResponseDto = feedService.getFeed(id, pageNumber, pageSize);
+        return ResponseEntity.ok(feedResponseDto);
     }
 
     @GetMapping("/user/{username}")
-    public ResponseEntity<FeedDto> getUserFeedByUsername(@PathVariable String username,
-                                                         @RequestParam(defaultValue = "0") int pageNumber,
-                                                         @RequestParam(defaultValue = "10") int pageSize) {
-        UserDto dto = userService.findByUsername(username);
-        FeedDto feedDto = feedService.getFeed(dto.id(), pageNumber, pageSize);
-        return ResponseEntity.ok(feedDto);
+    public ResponseEntity<FeedResponseDto> getUserFeedByUsername(@PathVariable String username,
+                                                                 @RequestParam(defaultValue = "0") int pageNumber,
+                                                                 @RequestParam(defaultValue = "10") int pageSize) {
+        UserResponseDto dto = userService.findByUsername(username);
+        FeedResponseDto feedResponseDto = feedService.getFeed(dto.id(), pageNumber, pageSize);
+        return ResponseEntity.ok(feedResponseDto);
     }
 }

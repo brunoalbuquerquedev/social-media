@@ -1,7 +1,7 @@
 package project.social.services.interfaces;
 
 import org.springframework.data.domain.Page;
-import project.social.dto.domain.FollowDto;
+import project.social.common.dtos.domain.FollowDto;
 
 public interface IFollowService {
     Page<FollowDto> findAllById(String id, int page, int size);

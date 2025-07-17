@@ -5,16 +5,17 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import project.social.dto.domain.ConversationDto;
-import project.social.dto.domain.MessageDto;
+import project.social.common.annotations.CurrentUser;
+import project.social.common.dtos.domain.ConversationDto;
+import project.social.common.dtos.domain.MessageDto;
 import project.social.services.ChatService;
-import project.social.util.SecurityUtils;
+import project.social.common.utils.SecurityUtils;
 
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/chat")
+@RequestMapping("/api/v1/chat")
 public class ChatResource {
 
     private final ChatService chatService;
@@ -45,15 +46,14 @@ public class ChatResource {
     }
 
     @PostMapping("/conversation/start")
-    public ResponseEntity<ConversationDto> startConversation(@Valid  @RequestBody List<String> participantIds) {
+    public ResponseEntity<ConversationDto> startConversation(@Valid @RequestBody List<String> participantIds) {
         ConversationDto dto = chatService.startConversation(participantIds);
         return ResponseEntity.ok(dto);
     }
 
     @PostMapping("/message/seen/id/{id}")
-    public ResponseEntity<Void> markAsSeen(@PathVariable String messageId) {
-        String loggedUserId = securityUtils.getLoggedUserId();
-        chatService.markAsSeen(messageId, loggedUserId);
+    public ResponseEntity<Void> markAsSeen(@PathVariable String messageId, @CurrentUser String currentUserId) {
+        chatService.markAsSeen(messageId, currentUserId);
         return ResponseEntity.noContent().build();
     }
 }
