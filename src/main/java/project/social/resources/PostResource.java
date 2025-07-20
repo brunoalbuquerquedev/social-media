@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/posts")
+@RequestMapping("/api/v1/posts")
 public class PostResource {
 
     private final PostService postService;
@@ -27,18 +27,18 @@ public class PostResource {
         return ResponseEntity.ok(page);
     }
 
-    @GetMapping("/id/{id}")
+    @GetMapping("/post-id/{id}")
     public ResponseEntity<PostDto> findById(@PathVariable String id) {
         PostDto dto = postService.findById(id);
         return ResponseEntity.ok(dto);
     }
 
-    @GetMapping("/id/{id}/liked")
+    @GetMapping("/post-id/{id}/liked")
     public ResponseEntity<Page<PostDto>> getPostsLikedByUser(@PathVariable String id,
                                                              @Valid @RequestBody boolean hasUserLiked,
                                                              @RequestParam(defaultValue = "0") int pageNumber,
                                                              @RequestParam(defaultValue = "10") int pageSize) {
-        Page<PostDto> page = postService.findAllByHasUserLiked(hasUserLiked, pageNumber, pageSize);
+        Page<PostDto> page = postService.findAllByAuthorIdAndByHasUserLiked(id, hasUserLiked, pageNumber, pageSize);
         return ResponseEntity.ok(page);
     }
 
@@ -52,7 +52,7 @@ public class PostResource {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @DeleteMapping("/id/{id}")
+    @DeleteMapping("/post-id/{id}")
     public ResponseEntity<Void> deletePost(@Valid @RequestParam String id) {
         String loggedUserId = securityUtils.getLoggedUserId();
         postService.deletePost(loggedUserId, id);

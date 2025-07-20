@@ -40,6 +40,14 @@ public class JwtUtils {
         return new JwtTokenDto(accessToken, refreshToken);
     }
 
+    /**
+     * Generates an access token for the user.
+     *
+     * @param userId   The user's ID.
+     * @param username The user's username.
+     * @param role     The user's role.
+     * @return A JWT access token as a String.
+     */
     public String generateAccessToken(String userId, String username, UserRole role) {
         return Jwts.builder()
                 .setSubject(userId)
@@ -51,6 +59,14 @@ public class JwtUtils {
                 .compact();
     }
 
+    /**
+     * Generates a refresh token for the user.
+     *
+     * @param userId   The user's ID.
+     * @param username The user's username.
+     * @param role     The user's role.
+     * @return A JWT refresh token as a String.
+     */
     public String generateRefreshToken(String userId, String username, UserRole role) {
         return Jwts.builder()
                 .setSubject(userId)
@@ -62,6 +78,12 @@ public class JwtUtils {
                 .compact();
     }
 
+    /**
+     * Extracts the user ID from the JWT token.
+     *
+     * @param token The JWT token.
+     * @return The user ID as a String.
+     */
     public String extractUserId(String token) {
         try {
             return Jwts.parserBuilder()
@@ -75,6 +97,12 @@ public class JwtUtils {
         }
     }
 
+    /**
+     * Validates the JWT token.
+     *
+     * @param token The JWT token to validate.
+     * @return true if the token is valid, false otherwise.
+     */
     public boolean isTokenValid(String token) {
         try {
             Jwts.parserBuilder()
@@ -87,6 +115,12 @@ public class JwtUtils {
         }
     }
 
+    /**
+     * Extracts the token from the Authorization header.
+     *
+     * @param authHeader The Authorization header containing the token.
+     * @return The extracted token as a String.
+     */
     public String extractToken(String authHeader) {
         if (authHeader == null || !authHeader.startsWith("Bearer "))
             throw new InvalidTokenException("Missing or malformed Authorization header.");
@@ -94,6 +128,13 @@ public class JwtUtils {
         return authHeader.substring(7);
     }
 
+    /**
+     * Extracts a specific field from the JWT token.
+     *
+     * @param token The JWT token.
+     * @param field The field to extract.
+     * @return The value of the specified field as a String.
+     */
     public String extractField(String token, String field) {
         try {
             return Jwts.parserBuilder()
@@ -107,6 +148,12 @@ public class JwtUtils {
         }
     }
 
+    /**
+     * Extracts the expiration date from the JWT token.
+     *
+     * @param token The JWT token.
+     * @return The expiration date as a Date object.
+     */
     public Date extractExpiration(String token) {
         try {
             return Jwts.parserBuilder()
