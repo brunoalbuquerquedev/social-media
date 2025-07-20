@@ -41,9 +41,12 @@ public class PostService implements IPostService {
     }
 
     @Override
-    public Page<PostDto> findAllByHasUserLiked(boolean hasUserLiked, int pageNumber, int pageSize) {
+    public Page<PostDto> findAllByAuthorIdAndByHasUserLiked(String authorId,
+                                                            boolean hasUserLiked,
+                                                            int pageNumber,
+                                                            int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        return postRepository.findByHasUserLiked(hasUserLiked, pageable).map(PostDto::new);
+        return postRepository.findByUserIdAndHasUserLiked(authorId, hasUserLiked, pageable).map(PostDto::new);
     }
 
     @Override
@@ -61,6 +64,11 @@ public class PostService implements IPostService {
                 .build();
 
         postRepository.save(post);
+    }
+
+    @Override
+    public void updatePost(String userId, String postId, String content, List<String> mediaUrl) {
+        throw new UnsupportedOperationException("Unsupported operation.");
     }
 
     @Override

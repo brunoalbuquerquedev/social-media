@@ -11,13 +11,20 @@ import project.social.util.SecurityUtils;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/feed")
+@RequestMapping("/api/v1/feed")
 public class FeedResource {
 
     private final FeedService feedService;
     private final SecurityUtils securityUtils;
     private final UserService userService;
 
+    /**
+     * Retrieves the feed for the logged-in user.
+     *
+     * @param pageNumber the page number to retrieve
+     * @param pageSize   the number of items per page
+     * @return a FeedDto containing the posts for the user's feed
+     */
     @GetMapping()
     public ResponseEntity<FeedDto> getFeed(@RequestParam(defaultValue = "0") int pageNumber,
                                            @RequestParam(defaultValue = "10") int pageSize) {
@@ -26,7 +33,15 @@ public class FeedResource {
         return ResponseEntity.ok(feedDto);
     }
 
-    @GetMapping("/id/{id}")
+    /**
+     * Retrieves the feed for a user by their ID.
+     *
+     * @param id         the ID of the user
+     * @param pageNumber the page number to retrieve
+     * @param pageSize   the number of items per page
+     * @return a FeedDto containing the posts for the user's feed
+     */
+    @GetMapping("/user-id/{id}")
     public ResponseEntity<FeedDto> getUserFeed(@PathVariable String id,
                                                @RequestParam(defaultValue = "0") int pageNumber,
                                                @RequestParam(defaultValue = "10") int pageSize) {
@@ -34,7 +49,15 @@ public class FeedResource {
         return ResponseEntity.ok(feedDto);
     }
 
-    @GetMapping("/user/{username}")
+    /**
+     * Retrieves the feed for a user by their username.
+     *
+     * @param username   the username of the user
+     * @param pageNumber the page number to retrieve
+     * @param pageSize   the number of items per page
+     * @return a FeedDto containing the posts for the user's feed
+     */
+    @GetMapping("/user-username/{username}")
     public ResponseEntity<FeedDto> getUserFeedByUsername(@PathVariable String username,
                                                          @RequestParam(defaultValue = "0") int pageNumber,
                                                          @RequestParam(defaultValue = "10") int pageSize) {

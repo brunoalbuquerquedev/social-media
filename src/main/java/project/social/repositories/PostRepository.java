@@ -15,7 +15,7 @@ public interface PostRepository extends MongoRepository<Post, String> {
 
     Optional<Post> findByAuthorUsername(String username);
 
-    Page<Post> findByHasUserLiked(boolean hasUserLiked, Pageable pageable);
+    Page<Post> findByUserIdAndHasUserLiked(String userId, boolean hasUserLiked, Pageable pageable);
 
     Page<Post> findAllById(String id, Pageable pageable);
 }

@@ -15,13 +15,20 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/follows")
+@RequestMapping("/api/v1/follow")
 public class FollowResource {
 
     private final UserService userService;
     private final FollowService followService;
     private final SecurityUtils securityUtils;
 
+    /**
+     * Retrieves all follows with pagination.
+     *
+     * @param pageNumber the page number to retrieve
+     * @param pageSize   the number of items per page
+     * @return a paginated list of FollowDto
+     */
     @GetMapping("/all")
     public ResponseEntity<Page<FollowDto>> findAll(@RequestParam(defaultValue = "0") int pageNumber,
                                                    @RequestParam(defaultValue = "10") int pageSize) {
@@ -29,21 +36,40 @@ public class FollowResource {
         return ResponseEntity.ok().body(page);
     }
 
-    @PostMapping("/id/{id}")
+    /**
+     * Follows a user by their ID.
+     *
+     * @param id the ID of the user to follow
+     * @return a response indicating the result of the follow operation
+     */
+    @PostMapping("/user-id/{id}")
     public ResponseEntity<Void> follow(@PathVariable String id) {
         String loggedUserId = securityUtils.getLoggedUserId();
         followService.followUser(loggedUserId, id);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @DeleteMapping("/id/{id}")
+    /**
+     * Unfollows a user by their ID.
+     *
+     * @param id the ID of the user to unfollow
+     * @return a response indicating the result of the unfollow operation
+     */
+    @DeleteMapping("/user-id/{id}")
     public ResponseEntity<Void> unfollow(@PathVariable String id) {
         String loggedUserId = securityUtils.getLoggedUserId();
         followService.unfollowUser(loggedUserId, id);
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/followers/me")
+    /**
+     * Retrieves the followers of the logged-in user with pagination.
+     *
+     * @param pageNumber the page number to retrieve
+     * @param pageSize   the number of items per page
+     * @return a paginated list of UserDto representing the followers
+     */
+    @GetMapping("/me/all-followers")
     public ResponseEntity<Page<UserDto>> getMyFollowers(@RequestParam(defaultValue = "0") int pageNumber,
                                                         @RequestParam(defaultValue = "10") int pageSize) {
         String loggedUserId = securityUtils.getLoggedUserId();
@@ -57,21 +83,36 @@ public class FollowResource {
         return ResponseEntity.ok().body(dtoList);
     }
 
-    @GetMapping("/followers/{id}")
+    /**
+     * Retrieves the users that the logged-in user is following with pagination.
+     *
+     * @param pageNumber the pageNumber number to retrieve
+     * @param pageSize   the number of items per pageNumber
+     * @return a paginated list of UserDto representing the following users
+     */
+    @GetMapping("/user-id/{id}/all-followers")
     public ResponseEntity<Page<UserDto>> getFollowers(@PathVariable String id,
-                                                      @RequestParam(defaultValue = "0") int page,
-                                                      @RequestParam(defaultValue = "10") int size) {
+                                                      @RequestParam(defaultValue = "0") int pageNumber,
+                                                      @RequestParam(defaultValue = "10") int pageSize) {
         UserDto dto = userService.findById(id);
-        Page<UserDto> list = userService.findAllById(dto.followersIds(), page, size);
+        Page<UserDto> list = userService.findAllById(dto.followersIds(), pageNumber, pageSize);
         return ResponseEntity.ok(list);
     }
 
-    @GetMapping("/following/{id}")
+    /**
+     * Retrieves the users that the logged-in user is following with pagination.
+     *
+     * @param id   the ID of the user whose following list is to be retrieved
+     * @param pageNumber the pageNumber number to retrieve
+     * @param pageSize the number of items per pageNumber
+     * @return a paginated list of UserDto representing the following users
+     */
+    @GetMapping("/user-id/{id}/all-following")
     public ResponseEntity<Page<UserDto>> getFollowing(@PathVariable String id,
-                                                      @RequestParam(defaultValue = "0") int page,
-                                                      @RequestParam(defaultValue = "10") int size) {
+                                                      @RequestParam(defaultValue = "0") int pageNumber,
+                                                      @RequestParam(defaultValue = "10") int pageSize) {
         UserDto dto = userService.findById(id);
-        Page<UserDto> list = userService.findAllById(dto.followingIds(), page, size);
+        Page<UserDto> list = userService.findAllById(dto.followingIds(), pageNumber, pageSize);
         return ResponseEntity.ok(list);
     }
 }
