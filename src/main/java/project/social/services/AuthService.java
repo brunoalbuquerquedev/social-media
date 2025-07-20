@@ -119,4 +119,9 @@ public class AuthService implements IAuthService {
     public void recoverPassword() {
         throw new UnsupportedOperationException("Unsupported operation.");
     }
+
+    @Override
+    public void verifyEmail() {
+        throw new UnsupportedOperationException("Unsupported operation.");
+    }
 }
