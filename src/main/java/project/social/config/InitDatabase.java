@@ -3,6 +3,7 @@ package project.social.config;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import project.social.domain.*;
 import project.social.domain.enums.FollowStatus;
 import project.social.repositories.*;

@@ -1,7 +1,7 @@
 package project.social.services.interfaces;
 
 import org.springframework.data.domain.Page;
-import project.social.dto.domain.BlockDto;
+import project.social.common.dtos.domain.BlockDto;
 
 public interface IBlockService {
     /**

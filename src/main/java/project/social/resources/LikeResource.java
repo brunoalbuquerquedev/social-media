@@ -5,9 +5,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import project.social.dto.domain.LikeDto;
+import project.social.common.annotations.CurrentUser;
+import project.social.common.dtos.domain.LikeDto;
 import project.social.services.LikeService;
-import project.social.util.SecurityUtils;
+import project.social.common.utils.SecurityUtils;
 
 @RestController
 @RequiredArgsConstructor
@@ -41,16 +42,14 @@ public class LikeResource {
     }
 
     @PostMapping("/post-id/{id}")
-    public ResponseEntity<Void> likePost(@PathVariable String id) {
-        String loggedUserId = securityUtils.getLoggedUserId();
-        likeService.likePost(loggedUserId, id);
+    public ResponseEntity<Void> likePost(@PathVariable String id, @CurrentUser String currentUserId) {
+        likeService.likePost(currentUserId, id);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @DeleteMapping("/post-id/{id}")
-    public ResponseEntity<Void> unlikePost(@PathVariable String id) {
-        String loggedUserId = securityUtils.getLoggedUserId();
-        likeService.unlikePost(loggedUserId, id);
+    public ResponseEntity<Void> unlikePost(@PathVariable String id, @CurrentUser String currentUserId) {
+        likeService.unlikePost(currentUserId, id);
         return ResponseEntity.noContent().build();
     }
 }

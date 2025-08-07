@@ -1,6 +1,6 @@
 package project.social.services.interfaces;
 
-import project.social.dto.domain.FeedDto;
+import project.social.common.dtos.domain.FeedResponseDto;
 
 public interface IFeedService {
     /**
@@ -11,5 +11,5 @@ public interface IFeedService {
      * @param pageSize the number of items per page
      * @return a FeedDto containing the user's feed data
      */
-    FeedDto getFeed(String userId, int pageNumber, int pageSize);
+    FeedResponseDto getFeed(String userId, int pageNumber, int pageSize);
 }

@@ -1,7 +1,7 @@
 package project.social.services.interfaces;
 
 import org.springframework.data.domain.Page;
-import project.social.dto.domain.LikeDto;
+import project.social.common.dtos.domain.LikeDto;
 
 public interface ILikeService {
     /**

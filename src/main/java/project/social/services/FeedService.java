@@ -7,9 +7,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import project.social.domain.Post;
 import project.social.domain.User;
-import project.social.dto.domain.FeedDto;
-import project.social.dto.domain.PostDto;
-import project.social.exceptions.base.ObjectNotFoundException;
+import project.social.common.dtos.domain.FeedResponseDto;
+import project.social.common.dtos.domain.PostDto;
+import project.social.common.exceptions.base.ObjectNotFoundException;
 import project.social.repositories.PostRepository;
 import project.social.repositories.UserRepository;
 import project.social.services.interfaces.IFeedService;
@@ -24,7 +24,7 @@ public class FeedService implements IFeedService {
     private final PostRepository postRepository;
 
     @Override
-    public FeedDto getFeed(String userId, int pageNumber, int pageSize) {
+    public FeedResponseDto getFeed(String userId, int pageNumber, int pageSize) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ObjectNotFoundException("User not found"));
 
@@ -36,6 +36,6 @@ public class FeedService implements IFeedService {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         Page<Post> posts = postRepository.findByAuthorIdInOrderByCreatedAtDesc(visibleUsersIds, pageable);
         Page<PostDto> dtoList = posts.map(PostDto::new);
-        return new FeedDto(dtoList);
+        return new FeedResponseDto(dtoList);
     }
 }

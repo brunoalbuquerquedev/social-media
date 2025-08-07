@@ -6,9 +6,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import project.social.dto.domain.PostDto;
+import project.social.common.annotations.CurrentUser;
+import project.social.common.dtos.domain.PostDto;
 import project.social.services.PostService;
-import project.social.util.SecurityUtils;
+import project.social.common.utils.SecurityUtils;
 
 import java.util.List;
 
@@ -46,16 +47,15 @@ public class PostResource {
     @PostMapping()
     public ResponseEntity<Void> createPost(@Valid @RequestBody String content,
                                            @Valid @RequestBody String authorProfilePictureUrl,
-                                           @Valid @RequestBody List<String> mediaUrl) {
-        String loggedUserId = securityUtils.getLoggedUserId();
-        postService.createPost(loggedUserId, content, authorProfilePictureUrl, mediaUrl);
+                                           @Valid @RequestBody List<String> mediaUrl,
+                                           @CurrentUser String currentUserId) {
+        postService.createPost(currentUserId, content, authorProfilePictureUrl, mediaUrl);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @DeleteMapping("/post-id/{id}")
-    public ResponseEntity<Void> deletePost(@Valid @RequestParam String id) {
-        String loggedUserId = securityUtils.getLoggedUserId();
-        postService.deletePost(loggedUserId, id);
+    public ResponseEntity<Void> deletePost(@CurrentUser String currentUserId, @Valid @RequestParam String id) {
+        postService.deletePost(currentUserId, id);
         return ResponseEntity.noContent().build();
     }
 }

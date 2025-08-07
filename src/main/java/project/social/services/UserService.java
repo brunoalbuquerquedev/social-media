@@ -5,11 +5,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import project.social.common.dtos.domain.user.UserDto;
+import project.social.common.dtos.domain.user.UserResponseDto;
+import project.social.common.dtos.domain.user.UserUpdateDto;
+import project.social.common.exceptions.base.InvalidRequestException;
+import project.social.common.exceptions.base.ObjectNotFoundException;
 import project.social.domain.User;
-import project.social.dto.domain.UserDto;
-import project.social.exceptions.base.InvalidRequestException;
-import project.social.exceptions.base.ObjectNotFoundException;
-import project.social.mappers.UserMapper;
+import project.social.domain.mappers.UserMapper;
 import project.social.repositories.UserRepository;
 import project.social.services.interfaces.IUserService;
 
@@ -27,33 +29,42 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public Page<UserDto> findAllById(List<String> id, int page, int size) {
+    public Page<UserResponseDto> findAllById(List<String> ids, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        return userRepository.findAllById(id, pageable).map(UserDto::new);
+        return userRepository.findAllById(ids, pageable).map(UserResponseDto::new);
+    }
+
+    public List<UserDto> findAllById(List<String> ids) {
+        List<UserDto> list = userRepository.findAllById(ids).stream()
+                .map(UserDto::new)
+                .toList();
+
+        if (list.isEmpty()) throw new ObjectNotFoundException("No users found with the provided IDs.");
+        return list;
     }
 
     @Override
-    public UserDto findById(String id) {
+    public UserResponseDto findById(String id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ObjectNotFoundException("User not found."));
-        return new UserDto(user);
+        return new UserResponseDto(user);
     }
 
     @Override
-    public UserDto findByUsername(String username) {
+    public UserResponseDto findByUsername(String username) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ObjectNotFoundException("User not found."));
-        return new UserDto(user);
+        return new UserResponseDto(user);
     }
 
     @Override
-    public void updateUser(String userId, UserDto request) {
-        userRepository.findById(userId)
+    public void updateUser(String userId, UserUpdateDto request) {
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ObjectNotFoundException("User not found"));
 
         if (request.id().equals(userId))
             throw new InvalidRequestException("Invalid request: user id and request body id are different.");
 
-        userRepository.save(UserMapper.fromDto(request));
+        userRepository.save(UserMapper.fromUpdateDto(user, request));
     }
 }

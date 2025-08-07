@@ -5,10 +5,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import project.social.common.dtos.domain.user.UserResponseDto;
 import project.social.domain.Post;
-import project.social.dto.domain.PostDto;
-import project.social.dto.domain.UserDto;
-import project.social.exceptions.base.ObjectNotFoundException;
+import project.social.common.dtos.domain.PostDto;
+import project.social.common.dtos.domain.user.UserDto;
+import project.social.common.exceptions.base.ObjectNotFoundException;
 import project.social.repositories.PostRepository;
 import project.social.services.interfaces.IPostService;
 
@@ -51,7 +52,7 @@ public class PostService implements IPostService {
 
     @Override
     public void createPost(String userId, String content, String authorProfilePictureUrl, List<String> mediaUrl) {
-        UserDto user = userService.findById(userId);
+        UserResponseDto user = userService.findById(userId);
 
         Post post = Post.builder()
                 .authorId(userId)

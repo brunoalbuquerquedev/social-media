@@ -5,10 +5,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import project.social.dto.domain.ConversationDto;
-import project.social.dto.domain.MessageDto;
+import project.social.common.annotations.CurrentUser;
+import project.social.common.dtos.domain.ConversationDto;
+import project.social.common.dtos.domain.MessageDto;
 import project.social.services.ChatService;
-import project.social.util.SecurityUtils;
+import project.social.common.utils.SecurityUtils;
 
 import java.util.List;
 
@@ -75,7 +76,7 @@ public class ChatResource {
      * @return the created conversation as a DTO
      */
     @PostMapping("/conversation/start")
-    public ResponseEntity<ConversationDto> startConversation(@Valid  @RequestBody List<String> participantIds) {
+    public ResponseEntity<ConversationDto> startConversation(@Valid @RequestBody List<String> participantIds) {
         ConversationDto dto = chatService.startConversation(participantIds);
         return ResponseEntity.ok(dto);
     }
@@ -87,9 +88,8 @@ public class ChatResource {
      * @return a response indicating the operation was successful
      */
     @PostMapping("/message-id/{id}/mark-as-seen")
-    public ResponseEntity<Void> markAsSeen(@PathVariable String messageId) {
-        String loggedUserId = securityUtils.getLoggedUserId();
-        chatService.markAsSeen(messageId, loggedUserId);
+    public ResponseEntity<Void> markAsSeen(@PathVariable String messageId, @CurrentUser String currentUserId) {
+        chatService.markAsSeen(messageId, currentUserId);
         return ResponseEntity.noContent().build();
     }
 }

@@ -8,17 +8,18 @@ import org.springframework.stereotype.Service;
 import project.social.domain.Block;
 import project.social.domain.User;
 import project.social.domain.enums.RestrictionType;
-import project.social.dto.domain.BlockDto;
-import project.social.dto.domain.UserDto;
-import project.social.exceptions.domain.BlockAlreadyExistsException;
-import project.social.exceptions.domain.InvalidBlockRequestException;
-import project.social.mappers.UserMapper;
+import project.social.common.dtos.domain.BlockDto;
+import project.social.common.dtos.domain.user.UserDto;
+import project.social.common.exceptions.domain.BlockAlreadyExistsException;
+import project.social.common.exceptions.domain.InvalidBlockRequestException;
+import project.social.domain.mappers.UserMapper;
 import project.social.repositories.BlockRepository;
 import project.social.repositories.UserRepository;
 import project.social.services.interfaces.IBlockService;
 
 import java.time.OffsetDateTime;
 import java.util.Arrays;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -39,8 +40,7 @@ public class BlockService implements IBlockService {
         if (requesterId.equals(targetId))
             throw new InvalidBlockRequestException("You cannot block yourself.");
 
-        UserDto requesterUserDto = userService.findById(requesterId);
-        UserDto targetUserDto = userService.findById(targetId);
+        List<UserDto> users = userService.findAllById(List.of(requesterId, targetId));
 
         blockRepository.findByBlockerUserIdAndBlockingUserIdAndType(requesterId, targetId, RestrictionType.BLOCK)
                 .ifPresent(b -> {
@@ -57,8 +57,8 @@ public class BlockService implements IBlockService {
         blockRepository.save(block);
         followService.deleteMutualFollowingByBlock(requesterId, targetId);
 
-        User requesterUser = UserMapper.fromDto(requesterUserDto);
-        User targetUser = UserMapper.fromDto(targetUserDto);
+        User requesterUser = UserMapper.fromDto(users.getFirst());
+        User targetUser = UserMapper.fromDto(users.getLast());
 
         requesterUser.getUsersBlockedByMe().add(targetId);
         targetUser.getUsersWhoBlockMe().add(requesterId);
@@ -70,14 +70,13 @@ public class BlockService implements IBlockService {
         if (requesterId.equals(targetId))
             throw new InvalidBlockRequestException("You cannot unblock yourself.");
 
-        UserDto requesterUserDto = userService.findById(requesterId);
-        UserDto targetUserDto = userService.findById(targetId);
+        List<UserDto> users = userService.findAllById(List.of(requesterId, targetId));
 
         blockRepository.findByBlockerUserIdAndBlockingUserIdAndType(requesterId, targetId, RestrictionType.BLOCK)
                 .ifPresent(blockRepository::delete);
 
-        User requesterUser = UserMapper.fromDto(requesterUserDto);
-        User targetUser = UserMapper.fromDto(targetUserDto);
+        User requesterUser = UserMapper.fromDto(users.getFirst());
+        User targetUser = UserMapper.fromDto(users.getLast());
 
         requesterUser.getUsersBlockedByMe().remove(targetId);
         targetUser.getUsersWhoBlockMe().remove(requesterId);
@@ -89,8 +88,7 @@ public class BlockService implements IBlockService {
         if (requesterId.equals(targetId))
             throw new InvalidBlockRequestException("You cannot block yourself.");
 
-        UserDto requesterUserDto = userService.findById(requesterId);
-        UserDto targetUserDto = userService.findById(targetId);
+        List<UserDto> users = userService.findAllById(List.of(requesterId, targetId));
 
         blockRepository.findByBlockerUserIdAndBlockingUserIdAndType(requesterId, targetId, RestrictionType.BLOCK)
                 .ifPresent(b -> {
@@ -105,8 +103,8 @@ public class BlockService implements IBlockService {
 
         blockRepository.save(block);
 
-        User requesterUser = UserMapper.fromDto(requesterUserDto);
-        User targetUser = UserMapper.fromDto(targetUserDto);
+        User requesterUser = UserMapper.fromDto(users.getFirst());
+        User targetUser = UserMapper.fromDto(users.getLast());
 
         requesterUser.getUsersBlockedByMe().add(targetId);
         targetUser.getUsersWhoBlockMe().add(requesterId);
@@ -118,14 +116,13 @@ public class BlockService implements IBlockService {
         if (requesterId.equals(targetId))
             throw new InvalidBlockRequestException("You cannot unmute yourself.");
 
-        UserDto requesterUserDto = userService.findById(requesterId);
-        UserDto targetUserDto = userService.findById(targetId);
+        List<UserDto> users = userService.findAllById(List.of(requesterId, targetId));
 
         blockRepository.findByBlockerUserIdAndBlockingUserIdAndType(requesterId, targetId, RestrictionType.MUTE)
                 .ifPresent(blockRepository::delete);
 
-        User requesterUser = UserMapper.fromDto(requesterUserDto);
-        User targetUser = UserMapper.fromDto(targetUserDto);
+        User requesterUser = UserMapper.fromDto(users.getFirst());
+        User targetUser = UserMapper.fromDto(users.getLast());
 
         requesterUser.getUsersBlockedByMe().remove(targetId);
         targetUser.getUsersWhoBlockMe().remove(requesterId);

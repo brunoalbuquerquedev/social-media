@@ -5,9 +5,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import project.social.dto.domain.BlockDto;
+import project.social.common.annotations.CurrentUser;
+import project.social.common.dtos.domain.BlockDto;
 import project.social.services.BlockService;
-import project.social.util.SecurityUtils;
+import project.social.common.utils.SecurityUtils;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,9 +25,8 @@ public class BlockResource {
      * @return a response indicating the result of the block operation
      */
     @PostMapping("/user-id/{id}/block")
-    public ResponseEntity<Void> blockUser(@PathVariable String id) {
-        String loggedUserId = securityUtils.getLoggedUserId();
-        blockService.blockUser(loggedUserId, id);
+    public ResponseEntity<Void> blockUser(@CurrentUser String currentUserId, @PathVariable String id) {
+        blockService.blockUser(currentUserId, id);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
@@ -37,9 +37,8 @@ public class BlockResource {
      * @return a response indicating the result of the unblock operation
      */
     @DeleteMapping("/user-id/{id}/block")
-    public ResponseEntity<Void> unblockUser(@PathVariable String id) {
-        String loggedUserId = securityUtils.getLoggedUserId();
-        blockService.unblockUser(loggedUserId, id);
+    public ResponseEntity<Void> unblockUser(@CurrentUser String currentUserId, @PathVariable String id) {
+        blockService.unblockUser(currentUserId, id);
         return ResponseEntity.noContent().build();
     }
 
@@ -50,9 +49,8 @@ public class BlockResource {
      * @return a response indicating the result of the mute operation
      */
     @PostMapping("/user-id/{id}/mute")
-    public ResponseEntity<Void> muteUser(@PathVariable String id) {
-        String loggedUserId = securityUtils.getLoggedUserId();
-        blockService.muteUser(loggedUserId, id);
+    public ResponseEntity<Void> muteUser(@CurrentUser String currentUserId, @PathVariable String id) {
+        blockService.muteUser(currentUserId, id);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
@@ -63,9 +61,8 @@ public class BlockResource {
      * @return a response indicating the result of the unmute operation
      */
     @DeleteMapping("/user-id/{id}/mute")
-    public ResponseEntity<Void> unmuteUser(@PathVariable String id) {
-        String loggedUserId = securityUtils.getLoggedUserId();
-        blockService.unmuteUser(loggedUserId, id);
+    public ResponseEntity<Void> unmuteUser(@PathVariable String id, @CurrentUser String currentUserId) {
+        blockService.unmuteUser(currentUserId, id);
         return ResponseEntity.noContent().build();
     }
 
@@ -81,7 +78,7 @@ public class BlockResource {
     public ResponseEntity<Page<BlockDto>> getBlockByUserId(@PathVariable String id,
                                                            @RequestParam(defaultValue = "0") int pageNumber,
                                                            @RequestParam(defaultValue = "10") int pageSize) {
-         Page<BlockDto> page = blockService.findAllBlockById(id, pageNumber, pageSize);
+        Page<BlockDto> page = blockService.findAllBlockById(id, pageNumber, pageSize);
         return ResponseEntity.ok(page);
     }
 }
