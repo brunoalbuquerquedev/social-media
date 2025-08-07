@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: social-media-app
+    username: dev
+  data:
+    mongodb:
+      uri: mongodb://localhost:27018/test
+  main:
+    allow-bean-definition-overriding: true
+
+server:
+  port: 8080

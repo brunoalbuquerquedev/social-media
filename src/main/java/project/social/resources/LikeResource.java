@@ -12,7 +12,7 @@ import project.social.common.utils.SecurityUtils;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/likes")
+@RequestMapping("/api/v1/like")
 public class LikeResource {
 
     private final LikeService likeService;
@@ -25,7 +25,7 @@ public class LikeResource {
         return ResponseEntity.ok(page);
     }
 
-    @GetMapping("/post/id/{id}")
+    @GetMapping("/post-id/{id}")
     public ResponseEntity<Page<LikeDto>> getPostLikes(@PathVariable String id,
                                                       @RequestParam(defaultValue = "0") int pageNumber,
                                                       @RequestParam(defaultValue = "10") int pageSize) {
@@ -33,7 +33,7 @@ public class LikeResource {
         return ResponseEntity.ok(page);
     }
 
-    @GetMapping("/user/id/{id}/likes")
+    @GetMapping("/user-id/{id}/last-likes")
     public ResponseEntity<Page<LikeDto>> getUserLastLikes(@PathVariable String id,
                                                           @RequestParam(defaultValue = "0") int pageNumber,
                                                           @RequestParam(defaultValue = "10") int pageSize) {
@@ -41,13 +41,13 @@ public class LikeResource {
         return ResponseEntity.ok(page);
     }
 
-    @PostMapping("/id/{id}")
+    @PostMapping("/post-id/{id}")
     public ResponseEntity<Void> likePost(@PathVariable String id, @CurrentUser String currentUserId) {
         likeService.likePost(currentUserId, id);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @DeleteMapping("/id/{id}")
+    @DeleteMapping("/post-id/{id}")
     public ResponseEntity<Void> unlikePost(@PathVariable String id, @CurrentUser String currentUserId) {
         likeService.unlikePost(currentUserId, id);
         return ResponseEntity.noContent().build();

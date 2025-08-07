@@ -20,6 +20,13 @@ public class FeedResource {
     private final SecurityUtils securityUtils;
     private final UserService userService;
 
+    /**
+     * Retrieves the feed for the logged-in user.
+     *
+     * @param pageNumber the page number to retrieve
+     * @param pageSize   the number of items per page
+     * @return a FeedDto containing the posts for the user's feed
+     */
     @GetMapping()
     public ResponseEntity<FeedResponseDto> getFeed(@RequestParam(defaultValue = "0") int pageNumber,
                                                    @RequestParam(defaultValue = "10") int pageSize,
@@ -28,7 +35,15 @@ public class FeedResource {
         return ResponseEntity.ok(feedResponseDto);
     }
 
-    @GetMapping("/id/{id}")
+    /**
+     * Retrieves the feed for a user by their ID.
+     *
+     * @param id         the ID of the user
+     * @param pageNumber the page number to retrieve
+     * @param pageSize   the number of items per page
+     * @return a FeedDto containing the posts for the user's feed
+     */
+    @GetMapping("/user-id/{id}")
     public ResponseEntity<FeedResponseDto> getUserFeed(@PathVariable String id,
                                                        @RequestParam(defaultValue = "0") int pageNumber,
                                                        @RequestParam(defaultValue = "10") int pageSize) {
@@ -36,7 +51,15 @@ public class FeedResource {
         return ResponseEntity.ok(feedResponseDto);
     }
 
-    @GetMapping("/user/{username}")
+    /**
+     * Retrieves the feed for a user by their username.
+     *
+     * @param username   the username of the user
+     * @param pageNumber the page number to retrieve
+     * @param pageSize   the number of items per page
+     * @return a FeedDto containing the posts for the user's feed
+     */
+    @GetMapping("/user-username/{username}")
     public ResponseEntity<FeedResponseDto> getUserFeedByUsername(@PathVariable String username,
                                                                  @RequestParam(defaultValue = "0") int pageNumber,
                                                                  @RequestParam(defaultValue = "10") int pageSize) {
