@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 import project.social.domain.Post;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,4 +19,8 @@ public interface PostRepository extends MongoRepository<Post, String> {
     Page<Post> findByUserIdAndHasUserLiked(String userId, boolean hasUserLiked, Pageable pageable);
 
     Page<Post> findAllById(String id, Pageable pageable);
+    
+    Page<Post> findByContentContainingIgnoreCase(String content, Pageable pageable);
+
+    List<Post> findByCreatedAtGreaterThan(OffsetDateTime createdAt);
 }

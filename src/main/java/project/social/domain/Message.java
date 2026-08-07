@@ -31,6 +31,10 @@ public class Message implements Serializable {
     @Builder.Default
     private SeenStatus seenStatus = SeenStatus.PENDING;
 
+    private Boolean isRead;
+    private OffsetDateTime readAt;
+
     private boolean deletedBySender;
     private boolean deletedByReceiver;
+    private OffsetDateTime deletedAt;
 }

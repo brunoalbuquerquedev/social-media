@@ -20,4 +20,7 @@ public interface UserRepository extends MongoRepository<User, String> {
     boolean existsByEmail(String email);
 
     boolean existsByUsername(String username);
+    
+    Page<User> findByUsernameContainingIgnoreCaseOrFullNameContainingIgnoreCase(
+            String username, String fullName, Pageable pageable);
 }

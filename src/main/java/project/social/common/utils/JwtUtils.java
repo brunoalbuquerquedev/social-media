@@ -6,7 +6,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import project.social.common.constants.AppConstants;
+import project.social.common.constants.AppConstant;
 import project.social.domain.RefreshToken;
 import project.social.domain.enums.UserRole;
 import project.social.common.dtos.auth.JwtTokenDto;
@@ -54,7 +54,7 @@ public class JwtUtils {
                 .claim("username", username)
                 .claim("role", role)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + AppConstants.ACCESS_TOKEN_EXPIRATION.getValue()))
+                .setExpiration(new Date(System.currentTimeMillis() + AppConstant.ACCESS_TOKEN_EXPIRATION.getValue()))
                 .signWith(secretKey, SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -73,7 +73,7 @@ public class JwtUtils {
                 .claim("username", username)
                 .claim("role", role)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + AppConstants.REFRESH_TOKEN_EXPIRATION.getValue()))
+                .setExpiration(new Date(System.currentTimeMillis() + AppConstant.REFRESH_TOKEN_EXPIRATION.getValue()))
                 .signWith(secretKey, SignatureAlgorithm.HS256)
                 .compact();
     }

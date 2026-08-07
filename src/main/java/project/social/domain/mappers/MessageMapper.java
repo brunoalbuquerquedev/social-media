@@ -15,8 +15,11 @@ public class MessageMapper {
                 message.getContent(),
                 message.getSentAt(),
                 message.getSeenStatus(),
+                message.getIsRead(),
+                message.getReadAt(),
                 message.isDeletedBySender(),
-                message.isDeletedByReceiver()
+                message.isDeletedByReceiver(),
+                message.getDeletedAt()
         );
     }
 
@@ -30,8 +33,11 @@ public class MessageMapper {
                 .content(dto.content())
                 .sentAt(dto.sentAt())
                 .seenStatus(dto.seenStatus())
+                .isRead(dto.isRead())
+                .readAt(dto.readAt())
                 .deletedBySender(dto.deletedBySender())
                 .deletedByReceiver(dto.deletedByReceiver())
+                .deletedAt(dto.deletedAt())
                 .build();
     }
 }

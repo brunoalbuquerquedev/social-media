@@ -52,4 +52,21 @@ public interface IChatService {
      * @param userId the ID of the user who has seen the message
      */
     void markAsSeen(String messageId, String userId);
+
+    /**
+     * Marks a message as read (read receipt).
+     *
+     * @param messageId the ID of the message
+     * @return the updated MessageDto
+     */
+    MessageDto markMessageAsRead(String messageId);
+
+    /**
+     * Soft deletes a message (marks as deleted but doesn't remove from DB).
+     *
+     * @param messageId the ID of the message
+     * @param userId the ID of the user deleting the message
+     * @return the updated MessageDto
+     */
+    MessageDto softDeleteMessage(String messageId, String userId);
 }

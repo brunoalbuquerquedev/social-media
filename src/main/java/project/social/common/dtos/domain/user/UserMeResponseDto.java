@@ -11,6 +11,7 @@ public record UserMeResponseDto(
         String bio,
         String profilePictureUrl,
         String location,
+        Boolean isVerified,
         OffsetDateTime birthDate,
         OffsetDateTime createdAt
 ) {
@@ -22,6 +23,7 @@ public record UserMeResponseDto(
                 user.getBio(),
                 user.getProfilePictureUrl(),
                 user.getLocation(),
+                user.getIsVerified(),
                 user.getBirthDate(),
                 user.getCreatedAt()
         );

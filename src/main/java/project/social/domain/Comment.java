@@ -24,6 +24,11 @@ public class Comment implements Serializable {
 
     private String postId;
     private String authorId;
+    private String authorUsername;
+    private String authorProfilePictureUrl;
     private String content;
     private OffsetDateTime createdAt;
+    private OffsetDateTime editedAt;
+    private OffsetDateTime updatedAt;
+    private Integer likesCount;
 }

@@ -80,4 +80,33 @@ public class ChatService implements IChatService {
 
         messageRepository.save(message);
     }
+
+    @Override
+    public MessageDto markMessageAsRead(String messageId) {
+        Message message = messageRepository.findById(messageId)
+                .orElseThrow(() -> new MessageNotFoundException("Message not found"));
+
+        message.setIsRead(true);
+        message.setReadAt(OffsetDateTime.now());
+
+        Message saved = messageRepository.save(message);
+        return MessageMapper.toDto(saved);
+    }
+
+    @Override
+    public MessageDto softDeleteMessage(String messageId, String userId) {
+        Message message = messageRepository.findById(messageId)
+                .orElseThrow(() -> new MessageNotFoundException("Message not found"));
+
+        if (message.getSenderId().equals(userId)) {
+            message.setDeletedBySender(true);
+        } else {
+            message.setDeletedByReceiver(true);
+        }
+
+        message.setDeletedAt(OffsetDateTime.now());
+
+        Message saved = messageRepository.save(message);
+        return MessageMapper.toDto(saved);
+    }
 }

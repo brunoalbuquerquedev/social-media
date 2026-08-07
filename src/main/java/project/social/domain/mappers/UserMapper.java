@@ -23,6 +23,7 @@ public class UserMapper {
                 user.getBirthDate(),
                 user.getCreatedAt(),
                 user.getIsActive(),
+                user.getIsVerified(),
                 user.getLastLogin(),
                 user.getPosts(),
                 user.getUsersFollowedByMe(),
@@ -47,6 +48,7 @@ public class UserMapper {
                 .birthDate(dto.birthDate())
                 .createdAt(dto.createdAt())
                 .isActive(dto.isActive())
+                .isVerified(dto.isVerified())
                 .lastLogin(dto.lastLogin())
                 .posts(dto.posts())
                 .usersFollowedByMe(dto.followersIds())
@@ -71,6 +73,7 @@ public class UserMapper {
                 .birthDate(dto.birthDate())
                 .createdAt(user.getCreatedAt())
                 .isActive(user.getIsActive())
+                .isVerified(user.getIsVerified())
                 .lastLogin(user.getLastLogin())
                 .posts(user.getPosts())
                 .usersFollowedByMe(user.getUsersFollowedByMe())
@@ -96,6 +99,7 @@ public class UserMapper {
                 .birthDate(user.getBirthDate())
                 .createdAt(user.getCreatedAt())
                 .isActive(user.getIsActive())
+                .isVerified(dto.isVerified())
                 .lastLogin(user.getLastLogin())
                 .posts(user.getPosts())
                 .usersFollowedByMe(user.getUsersFollowedByMe())
@@ -105,3 +109,4 @@ public class UserMapper {
                 .build();
     }
 }
+

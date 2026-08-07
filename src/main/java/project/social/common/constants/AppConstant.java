@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum AppConstants {
+public enum AppConstant {
     ACCESS_TOKEN_EXPIRATION(10 * 60 * 1000),
     REFRESH_TOKEN_EXPIRATION(24 * 60 * 60 * 1000);
 

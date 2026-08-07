@@ -15,7 +15,11 @@ public record PostDto(
         OffsetDateTime createdAt,
         List<Like> likes,
         List<CommentDto> comments,
-        Boolean hasUserLiked
+        Boolean hasUserLiked,
+        Integer likesCount,
+        Integer commentsCount,
+        Integer retweetsCount,
+        Integer bookmarksCount
 ) {
     public PostDto(Post post) {
         this(
@@ -27,7 +31,11 @@ public record PostDto(
                 post.getCreatedAt(),
                 post.getLikes(),
                 post.getComments(),
-                post.isHasUserLiked()
+                post.isHasUserLiked(),
+                post.getLikesCount(),
+                post.getCommentsCount(),
+                post.getRetweetsCount(),
+                post.getBookmarksCount()
         );
     }
 }

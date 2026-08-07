@@ -37,6 +37,7 @@ public class User implements Serializable {
 
     private OffsetDateTime createdAt;
     private Boolean isActive;
+    private Boolean isVerified;
     private OffsetDateTime lastLogin;
 
     @DBRef(lazy = true)

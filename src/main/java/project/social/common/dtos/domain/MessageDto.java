@@ -12,8 +12,11 @@ public record MessageDto(
         String content,
         OffsetDateTime sentAt,
         SeenStatus seenStatus,
+        Boolean isRead,
+        OffsetDateTime readAt,
         Boolean deletedBySender,
-        Boolean deletedByReceiver
+        Boolean deletedByReceiver,
+        OffsetDateTime deletedAt
 ) {
     public MessageDto(Message message) {
         this(
@@ -23,8 +26,11 @@ public record MessageDto(
                 message.getContent(),
                 message.getSentAt(),
                 message.getSeenStatus(),
+                message.getIsRead(),
+                message.getReadAt(),
                 message.isDeletedBySender(),
-                message.isDeletedByReceiver()
+                message.isDeletedByReceiver(),
+                message.getDeletedAt()
         );
     }
 }

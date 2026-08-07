@@ -3,9 +3,7 @@ package project.social.services;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import project.social.domain.RevokedToken;
-import project.social.domain.User;
-import project.social.domain.enums.UserRole;
+import project.social.common.constants.MessageConstant;
 import project.social.common.dtos.auth.JwtTokenDto;
 import project.social.common.dtos.auth.LoginRequestDto;
 import project.social.common.dtos.auth.RefreshRequestDto;
@@ -16,12 +14,15 @@ import project.social.common.exceptions.auth.InvalidRequestDataException;
 import project.social.common.exceptions.auth.InvalidTokenException;
 import project.social.common.exceptions.base.ObjectNotFoundException;
 import project.social.common.exceptions.domain.UserAlreadyExistsException;
+import project.social.common.utils.EnumUtils;
+import project.social.common.utils.JwtUtils;
+import project.social.domain.RevokedToken;
+import project.social.domain.User;
+import project.social.domain.enums.UserRole;
 import project.social.repositories.RefreshTokenRepository;
 import project.social.repositories.RevokedTokenRepository;
 import project.social.repositories.UserRepository;
 import project.social.services.interfaces.IAuthService;
-import project.social.common.utils.EnumUtils;
-import project.social.common.utils.JwtUtils;
 
 import java.time.OffsetDateTime;
 import java.util.Date;
@@ -39,10 +40,10 @@ public class AuthService implements IAuthService {
     @Override
     public void register(SignupRequestDto request) {
         if (userRepository.existsByEmail(request.email()))
-            throw new UserAlreadyExistsException("This email already has an account.");
+            throw new UserAlreadyExistsException(MessageConstant.USER_ALREADY_EXISTS.getMessage());
 
         if (userRepository.existsByUsername(request.username()))
-            throw new UserAlreadyExistsException("This username is unavailable.");
+            throw new UserAlreadyExistsException(MessageConstant.USERNAME_UNAVAILABLE.getMessage());
 
         User user = User.builder()
                 .username(request.username())
@@ -58,13 +59,13 @@ public class AuthService implements IAuthService {
     @Override
     public JwtTokenDto login(LoginRequestDto request) {
         User user = userRepository.findByEmail(request.email())
-                .orElseThrow(() -> new ObjectNotFoundException("User not found."));
+                .orElseThrow(() -> new ObjectNotFoundException(MessageConstant.USER_NOT_FOUND.getMessage()));
 
         if (!passwordEncoder.matches(request.password(), user.getPassword()))
-            throw new IncorrectPasswordException("Incorrect password.");
+            throw new IncorrectPasswordException(MessageConstant.INCORRECT_PASSWORD.getMessage());
 
         UserRole role = EnumUtils.safeValueOf(UserRole.class, user.getRole())
-                .orElseThrow(() -> new InvalidRequestDataException("Invalid data in json body."));
+                .orElseThrow(() -> new InvalidRequestDataException(MessageConstant.INVALID_REQUEST_DATA.getMessage()));
 
         return jwtUtils.generateTokens(user.getId(), user.getUsername(), role);
     }
@@ -74,11 +75,11 @@ public class AuthService implements IAuthService {
         String token = request.refreshToken();
 
         refreshTokenRepository.findByToken(token)
-                .orElseThrow(() -> new InvalidTokenException("Refresh token not found or already revoked."));
+                .orElseThrow(() -> new InvalidTokenException(MessageConstant.INVALID_REFRESH_TOKEN_DATA.getMessage()));
 
         if (!jwtUtils.isTokenValid(token)) {
             refreshTokenRepository.deleteByToken(token);
-            throw new ExpiredTokenException("Token expired.");
+            throw new ExpiredTokenException(MessageConstant.INVALID_TOKEN.getMessage());
         }
 
         String userId = jwtUtils.extractUserId(token);
@@ -86,7 +87,7 @@ public class AuthService implements IAuthService {
         String role = jwtUtils.extractField(token, "role");
 
         UserRole userRole = EnumUtils.safeValueOf(UserRole.class, role)
-                .orElseThrow(() -> new InvalidTokenException("Invalid role data in request json body."));
+                .orElseThrow(() -> new InvalidTokenException(MessageConstant.INVALID_REQUEST_DATA.getMessage()));
 
         refreshTokenRepository.deleteByToken(token);
         return jwtUtils.generateTokens(userId, username, userRole);
@@ -111,16 +112,16 @@ public class AuthService implements IAuthService {
 
     @Override
     public void changePassword() {
-        throw new UnsupportedOperationException("Unsupported operation.");
+        throw new UnsupportedOperationException(MessageConstant.UNSUPPORTED_OPERATION.getMessage());
     }
 
     @Override
     public void recoverPassword() {
-        throw new UnsupportedOperationException("Unsupported operation.");
+        throw new UnsupportedOperationException(MessageConstant.UNSUPPORTED_OPERATION.getMessage());
     }
 
     @Override
     public void verifyEmail() {
-        throw new UnsupportedOperationException("Unsupported operation.");
+        throw new UnsupportedOperationException(MessageConstant.UNSUPPORTED_OPERATION.getMessage());
     }
 }

@@ -40,4 +40,9 @@ public class Post implements Serializable {
     @DBRef(lazy = true)
     private List<String> mediaUrl;
 
+    private Integer likesCount;
+    private Integer commentsCount;
+    private Integer retweetsCount;
+    private Integer bookmarksCount;
 }
+
